@@ -52,18 +52,18 @@ include { MONDRIAN_QC         } from '../subworkflows/local/qc'
 workflow MONDRIAN_QC_PIPELINE{
 
     MONDRIAN_QC(
-        fastqs
-        metadata
-        human_reference
-        human_reference_version
-        mouse_reference
-        mouse_reference_version
-        salmon_reference
-        salmon_reference_version
-        gc_wig
-        map_wig
-        quality_classifier_training_data
-        repeats_satellite_regions
+        fastqs,
+        metadata,
+        human_reference,
+        human_reference_version,
+        mouse_reference,
+        mouse_reference_version,
+        salmon_reference,
+        salmon_reference_version,
+        gc_wig,
+        map_wig,
+        quality_classifier_training_data,
+        repeats_satellite_regions,
         chromosomes
     )
 
