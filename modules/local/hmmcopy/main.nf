@@ -38,6 +38,7 @@ process HMMCOPY {
   script:
     def chromosomes = "--chromosomes " + chromosomes.join(" --chromosomes ")
     """
+        cp ${quality_classifier_training_data} training_data.h5
         hmmcopy_utils run-cell-hmmcopy \
         --bam_file ${bamfile} \
         --gc_wig_file ${gc_wig} \
@@ -55,6 +56,7 @@ process HMMCOPY {
         --bias_output bias.pdf \
         --tempdir output \
         --map_cutoff ${map_cutoff} \
-        --quality_classifier_training_data ${quality_classifier_training_data}
+        --quality_classifier_training_data training_data.h5
+        rm training_data.h5
     """
 }
