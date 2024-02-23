@@ -92,7 +92,8 @@ workflow MONDRIAN_QC{
     BAMMERGE(
       ALIGN.out.collect{it[0]}, ALIGN.out.collect{it[1]}, ALIGN.out.collect{it[2]},
       human_reference, human_reference + '.fai',
-      CONCATMETRICS.out.csv, CONCATMETRICS.out.yaml
+      CONCATMETRICS.out.csv, CONCATMETRICS.out.yaml,
+      sample_id
     )
     CELLCYCLECLASSIFIER(
         CONCATMETRICS.out.csv, CONCATMETRICS.out.yaml,

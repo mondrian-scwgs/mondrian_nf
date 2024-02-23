@@ -14,8 +14,8 @@ process BAMMERGE{
     path(metrics_yaml)
     val(filename_prefix)
   output:
-    path("${filename_prefix}_all_cells.bam"), emit: bam
-    path("${filename_prefix}_all_cells.bam.bai"), emit: bai
+    path("${filename_prefix}_reference_cells.bam"), emit: bam
+    path("${filename_prefix}_reference_cells.bam.bai"), emit: bai
     path("${filename_prefix}_contaminated_cells.bam"), emit: contaminated_bam
     path("${filename_prefix}_contaminated_cells.bam.bai"), emit: contaminated_bai
     path("${filename_prefix}_control_cells.bam"), emit: control_bam
