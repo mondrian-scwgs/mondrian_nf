@@ -6,7 +6,7 @@ nextflow.enable.dsl=2
 
 def assert_required_param(param, param_name){
     if(! param){
-        exit 1, '${param_name} not specified. Please provide --${param_name} <value> !'
+        exit 1, param_name +' not specified. Please provide --${param_name} <value> !'
     }
 }
 assert_required_param(params.human_reference, 'human_reference')
