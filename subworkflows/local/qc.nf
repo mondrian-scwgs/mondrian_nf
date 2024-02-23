@@ -64,7 +64,7 @@ workflow MONDRIAN_QC{
 
     ALIGN(fastqs)
 
-    CONCATGCMETRICS(ALIGN.out.collect{it[5]}, ALIGN.out.collect{it[6]}, '${sample_id}_gc_metrics', true)
+    CONCATGCMETRICS(ALIGN.out.collect{it[5]}, ALIGN.out.collect{it[6]}, sample_id+'_gc_metrics', true)
 
     ALIGNTAR(ALIGN.out.collect{it[7]})
 
