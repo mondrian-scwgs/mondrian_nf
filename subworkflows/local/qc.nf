@@ -2,7 +2,7 @@ nextflow.enable.dsl=2
 
 include { CONCATCSV as CONCATREADS } from '../../modules/local/csverve_concat_csv'
 include { CONCATCSV as CONCATSEGMENTS } from '../../modules/local/csverve_concat_csv'
-include { CONCATCSV as CONCATPARAMS } from '../../modules/local/csverve_concat_csv'
+include { CONCATCSV as CONCATPARAMSvi } from '../../modules/local/csverve_concat_csv'
 include { CONCATCSV as CONCATMETRICS } from '../../modules/local/csverve_concat_csv'
 include { CONCATCSV as CONCATGCMETRICS } from '../../modules/local/csverve_concat_csv'
 include { BUILDTAR as HMMTAR } from '../../modules/local/tar'
@@ -108,6 +108,11 @@ workflow MONDRIAN_QC{
         CONCATMETRICS.out.csv, CONCATMETRICS.out.yaml,
         CONCATREADS.out.csv, CONCATREADS.out.yaml,
         chromosomes
+    )
+
+    HTMLREPORT(
+        CONCATMETRICS.out.csv, CONCATMETRICS.out.yaml,
+        CONCATGCMETRICS.out.csv, CONCATGCMETRICS.out.yaml,
     )
 
 }
