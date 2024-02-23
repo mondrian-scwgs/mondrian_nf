@@ -22,6 +22,7 @@ assert_required_param(params.repeats_satellite_regions, 'repeats_satellite_regio
 assert_required_param(params.chromosomes, 'chromosomes')
 assert_required_param(params.fastqs, 'fastqs')
 assert_required_param(params.metadata, 'metadata')
+assert_required_param(params.sample_id, 'sample_id')
 
 human_reference = file(params.human_reference)
 human_reference_version = file(params.human_reference_version)
@@ -36,6 +37,7 @@ repeats_satellite_regions = file(params.repeats_satellite_regions)
 chromosomes = params.chromosomes
 fastqs = file(params.fastqs)
 metadata = file(params.metadata)
+sample_id = params.sample_id
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     IMPORT LOCAL MODULES/SUBWORKFLOWS
@@ -64,7 +66,8 @@ workflow MONDRIAN_QC_PIPELINE{
         map_wig,
         quality_classifier_training_data,
         repeats_satellite_regions,
-        chromosomes
+        chromosomes,
+        sample_id
     )
 
 }
