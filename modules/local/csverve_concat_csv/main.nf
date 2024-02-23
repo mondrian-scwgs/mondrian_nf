@@ -10,8 +10,8 @@ process CONCATCSV {
       val(filename)
       val(drop_duplicates)
   output:
-    path("concat.csv.gz"), emit: csv
-    path("concat.csv.gz.yaml"), emit:yaml
+    path("${filename}.csv.gz"), emit: csv
+    path("${filename}.csv.gz.yaml"), emit:yaml
   script:
     def infiles = '--in_f ' + csv_files.join(' --in_f ')
     def drop_dups = drop_duplicates ? " --drop_duplicates" : ''
