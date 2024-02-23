@@ -7,6 +7,7 @@ process CONCATCSV {
   input:
       path(csv_files)
       path(yaml_files)
+      val(filename)
       val(drop_duplicates)
   output:
     path("concat.csv.gz"), emit: csv
