@@ -16,7 +16,7 @@ process CONCATCSV {
     def infiles = '--in_f ' + csv_files.join(' --in_f ')
     def drop_dups = drop_duplicates ? " --drop_duplicates" : ''
     """
-      csverve concat $infiles --out_f concat.csv.gz $drop_dups
+      csverve concat $infiles --out_f ${filename}.csv.gz $drop_dups
     """
 
 }
