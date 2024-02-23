@@ -10,14 +10,15 @@ process ADDCLUSTERINGORDER {
     path(reads, stageAs: "?/reads/*")
     path(reads_yaml, stageAs: "?/reads/*")
     val(chromosomes)
+    val(filename)
   output:
-    path("metrics.csv.gz"), emit: csv
-    path("metrics.csv.gz.yaml"), emit: yaml
+    path("${filename}.csv.gz"), emit: csv
+    path("${filename}.csv.gz.yaml"), emit: yaml
   script:
     def chromosomes = "--chromosomes " + chromosomes.join(" --chromosomes ")
     """
         hmmcopy_utils add-clustering-order \
-         --reads ${reads} --output metrics.csv.gz \
+         --reads ${reads} --output ${filename}.csv.gz \
          --metrics ${metrics} $chromosomes
     """
 

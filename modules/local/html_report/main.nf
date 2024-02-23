@@ -9,12 +9,13 @@ process HTMLREPORT {
     path(metrics_yaml, stageAs: "?/metrics/*")
     path(gc_metrics, stageAs: "?/reads/*")
     path(gc_metrics_yaml, stageAs: "?/reads/*")
+    val(filename)
   output:
-    path("qcreport.html")
+    path("${filename}.html")
   script:
     """
         hmmcopy_utils generate-html-report \
-         --tempdir temp --html qcreport.html \
+         --tempdir temp --html ${filename}.html \
          --metrics ${metrics} \
          --gc_metrics ${gc_metrics}
 

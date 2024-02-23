@@ -102,18 +102,19 @@ workflow MONDRIAN_QC{
     ADDCLUSTERINGORDER(
         CELLCYCLECLASSIFIER.out.csv, CELLCYCLECLASSIFIER.out.yaml,
         CONCATREADS.out.csv, CONCATREADS.out.yaml,
-        chromosomes
+        chromosomes, sample_id + '_metrics'
     )
 
     PLOTHEATMAP(
         CONCATMETRICS.out.csv, CONCATMETRICS.out.yaml,
         CONCATREADS.out.csv, CONCATREADS.out.yaml,
-        chromosomes
+        chromosomes, sample_id + '_heatmap'
     )
 
     HTMLREPORT(
         CONCATMETRICS.out.csv, CONCATMETRICS.out.yaml,
         CONCATGCMETRICS.out.csv, CONCATGCMETRICS.out.yaml,
+        sample_id + '_qcreport'
     )
 
 }

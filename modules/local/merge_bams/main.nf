@@ -12,13 +12,14 @@ process BAMMERGE{
     path(reference_fai)
     path(metrics)
     path(metrics_yaml)
+    val(filename_prefix)
   output:
-    path("merged.bam"), emit: bam
-    path("merged.bam.bai"), emit: bai
-    path("contaminated.bam"), emit: contaminated_bam
-    path("contaminated.bam.bai"), emit: contaminated_bai
-    path("control.bam"), emit: control_bam
-    path("control.bam.bai"), emit: control_bai
+    path("${filename_prefix}_all_cells.bam"), emit: bam
+    path("${filename_prefix}_all_cells.bam.bai"), emit: bai
+    path("${filename_prefix}_contaminated_cells.bam"), emit: contaminated_bam
+    path("${filename_prefix}_contaminated_cells.bam.bai"), emit: contaminated_bai
+    path("${filename_prefix}_control_cells.bam"), emit: control_bam
+    path("${filename_prefix}_control_cells.bam.bai"), emit: control_bai
   script:
     def infiles = "--infiles " + bamfile.join(" --infiles ")
     def cell_ids = "--cell_ids " + cell_id.join(" --cell_ids ")
@@ -29,9 +30,9 @@ process BAMMERGE{
               ${cell_ids} \
               --tempdir temp \
               --ncores ${task.cpus} \
-              --contaminated_outfile contaminated.bam \
-              --control_outfile control.bam \
-              --pass_outfile merged.bam \
+              --contaminated_outfile ${filename_prefix}_contaminated_cells.bam \
+              --control_outfile ${filename_prefix}_control_cells.bam \
+              --pass_outfile ${filename_prefix}_reference_cells.bam \
               --reference ${reference}
     """
 

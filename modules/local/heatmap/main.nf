@@ -10,13 +10,14 @@ process PLOTHEATMAP {
     path(reads, stageAs: "?/reads/*")
     path(reads_yaml, stageAs: "?/reads/*")
     val(chromosomes)
+    val(filename)
   output:
-    path("heatmap.pdf")
+    path("${filename}.pdf")
   script:
     def chromosomes = "--chromosomes " + chromosomes.join(" --chromosomes ")
     """
         hmmcopy_utils heatmap --reads ${reads} --metrics ${metrics} \
-        --output heatmap.pdf $chromosomes \
+        --output ${filename}.pdf $chromosomes \
         --sidebar_column pick_met
     """
 
