@@ -44,7 +44,7 @@ process QCMETADATA {
         --alignment_tar ${alignment_tar} \
         --hmmcopy_tar ${hmmcopy_tar} \
         --metadata_output metadata.yaml \
-        --metadata_input ${metadata_input}
+        --metadata_input ${metadata_yaml}
     """
 
 }
