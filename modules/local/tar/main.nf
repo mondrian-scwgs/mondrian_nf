@@ -15,7 +15,7 @@ process BUILDTAR {
         mkdir ${filename}
         cp ${infiles} ${filename}
         tar -cvf ${filename}.tar ${filename}
-        gzip $${filename}.tar
+        gzip ${filename}.tar
     """
 
 }
