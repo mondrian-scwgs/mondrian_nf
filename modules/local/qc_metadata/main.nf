@@ -41,8 +41,8 @@ process QCMETADATA {
         --reads ${reads} ${reads_yaml} \
         --heatmap ${heatmap} \
         --qc_report_html ${qc_report} \
-        --alignment_tar ${alignment_tarfile} \
-        --hmmcopy_tar ${hmmcopy_tarfile} \
+        --alignment_tar ${alignment_tar} \
+        --hmmcopy_tar ${hmmcopy_tar} \
         --metadata_output metadata.yaml \
         --metadata_input ${metadata_input}
     """
