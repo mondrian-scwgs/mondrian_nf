@@ -11,7 +11,7 @@ process HTMLREPORT {
     path(gc_metrics_yaml, stageAs: "?/reads/*")
     val(filename)
   output:
-    path("${filename}.html")
+    path("${filename}.html"), emit: html
   script:
     """
         hmmcopy_utils generate-html-report \

@@ -12,7 +12,7 @@ process PLOTHEATMAP {
     val(chromosomes)
     val(filename)
   output:
-    path("${filename}.pdf")
+    path("${filename}.pdf"), emit: pdf
   script:
     def chromosomes = "--chromosomes " + chromosomes.join(" --chromosomes ")
     """
