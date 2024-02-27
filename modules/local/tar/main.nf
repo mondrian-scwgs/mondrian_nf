@@ -8,7 +8,7 @@ process BUILDTAR {
     path(infiles, stageAs: "?/*")
     val(filename)
   output:
-    path("{filename}.tar.gz")
+    path("${filename}.tar.gz")
   script:
     def infiles = infiles.join(" ")
     """
