@@ -14,7 +14,7 @@ include { PLOTHEATMAP } from '../../modules/local/heatmap'
 include { HMMCOPY } from '../../modules/local/hmmcopy'
 include { HTMLREPORT } from '../../modules/local/html_report'
 include { BAMMERGE } from '../../modules/local/merge_bams'
-
+include { QCMETADATA } from '../../modules/local/qc_metadata'
 
 
 workflow MONDRIAN_QC{
