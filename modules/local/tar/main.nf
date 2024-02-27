@@ -6,15 +6,16 @@ process BUILDTAR {
 
   input:
     path(infiles, stageAs: "?/*")
+    val(filename)
   output:
-    path("consolidated.tar.gz")
+    path("{filename}.tar.gz")
   script:
     def infiles = infiles.join(" ")
     """
-        mkdir consolidated
-        cp ${infiles} consolidated
-        tar -cvf consolidated.tar consolidated
-        gzip consolidated.tar
+        mkdir ${filename}
+        cp ${infiles} ${filename}
+        tar -cvf ${filename}.tar ${filename}
+        gzip $${filename}.tar
     """
 
 }

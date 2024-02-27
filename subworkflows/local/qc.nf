@@ -66,7 +66,7 @@ workflow MONDRIAN_QC{
 
     CONCATGCMETRICS(ALIGN.out.collect{it[5]}, ALIGN.out.collect{it[6]}, sample_id+'_gc_metrics', true)
 
-    ALIGNTAR(ALIGN.out.collect{it[7]})
+    ALIGNTAR(ALIGN.out.collect{it[7]}, sample_id+'_alignment_data')
 
 
 
@@ -82,7 +82,7 @@ workflow MONDRIAN_QC{
 
     HMMCOPY(hmm_input)
 
-    HMMTAR(HMMCOPY.out.collect{it[9]})
+    HMMTAR(HMMCOPY.out.collect{it[9]}, sample_id+'_hmmcopy_data')
 
     CONCATREADS(HMMCOPY.out.collect{it[1]}, HMMCOPY.out.collect{it[2]}, sample_id+'_hmmcopy_reads', false)
     CONCATMETRICS(HMMCOPY.out.collect{it[3]}, HMMCOPY.out.collect{it[4]}, sample_id+'_metrics', false)
