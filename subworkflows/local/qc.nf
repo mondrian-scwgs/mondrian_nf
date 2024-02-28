@@ -121,6 +121,7 @@ workflow MONDRIAN_QC{
     )
 
     QCMETADATA(
+    tuple(
         BAMMERGE.out.bam, BAMMERGE.out.bai,
         BAMMERGE.out.contaminated_bam, BAMMERGE.out.contaminated_bai,
         BAMMERGE.out.control_bam, BAMMERGE.out.control_bai,
@@ -132,6 +133,7 @@ workflow MONDRIAN_QC{
         PLOTHEATMAP.out.pdf, HTMLREPORT.out.html,
         ALIGNTAR.out.tar, HMMTAR.out.tar,
         VALIDATEQCINPUTS.out.metadata
+    )
     )
 
 }
