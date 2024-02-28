@@ -39,6 +39,7 @@ workflow MONDRIAN_QC{
     main:
 
     VALIDATEQCINPUTS(fastqs, metadata_yaml)
+
     fastqs_data = Channel
                .fromPath(fastqs)
                .splitCsv(header:true, sep:',')
@@ -60,7 +61,7 @@ workflow MONDRIAN_QC{
                        salmon_reference, salmon_reference_version,
                        salmon_reference+'.fai', salmon_reference+'.amb', salmon_reference+'.ann',
                        salmon_reference+'.bwt', salmon_reference+'.pac', salmon_reference+'.sa',
-                       metadata_yaml
+                       VALIDATEQCINPUTS.out.metadata
         )
     }
 
