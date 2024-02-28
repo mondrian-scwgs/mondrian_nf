@@ -27,7 +27,7 @@ process QCMETADATA {
       path(hmmcopy_tar)
       path(input_meta, stageAs: '?/*')
   output:
-    path("output.yaml")
+    path("output.yaml"), emit: metadata
   script:
     """
         qc_utils generate-metadata \

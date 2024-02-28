@@ -15,7 +15,7 @@ include { HMMCOPY } from '../../modules/local/hmmcopy'
 include { HTMLREPORT } from '../../modules/local/html_report'
 include { BAMMERGE } from '../../modules/local/merge_bams'
 include { QCMETADATA } from '../../modules/local/qc_metadata'
-include { VALIDATEQCINPUTS } from '../../modules/local/validate_qc_inputs'
+include { RECOPYMETADATA } from '../../modules/local/recopy'
 
 
 workflow MONDRIAN_QC{
@@ -37,8 +37,6 @@ workflow MONDRIAN_QC{
         sample_id
 
     main:
-
-    VALIDATEQCINPUTS(fastqs, metadata_yaml)
 
     fastqs_data = Channel
                .fromPath(fastqs)
@@ -132,7 +130,9 @@ workflow MONDRIAN_QC{
         CONCATREADS.out.csv, CONCATREADS.out.yaml,
         PLOTHEATMAP.out.pdf, HTMLREPORT.out.html,
         ALIGNTAR.out.tar, HMMTAR.out.tar,
-        VALIDATEQCINPUTS.out.metadata
+        metadata_yaml
     )
+
+    RECOPYMETADATA(QCMETADATA.out.metadata, 'metadata.yaml')
 
 }
