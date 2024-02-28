@@ -118,18 +118,18 @@ workflow MONDRIAN_QC{
         sample_id + '_qcreport'
     )
 
-//     QCMETADATA(
-//         BAMMERGE.out.bam, BAMMERGE.out.bai,
-//         BAMMERGE.out.contaminated_bam, BAMMERGE.out.contaminated_bai,
-//         BAMMERGE.out.control_bam, BAMMERGE.out.control_bai,
-//         CONCATGCMETRICS.out.csv, CONCATGCMETRICS.out.yaml,
-//         ADDCLUSTERINGORDER.out.csv, ADDCLUSTERINGORDER.out.yaml,
-//         CONCATPARAMS.out.csv, CONCATPARAMS.out.yaml,
-//         CONCATSEGMENTS.out.csv, CONCATSEGMENTS.out.yaml,
-//         CONCATREADS.out.csv, CONCATREADS.out.yaml,
-//         PLOTHEATMAP.out.pdf, HTMLREPORT.out.html,
-//         ALIGNTAR.out.tar, HMMTAR.out.tar,
-//         metadata_yaml
-//     )
+    QCMETADATA(
+        BAMMERGE.out.bam, BAMMERGE.out.bai,
+        BAMMERGE.out.contaminated_bam, BAMMERGE.out.contaminated_bai,
+        BAMMERGE.out.control_bam, BAMMERGE.out.control_bai,
+        CONCATGCMETRICS.out.csv, CONCATGCMETRICS.out.yaml,
+        ADDCLUSTERINGORDER.out.csv, ADDCLUSTERINGORDER.out.yaml,
+        CONCATPARAMS.out.csv, CONCATPARAMS.out.yaml,
+        CONCATSEGMENTS.out.csv, CONCATSEGMENTS.out.yaml,
+        CONCATREADS.out.csv, CONCATREADS.out.yaml,
+        PLOTHEATMAP.out.pdf, HTMLREPORT.out.html,
+        ALIGNTAR.out.tar, HMMTAR.out.tar,
+        metadata_yaml
+    )
 
 }
