@@ -65,7 +65,7 @@ workflow MONDRIAN_QC{
     }
 
     fastqs.view()
-    fastqs.combine(VALIDATEQCINPUTS.out.yaml).view()
+    fastqs.combine(VALIDATEQCINPUTS.out.metadata).view()
 
     ALIGN(fastqs)
 
