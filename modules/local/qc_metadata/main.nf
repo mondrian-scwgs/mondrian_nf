@@ -27,7 +27,7 @@ process QCMETADATA {
       path(hmmcopy_tar)
       path(metadata_yaml, stageAs: "?/meta/*")
   output:
-    path("metadata.yaml"), emit: metadata
+    path("output.yaml"), emit: metadata
   script:
     """
         qc_utils generate-metadata \
@@ -43,7 +43,7 @@ process QCMETADATA {
         --qc_report_html ${qc_report} \
         --alignment_tar ${alignment_tar} \
         --hmmcopy_tar ${hmmcopy_tar} \
-        --metadata_output metadata.yaml \
+        --metadata_output output.yaml \
         --metadata_input ${metadata_yaml}
     """
 
