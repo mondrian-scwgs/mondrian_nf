@@ -60,7 +60,7 @@ workflow MONDRIAN_QC{
                        salmon_reference, salmon_reference_version,
                        salmon_reference+'.fai', salmon_reference+'.amb', salmon_reference+'.ann',
                        salmon_reference+'.bwt', salmon_reference+'.pac', salmon_reference+'.sa',
-                       VALIDATEQCINPUTS.out.metadata
+                       metadata_yaml
         )
     }
 
