@@ -25,7 +25,7 @@ process QCMETADATA {
       path(qc_report)
       path(alignment_tar)
       path(hmmcopy_tar)
-      path(metadata_yaml)
+      path(metadata_yaml, stageAs: '?/*')
   output:
     path("output.yaml")
   script:

@@ -5,8 +5,8 @@ process VALIDATEQCINPUTS {
     label 'process_high'
 
   input:
-    path(metadata_yaml, stageAs: "?/*")
     path(fastqs_csv)
+    path(metadata_yaml, stageAs: "?/*")
   output:
     path("metadata.yaml"), emit: metadata
   script:
