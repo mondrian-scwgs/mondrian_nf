@@ -129,7 +129,7 @@ workflow MONDRIAN_QC{
         CONCATREADS.out.csv, CONCATREADS.out.yaml,
         PLOTHEATMAP.out.pdf, HTMLREPORT.out.html,
         ALIGNTAR.out.tar, HMMTAR.out.tar,
-        path(metadata_yaml)
+        file(metadata_yaml)
     )
 
 }
