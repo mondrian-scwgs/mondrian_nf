@@ -4,6 +4,8 @@ process QCMETADATA {
     memory '12 GB'
     label 'process_high'
 
+   publishDir { "${params.output_dir}/" }, mode: 'copy'
+
   input:
       path(bam)
       path(bai)
