@@ -60,12 +60,10 @@ workflow MONDRIAN_QC{
                        mouse_reference+'.bwt', mouse_reference+'.pac', mouse_reference+'.sa',
                        salmon_reference, salmon_reference_version,
                        salmon_reference+'.fai', salmon_reference+'.amb', salmon_reference+'.ann',
-                       salmon_reference+'.bwt', salmon_reference+'.pac', salmon_reference+'.sa'
+                       salmon_reference+'.bwt', salmon_reference+'.pac', salmon_reference+'.sa',
+                       metadata_yaml
         )
     }
-
-    fastqs.view()
-    fastqs.combine(VALIDATEQCINPUTS.out.metadata).view()
 
     ALIGN(fastqs)
 
