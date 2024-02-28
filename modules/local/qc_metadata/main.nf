@@ -5,7 +5,6 @@ process QCMETADATA {
     label 'process_high'
 
   input:
-    tuple(
       path(bam)
       path(bai)
       path(contaminated_bam)
@@ -27,7 +26,6 @@ process QCMETADATA {
       path(alignment_tar)
       path(hmmcopy_tar)
       path(metadata_yaml, stageAs: '?/*')
-    )
   output:
     path("output.yaml")
   script:
