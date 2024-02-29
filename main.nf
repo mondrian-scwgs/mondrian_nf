@@ -10,18 +10,23 @@ nextflow.enable.dsl=2
 
 
 
-// include { MONDRIAN_INFERHAPS_PIPELINE } from './workflows/mondrian_inferhaps'
+if (params.mode == 'qc'){
+    include { MONDRIAN_QC_PIPELINE } from './workflows/mondrian_qc'
+    workflow QC {
+        MONDRIAN_QC_PIPELINE ()
+    }
+}
 
+if (params.mode == 'inferhaps'){
+    include { MONDRIAN_INFERHAPS_PIPELINE } from './workflows/mondrian_inferhaps'
+    workflow INFERHAPS {
+        MONDRIAN_INFERHAPS_PIPELINE ()
+    }
+}
 //
 // WORKFLOW: Run main demultiplex analysis pipeline
 //
-// workflow QC {
-//     MONDRIAN_QC_PIPELINE ()
-// }
 
-workflow INFERHAPS {
-    MONDRIAN_INFERHAPS_PIPELINE ()
-}
 
 
 /*
@@ -36,8 +41,7 @@ workflow INFERHAPS {
 workflow {
     switch (params.mode) {
       case {'qc'}:
-        include { MONDRIAN_QC_PIPELINE } from './workflows/mondrian_qc'
-        MONDRIAN_QC_PIPELINE()
+        QC()
     }
 }
 
