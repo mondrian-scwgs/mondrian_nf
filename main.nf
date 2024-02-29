@@ -5,26 +5,13 @@ import groovy.json.JsonBuilder
 nextflow.enable.dsl=2
 
 
-
-
-
-
-
 if (params.mode == 'qc'){
     include { MONDRIAN_QC_PIPELINE } from './workflows/mondrian_qc'
 }
 
-// if (params.mode == 'inferhaps'){
-//     include { MONDRIAN_INFERHAPS_PIPELINE } from './workflows/mondrian_inferhaps'
-//     workflow INFERHAPS {
-//         MONDRIAN_INFERHAPS_PIPELINE ()
-//     }
-// }
-//
-// WORKFLOW: Run main demultiplex analysis pipeline
-//
-
-
+if (params.mode == 'inferhaps'){
+    include { MONDRIAN_INFERHAPS_PIPELINE } from './workflows/mondrian_inferhaps'
+}
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -37,8 +24,13 @@ if (params.mode == 'qc'){
 //
 workflow {
     switch (params.mode) {
+
       case {'qc'}:
         MONDRIAN_QC_PIPELINE()
+
+      case {'inferhaps'}:
+        MONDRIAN_INFERHAPS_PIPELINE()
+
     }
 }
 
