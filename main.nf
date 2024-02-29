@@ -12,7 +12,6 @@ nextflow.enable.dsl=2
 
 if (params.mode == 'qc'){
     include { MONDRIAN_QC_PIPELINE } from './workflows/mondrian_qc'
-    MONDRIAN_QC_PIPELINE ()
 }
 
 // if (params.mode == 'inferhaps'){
@@ -36,12 +35,12 @@ if (params.mode == 'qc'){
 //
 // WORKFLOW: Execute a single named workflow for the pipeline
 //
-// workflow {
-//     switch (params.mode) {
-//       case {'qc'}:
-//         MONDRIAN_QC_PIPELINE()
-//     }
-// }
+workflow {
+    switch (params.mode) {
+      case {'qc'}:
+        MONDRIAN_QC_PIPELINE()
+    }
+}
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
