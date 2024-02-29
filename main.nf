@@ -12,9 +12,7 @@ nextflow.enable.dsl=2
 
 if (params.mode == 'qc'){
     include { MONDRIAN_QC_PIPELINE } from './workflows/mondrian_qc'
-    workflow QC {
-        MONDRIAN_QC_PIPELINE ()
-    }
+    MONDRIAN_QC_PIPELINE ()
 }
 
 if (params.mode == 'inferhaps'){
