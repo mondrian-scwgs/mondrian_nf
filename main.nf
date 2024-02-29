@@ -15,12 +15,12 @@ if (params.mode == 'qc'){
     MONDRIAN_QC_PIPELINE ()
 }
 
-if (params.mode == 'inferhaps'){
-    include { MONDRIAN_INFERHAPS_PIPELINE } from './workflows/mondrian_inferhaps'
-    workflow INFERHAPS {
-        MONDRIAN_INFERHAPS_PIPELINE ()
-    }
-}
+// if (params.mode == 'inferhaps'){
+//     include { MONDRIAN_INFERHAPS_PIPELINE } from './workflows/mondrian_inferhaps'
+//     workflow INFERHAPS {
+//         MONDRIAN_INFERHAPS_PIPELINE ()
+//     }
+// }
 //
 // WORKFLOW: Run main demultiplex analysis pipeline
 //
@@ -36,12 +36,12 @@ if (params.mode == 'inferhaps'){
 //
 // WORKFLOW: Execute a single named workflow for the pipeline
 //
-workflow {
-    switch (params.mode) {
-      case {'qc'}:
-        MONDRIAN_QC_PIPELINE()
-    }
-}
+// workflow {
+//     switch (params.mode) {
+//       case {'qc'}:
+//         MONDRIAN_QC_PIPELINE()
+//     }
+// }
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
