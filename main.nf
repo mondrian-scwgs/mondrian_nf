@@ -11,7 +11,7 @@ nextflow.enable.dsl=2
 
 
 include { MONDRIAN_QC_PIPELINE } from './workflows/mondrian_qc'
-include { MONDRIAN_INFERHAPS_PIPELINE } from './workflows/mondrian_inferhaps'
+// include { MONDRIAN_INFERHAPS_PIPELINE } from './workflows/mondrian_inferhaps'
 
 //
 // WORKFLOW: Run main demultiplex analysis pipeline
