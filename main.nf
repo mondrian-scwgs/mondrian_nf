@@ -25,8 +25,8 @@ if (params.mode == 'inferhaps'){
 workflow {
     switch (params.mode) {
 
-      case {'qc'}:
-        MONDRIAN_QC_PIPELINE()
+//       case {'qc'}:
+//         MONDRIAN_QC_PIPELINE()
 
       case {'inferhaps'}:
         MONDRIAN_INFERHAPS_PIPELINE()
