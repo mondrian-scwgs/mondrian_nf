@@ -11,6 +11,7 @@ nextflow.enable.dsl=2
 
 
 include { MONDRIAN_QC_PIPELINE } from './workflows/mondrian_qc'
+include { MONDRIAN_INFERHAPS_PIPELINE } from './workflows/mondrian_inferhaps'
 
 //
 // WORKFLOW: Run main demultiplex analysis pipeline
@@ -18,6 +19,11 @@ include { MONDRIAN_QC_PIPELINE } from './workflows/mondrian_qc'
 workflow QC {
     MONDRIAN_QC_PIPELINE ()
 }
+
+workflow INFERHAPS {
+    MONDRIAN_INFERHAPS_PIPELINE ()
+}
+
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -29,7 +35,10 @@ workflow QC {
 // WORKFLOW: Execute a single named workflow for the pipeline
 //
 workflow {
-    QC ()
+    switch (params.mode) {
+      case {'qc'}:
+        QC()
+    }
 }
 
 /*
