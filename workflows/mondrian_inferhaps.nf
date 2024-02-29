@@ -14,8 +14,8 @@ assert_required_param(params.reference_fasta, 'reference_fasta')
 assert_required_param(params.chromosome_references, 'chromosome_references')
 assert_required_param(params.phased_chromosomes, 'phased_chromosomes')
 assert_required_param(params.phased_chromosome_x, 'phased_chromosome_x')
-assert_required_param(params.is_female, 'is_female')
-// assert_required_param(params.sample_id, 'sample_id')
+// assert_required_param(params.is_female, 'is_female')
+assert_required_param(params.sample_id, 'sample_id')
 
 
 bam = file(params.bam)
