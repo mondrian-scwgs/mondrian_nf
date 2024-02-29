@@ -4,14 +4,22 @@ import groovy.json.JsonBuilder
 // Declare syntax version
 nextflow.enable.dsl=2
 
-
-if (params.mode == 'qc'){
+if (params.mode == "qc") {
     include { MONDRIAN_QC_PIPELINE } from './workflows/mondrian_qc'
-}
-
-if (params.mode == 'inferhaps'){
+} else if (params.mode == "inferhaps") {
     include { MONDRIAN_INFERHAPS_PIPELINE } from './workflows/mondrian_inferhaps'
 }
+
+
+workflow MONDRIAN {
+    if(params.mode == "qc") {
+        MONDRIAN_QC_PIPELINE ()
+    }
+    else if(params.mode == "inferhaps") {
+        MONDRIAN_INFERHAPS_PIPELINE ()
+    }
+}
+
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -23,15 +31,7 @@ if (params.mode == 'inferhaps'){
 // WORKFLOW: Execute a single named workflow for the pipeline
 //
 workflow {
-    switch (params.mode) {
-
-//       case {'qc'}:
-//         MONDRIAN_QC_PIPELINE()
-
-      case {'inferhaps'}:
-        MONDRIAN_INFERHAPS_PIPELINE()
-
-    }
+    MONDRIAN()
 }
 
 /*
