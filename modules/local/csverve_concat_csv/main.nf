@@ -5,8 +5,8 @@ process CONCATCSV {
     label 'process_high'
 
   input:
-      path(csv_files)
-      path(yaml_files)
+      path(csv_files, stageAs: "?/*")
+      path(yaml_files, stageAs: "?/*")
       val(filename)
       val(drop_duplicates)
   output:

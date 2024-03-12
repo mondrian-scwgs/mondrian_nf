@@ -8,6 +8,8 @@ if (params.mode == "qc") {
     include { MONDRIAN_QC_PIPELINE } from './workflows/mondrian_qc'
 } else if (params.mode == "inferhaps") {
     include { MONDRIAN_INFERHAPS_PIPELINE } from './workflows/mondrian_inferhaps'
+} else if (params.mode == "counthaps") {
+    include { MONDRIAN_COUNTHAPS_PIPELINE } from './workflows/mondrian_counthaps'
 }
 
 
@@ -17,6 +19,9 @@ workflow MONDRIAN {
     }
     else if(params.mode == "inferhaps") {
         MONDRIAN_INFERHAPS_PIPELINE ()
+    }
+    else if(params.mode == "counthaps") {
+        MONDRIAN_COUNTHAPS_PIPELINE ()
     }
 }
 
