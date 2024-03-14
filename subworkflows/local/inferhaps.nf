@@ -59,7 +59,6 @@ workflow MONDRIAN_INFERHAPS{
                           }
         shapeit_files= SHAPEIT(shapeit_input)
 
-        shapeit_files.view()
         CONCATCSV(shapeit_files.collect{it[1]}, shapeit_files.collect{it[2]}, 'inferhaps', false)
 
 }
