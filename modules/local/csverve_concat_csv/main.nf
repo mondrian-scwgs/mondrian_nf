@@ -13,6 +13,7 @@ process CONCATCSV {
     path("${filename}.csv.gz"), emit: csv
     path("${filename}.csv.gz.yaml"), emit:yaml
   script:
+    def type=csv_files.getClass()
     def size=csv_files.size()
     def infiles = ''
     if(csv_files.size() == 1){
