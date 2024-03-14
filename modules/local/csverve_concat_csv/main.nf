@@ -14,7 +14,7 @@ process CONCATCSV {
     path("${filename}.csv.gz.yaml"), emit:yaml
   script:
     def infiles = ''
-    if(csv_files instanceof String){
+    if(csv_files.size() == 1){
         infiles = '--in_f ' + csv_files
     } else {
         infiles = '--in_f ' + csv_files.join(' --in_f ')
