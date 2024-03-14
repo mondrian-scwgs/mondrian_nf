@@ -13,6 +13,7 @@ process CONCATCSV {
     path("${filename}.csv.gz"), emit: csv
     path("${filename}.csv.gz.yaml"), emit:yaml
   script:
+    def size=csv_files.size()
     def infiles = ''
     if(csv_files.size() == 1){
         infiles = '--in_f ' + csv_files
@@ -22,6 +23,8 @@ process CONCATCSV {
     def drop_dups = drop_duplicates ? " --drop_duplicates" : ''
     """
       echo ${csv_files}
+      echo ${size}
+      echo ${infiles}
       csverve concat $infiles --out_f ${filename}.csv.gz $drop_dups
     """
 
