@@ -25,6 +25,7 @@ process CONCATCSV {
     """
       echo ${csv_files}
       echo ${size}
+      echo ${type}
       echo ${infiles}
       csverve concat $infiles --out_f ${filename}.csv.gz $drop_dups
     """
