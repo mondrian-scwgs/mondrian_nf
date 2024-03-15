@@ -10,6 +10,8 @@ if (params.mode == "qc") {
     include { MONDRIAN_INFERHAPS_PIPELINE } from './workflows/mondrian_inferhaps'
 } else if (params.mode == "counthaps") {
     include { MONDRIAN_COUNTHAPS_PIPELINE } from './workflows/mondrian_counthaps'
+} else if (params.mode == "snv_genotyping") {
+    include { MONDRIAN_SNVGENOTYPING_PIPELINE } from './workflows/mondrian_snvgenotyping'
 }
 
 
@@ -22,6 +24,9 @@ workflow MONDRIAN {
     }
     else if(params.mode == "counthaps") {
         MONDRIAN_COUNTHAPS_PIPELINE ()
+    }
+    else if(params.mode == "snv_genotyping") {
+        MONDRIAN_SNVGENOTYPING_PIPELINE ()
     }
 }
 

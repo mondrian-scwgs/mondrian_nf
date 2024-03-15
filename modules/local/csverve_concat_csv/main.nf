@@ -13,21 +13,15 @@ process CONCATCSV {
     path("${filename}.csv.gz"), emit: csv
     path("${filename}.csv.gz.yaml"), emit:yaml
   script:
-    def type=csv_files.getClass()
-    def size=csv_files.size()
     def infiles = ''
-    if(csv_files.size() == 1){
-        infiles = '--in_f ' + csv_files
-    } else {
+    if (csv_files instanceof nextflow.util.BlankSeparatedList){
         infiles = '--in_f ' + csv_files.join(' --in_f ')
+    } else {
+        infiles = '--in_f ' + csv_files
     }
     def drop_dups = drop_duplicates ? " --drop_duplicates" : ''
     """
-      echo ${csv_files}
-      echo ${size}
-      echo ${type}
-      echo ${infiles}
-      csverve concat $infiles --out_f ${filename}.csv.gz $drop_dups
+      csverve concat ${infiles} --out_f ${filename}.csv.gz $drop_dups
     """
 
 }
