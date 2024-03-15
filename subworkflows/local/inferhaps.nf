@@ -6,6 +6,7 @@ include { BCFTOOLSFILTERHET } from '../../modules/local/bcftools_filter_het'
 include { BCFTOOLSCONCATVCF } from '../../modules/local/bcftools_concat_vcf'
 include { CONCATCSV } from '../../modules/local/csverve_concat_csv'
 include { SHAPEIT } from '../../modules/local/shapeit'
+include { INFERHAPSMETADATA } from '../../modules/local/infer_haps_metadata'
 
 
 workflow MONDRIAN_INFERHAPS{
@@ -16,6 +17,7 @@ workflow MONDRIAN_INFERHAPS{
         chromosome_references
         phased_chromosomes
         phased_chromosome_x
+        metadata_input
         is_female
         sample_id
 
@@ -59,6 +61,9 @@ workflow MONDRIAN_INFERHAPS{
                           }
         shapeit_files= SHAPEIT(shapeit_input)
 
-        CONCATCSV(shapeit_files.collect{it[1]}, shapeit_files.collect{it[2]}, 'inferhaps', false)
+        outputs = CONCATCSV(shapeit_files.collect{it[1]}, shapeit_files.collect{it[2]}, 'inferhaps', false)
 
+        INFERHAPSMETADATA(
+            output.csv, output.yaml, metadata_input
+        )
 }

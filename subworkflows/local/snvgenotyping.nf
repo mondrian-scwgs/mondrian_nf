@@ -46,7 +46,7 @@ workflow MONDRIAN_SNVGENOTYPING{
             reference_fasta, reference_fasta+'.fai', true,numcores,
             sample_id+'_vartrix'
         )
-        vartrix_all_chroms = CONCATCSV(vartrix.csv.collect(), vartrix.yaml.collect(), sample_id+'_vartrix_merged', false)
+        vartrix_all_chroms = CONCATCSV(vartrix.csv.collect(), vartrix.yaml.collect(), sample_id+'_vartrix', false)
 
         vartrix_outputs = REGENERATEVARTRIXOUTPUTS(
             vartrix_all_chroms.csv,
