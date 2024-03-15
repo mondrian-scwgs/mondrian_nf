@@ -64,6 +64,6 @@ workflow MONDRIAN_INFERHAPS{
         outputs = CONCATCSV(shapeit_files.collect{it[1]}, shapeit_files.collect{it[2]}, 'inferhaps', false)
 
         INFERHAPSMETADATA(
-            output.csv, output.yaml, metadata_input
+            outputs.csv, outputs.yaml, metadata_input
         )
 }
