@@ -50,7 +50,7 @@ workflow MONDRIAN_INFERHAPS{
 //         x = filtered_vcfs.map{it -> tuple(it[0], it[1])}.groupTuple()
 //         y = filtered_vcfs.map{it -> tuple(it[0], it[2])}.groupTuple()
 //         grouped_by_chrom = x.combine(y, by: 0)
-        vcfs = BCFTOOLSCONCATVCF(filtered_vcfs.collect{it[0]}, filtered_vcfs.collect{it[1]})
+        vcfs = BCFTOOLSCONCATVCF(BCFTOOLSFILTERHET.out.collect{it[0]}, BCFTOOLSFILTERHET.out.collect{it[1]})
 
         shapeit_input = vcfs
                           .combine(references, by: 0)
