@@ -15,7 +15,7 @@ process GETREGIONS {
 
     script:
     def chromosomes_arg = ''
-    if (csv_files instanceof nextflow.util.BlankSeparatedList){
+    if (chromosomes instanceof nextflow.util.BlankSeparatedList){
         chromosomes_arg = '--chromosomes ' + chromosomes.join(' --chromosomes ')
     } else {
         chromosomes_arg = '--chromosomes ' + chromosomes
