@@ -90,7 +90,7 @@ workflow MONDRIAN_QC{
     CONCATPARAMS(HMMCOPY.out.collect{it[5]}, HMMCOPY.out.collect{it[6]}, sample_id+'_hmcopy_params', false)
     CONCATSEGMENTS(HMMCOPY.out.collect{it[7]}, HMMCOPY.out.collect{it[8]}, sample_id+'_hmmcopy_segments', false)
 
-    BAMMERGE(
+    BAMMERGECELLS(
       ALIGN.out.collect{it[0]}, ALIGN.out.collect{it[1]}, ALIGN.out.collect{it[2]},
       human_reference, human_reference + '.fai',
       CONCATMETRICS.out.csv, CONCATMETRICS.out.yaml,
