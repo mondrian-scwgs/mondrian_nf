@@ -1,6 +1,6 @@
 nextflow.enable.dsl=2
 
-include { GETREGIONS } from '../../modules/local/get_regions'
+include { GETREGIONSPERCHROMOSOME } from '../../modules/local/get_regions_per_chromosome'
 include { BCFTOOLSMPILEUP } from '../../modules/local/bcftools_mpileup'
 include { BCFTOOLSFILTERHET } from '../../modules/local/bcftools_filter_het'
 include { BCFTOOLSCONCATVCF } from '../../modules/local/bcftools_concat_vcf'
@@ -29,7 +29,7 @@ workflow MONDRIAN_INFERHAPS{
 
         chromosomes = references.map{it->it[0]}
 
-        regions =  GETREGIONS(reference_fasta, chromosomes, 10000000)
+        regions =  GETREGIONSPERCHROMOSOME(reference_fasta, chromosomes, 10000000)
 
         allregions = regions
                        .map{it -> tuple(it[0], it[1].readLines())}
