@@ -127,7 +127,7 @@ workflow MONDRIAN_VARIANT {
         alignment_artifacts = FILTERALIGNMENTARTIFACTS(
             reference, reference+'.fai', reference_dict, realignment_index_bundle,
             filter_mutect.vcf, filter_mutect.tbi,  tumor_variant_bam.bam, tumor_variant_bam.bai,
-            sample_id+'_filter_alignment_artifacts'
+            sample_id+'_mutect'
         )
 
         consensus = VARIANTCONSENSUS(
