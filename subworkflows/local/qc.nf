@@ -120,9 +120,9 @@ workflow MONDRIAN_QC{
     )
 
     QCMETADATA(
-        BAMMERGE.out.bam, BAMMERGE.out.bai,
-        BAMMERGE.out.contaminated_bam, BAMMERGE.out.contaminated_bai,
-        BAMMERGE.out.control_bam, BAMMERGE.out.control_bai,
+        BAMMERGECELLS.out.bam, BAMMERGECELLS.out.bai,
+        BAMMERGECELLS.out.contaminated_bam, BAMMERGECELLS.out.contaminated_bai,
+        BAMMERGECELLS.out.control_bam, BAMMERGECELLS.out.control_bai,
         CONCATGCMETRICS.out.csv, CONCATGCMETRICS.out.yaml,
         ADDCLUSTERINGORDER.out.csv, ADDCLUSTERINGORDER.out.yaml,
         CONCATPARAMS.out.csv, CONCATPARAMS.out.yaml,
