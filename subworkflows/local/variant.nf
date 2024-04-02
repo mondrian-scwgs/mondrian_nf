@@ -139,7 +139,7 @@ workflow MONDRIAN_VARIANT {
         vcf2maf = VCF2MAF(consensus.vcf, vep_ref, vep_fasta_suffix, ncbi_build, cache_version, species, sample_id+'_consensus')
 
         VARIANTMETADATA(
-            vcf2maf.maf, consensus.vcf, consensus.vcf_tbi, museq_reheader.vcf, museq_reheader.tbi,
+            vcf2maf.maf, consensus.vcf, consensus.tbi, museq_reheader.vcf, museq_reheader.tbi,
             alignment_artifacts.vcf, alignment_artifacts.tbi, reheader_strelka_snv.vcf, reheader_strelka_snv.tbi,
             reheader_strelka_indel.vcf, reheader_strelka_indel.tbi, metadata
         )
