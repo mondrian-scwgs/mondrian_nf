@@ -29,6 +29,6 @@ process FILTERALIGNMENTARTIFACTS {
             -O ${filename}.vcf.gz
 
         bcftools index ${filename}.vcf.gz
-        tabix -p vcf ${filename}.vcf.gz
+        tabix -f -p vcf ${filename}.vcf.gz
     """
 }
