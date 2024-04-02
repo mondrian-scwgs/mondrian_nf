@@ -6,12 +6,18 @@ process BCFTOOLSCONCATVCF {
 
 
     input:
-        path(vcf_files, stageAs: "?/*")
+      tuple(
+        val(chromosome),
+        path(vcf_files, stageAs: "?/*"),
         path(csi_files, stageAs: "?/*")
+      )
 
     output:
-        path("merged_sorted.vcf.gz"), emit: vcf
-        path("merged_sorted.vcf.gz.csi"), emit: csi
+      tuple(
+        val(chromosome),
+        path("merged_sorted.vcf.gz"),
+        path("merged_sorted.vcf.gz.csi")
+      )
 
     script:
     def infiles = vcf_files.join(' ')
