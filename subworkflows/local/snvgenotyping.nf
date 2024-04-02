@@ -5,7 +5,7 @@ include { MERGEVCFS } from '../../modules/local/merge_vcfs'
 include { GENERATEBARCODES } from '../../modules/local/generate_barcodes'
 include { REMOVEDUPLICATES } from '../../modules/local/vcf_remove_duplicates'
 include { REMOVEBLACKLISTEDCALLS } from '../../modules/local/vcf_remove_blacklisted_calls'
-include { SPLITBYCHROM } from '../../modules/local/vcf_split_by_chrom'
+include { SPLITVCFBYNUMLINES } from '../../modules/local/vcf_split_by_lines'
 include { VARTRIX } from '../../modules/local/vartrix'
 include { RECOPY } from '../../modules/local/recopy'
 include { CONCATCSV } from '../../modules/local/csverve_concat_csv'
@@ -22,6 +22,7 @@ workflow MONDRIAN_SNVGENOTYPING{
         cell_barcodes
         reference_fasta
         metadata_input
+        numlines
         numcores
         sample_id
     main:
@@ -39,7 +40,7 @@ workflow MONDRIAN_SNVGENOTYPING{
         } else {
             blacklist_calls = RECOPY(uniq_calls[0], sample_id + '_unique_blacklist_removed.vcf.gz')
         }
-        chrom_vcfs = SPLITBYCHROM(blacklist_calls[0] )
+        chrom_vcfs = SPLITVCFBYNUMLINES(blacklist_calls[0], numlines)
 
         vartrix = VARTRIX(
             bam_file, bam_file+'.bai', chrom_vcfs.vcf.flatten(), barcodes,

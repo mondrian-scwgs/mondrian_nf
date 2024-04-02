@@ -25,6 +25,13 @@ if(params.barcodes){
     cell_barcodes = tuple(false, file("$baseDir/assets/dummy_file.txt"))
 }
 
+if(params.numlines){
+    numlines = params.numlines
+} else {
+    numlines = 1000
+}
+
+
 vcf_files = Channel.fromPath(params.vcf_files)
 bam_file = file(params.bam_file)
 reference_fasta = file(params.reference_fasta)
@@ -53,6 +60,7 @@ workflow MONDRIAN_SNVGENOTYPING_PIPELINE{
         cell_barcodes,
         reference_fasta,
         metadata_input,
+        numlines,
         numcores,
         sample_id
     )

@@ -6,19 +6,16 @@ process GETREGIONS {
 
 
     input:
-    file reference
-    val chromosome
-    val size
+    path(reference)
+    val(chromosomes)
+    val(size)
 
     output:
-    tuple(val(chromosome), path('intervals.txt'))
+    path('intervals.txt')
 
     script:
+    def chromosomes_arg = "--chromosomes " + chromosomes.join(" --chromosomes ")
     """
-    reference_utils get-intervals \
-        --reference ${reference} \
-        --output intervals.txt \
-        --chromosomes ${chromosome} \
-        --interval_size ${size}
+    variant_utils generate-intervals --reference ${reference} ${chromosomes_arg} --size ${size} > intervals.txt
     """
 }
