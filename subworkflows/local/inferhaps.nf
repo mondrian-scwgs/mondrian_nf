@@ -3,7 +3,7 @@ nextflow.enable.dsl=2
 include { GETREGIONSPERCHROMOSOME } from '../../modules/local/get_regions_per_chromosome'
 include { BCFTOOLSMPILEUP } from '../../modules/local/bcftools_mpileup'
 include { BCFTOOLSFILTERHET } from '../../modules/local/bcftools_filter_het'
-include { BCFTOOLSCONCATVCF } from '../../modules/local/bcftools_concat_vcf'
+include { BCFTOOLSCONCATVCFBYCHROMOSOME } from '../../modules/local/bcftools_concat_vcf_by_chromosome'
 include { CONCATCSV } from '../../modules/local/csverve_concat_csv'
 include { SHAPEIT } from '../../modules/local/shapeit'
 include { INFERHAPSMETADATA } from '../../modules/local/infer_haps_metadata'
@@ -50,7 +50,7 @@ workflow MONDRIAN_INFERHAPS{
         x = filtered_vcfs.map{it -> tuple(it[0], it[1])}.groupTuple()
         y = filtered_vcfs.map{it -> tuple(it[0], it[2])}.groupTuple()
         grouped_by_chrom = x.combine(y, by: 0)
-        vcfs = BCFTOOLSCONCATVCF(grouped_by_chrom)
+        vcfs = BCFTOOLSCONCATVCFBYCHROMOSOME(grouped_by_chrom)
 
         shapeit_input = vcfs
                           .combine(references, by: 0)

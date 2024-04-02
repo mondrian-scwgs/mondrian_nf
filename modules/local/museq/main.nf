@@ -16,9 +16,9 @@ process MUSEQ {
     val(numcores)
     val(filename)
   output:
-    path("${filename}.vcf.gz"), emit: vcf
-    path("${filename}.vcf.gz.csi"), emit: csi
-    path("${filename}.vcf.gz.tbi"), emit: tbi
+    path("${filename}.vcf.gz"), emit:vcf
+    path("${filename}.vcf.gz.csi"), emit:csi
+    path("${filename}.vcf.gz.tbi"), emit:tbi
   script:
     """
         mkdir pythonegg && export PYTHON_EGG_CACHE=$PWD/pythonegg

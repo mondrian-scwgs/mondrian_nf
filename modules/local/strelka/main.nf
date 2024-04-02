@@ -21,8 +21,8 @@ process STRELKA {
     path("merged_indels.sorted.fixed.vcf.gz.tbi"), emit: indel_tbi
     path("merged_snv.sorted.fixed.vcf.gz"), emit: snv_vcf
     path("merged_snv.sorted.fixed.vcf.gz.csi"), emit: snv_csi
-    path("merged_snv.sorted.fixed.vcf.gz.tbi"), emit: snv_tbi
-    path("*stats.txt"), emit: stats
+    path("merged_snv.sorted.fixed.vcf.gz.tbi"),  emit: snv_tbi
+    path("*stats.txt"), emit:stats
   script:
     """
         genome_size=`cat ${genome_size}`

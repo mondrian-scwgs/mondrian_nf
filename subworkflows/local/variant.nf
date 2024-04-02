@@ -75,7 +75,7 @@ workflow MONDRIAN_VARIANT {
         museq_vcfs = MUSEQ(
             normal_variant_bam.bam, normal_variant_bam.bai, tumor_variant_bam.bam, tumor_variant_bam.bai,
             reference, reference+'.fai', maxcoverage,allregions.flatten(),
-            1, 'museq_vcf_interval_'
+            1, 'museq_vcf_interval'
         )
         museq_concat = CONCAT_MUSEQ(museq_vcfs.vcf.collect(), museq_vcfs.csi.collect())
         museq_reheader = REHEADER_MUSEQ(museq_concat.vcf, normal, tumor, 'TUMOUR', 'NORMAL', sample_id+'_museq')
@@ -139,7 +139,7 @@ workflow MONDRIAN_VARIANT {
         vcf2maf = VCF2MAF(consensus.vcf, vep_ref, vep_fasta_suffix, ncbi_build, cache_version, species, sample_id+'_consensus')
 
         VARIANTMETADATA(
-            vcf2maf.maf, consensus.vcf, consensus.tbi, museq_reheader.vcf, museq_reheader.tbi,
+            vcf2maf.maf, consensus.vcf, consensus.vcf_tbi, museq_reheader.vcf, museq_reheader.tbi,
             alignment_artifacts.vcf, alignment_artifacts.tbi, reheader_strelka_snv.vcf, reheader_strelka_snv.tbi,
             reheader_strelka_indel.vcf, reheader_strelka_indel.tbi, metadata
         )
