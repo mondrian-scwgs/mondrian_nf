@@ -1,6 +1,8 @@
+# Infer Haplotypes
+
 *prerequisite: [quickstart](README.md)*
 
-1. Download test data set
+#### Download test data set
 
 ```
     wget https://mondriantestdata.s3.amazonaws.com/haplotype_calling_testdata.tar.gz
@@ -8,7 +10,7 @@
 ```
 
 
-2. create reference.csv file
+#### Create reference.csv file
 
 ```
 chromosome,regions_vcf,genetic_map
@@ -16,7 +18,7 @@ chromosome,regions_vcf,genetic_map
 ```
 
 
-2. create params.yaml file:
+#### Create params.yaml file:
 
 ```
 bam: "<path-to-haplotype_testdata>/data/HCC1395BL_chr15.bam"
@@ -33,15 +35,15 @@ sample_id: SA123
 metadata_input: "<path-to-haplotype_testdata>/data/metadata.yaml"
 ```
 
-4. run pipeline
+#### Run pipeline
 ```
 ./nextflow pull mondrian-scwgs/mondrian_nf -r main
 
 ./nextflow run mondrian-scwgs/mondrian_nf -r main -params-file params.yaml -resume
 ```
 
-to launch using singularity please add: `-profile singularity`
-to launch using singularity and slurm please add: `-profile singularity,slurm`
-to launch using singularity and lsf please add: `-profile singularity,lsf`
-to launch using docker please add: `-profile docker`
-to specify number of jobs: `--max_cpus 45`
+- to launch using singularity please add: `-profile singularity`
+- to launch using singularity and slurm please add: `-profile singularity,slurm`
+- to launch using singularity and lsf please add: `-profile singularity,lsf`
+- to launch using docker please add: `-profile docker`
+- to specify number of jobs: `--max_cpus 45`
