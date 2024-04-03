@@ -1,4 +1,4 @@
-process BCFTOOLSCONCATVCFBYCHROM {
+process BCFTOOLSCONCATVCFBYCHROMOSOME {
     time '48h'
     cpus 12
     memory '12 GB'
