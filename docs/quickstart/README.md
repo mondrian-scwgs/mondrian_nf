@@ -23,3 +23,15 @@
   ```
   wget -qO- https://get.nextflow.io | bash
   ```
+
+### Analyses:
+
+To continue quickstart, please choose the analysis you'd like to run:
+
+- [QC](quickstart/qc.md)
+- [variant](quickstart/variant.md)
+- [breakpoint](quickstart/breakpoint.md)
+- [snv genotyping](quickstart/snv_genotyping.md)
+- [normalizer](quickstart/normalizer.md)
+- [haplotype counts](quickstart/counthaps.md)
+- [haplotype infer](quickstart/inferhaps.md)
