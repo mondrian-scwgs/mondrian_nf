@@ -1,6 +1,8 @@
+# QC 
+
 *prerequisite: [quickstart](README.md)*
 
-1. Download test data set
+#### Download test data set
 
 ```
 wget https://mondriantestdata.s3.amazonaws.com/alignment_testdata.tar.gz
@@ -8,8 +10,7 @@ tar -xvf alignment_testdata.tar.gz
 
 ```
 
-
-2. create fastqs.csv file:
+#### Create fastqs.csv file:
 ```
 cellid,laneid,flowcellid,fastq1,fastq2
 SA1090-A96213A-R20-C28,L001,FL001,<path-to-alignment_testdata>/SA1090-A96213A-R20-C28_1.fastq.gz,/fscratch/shahlab/grewald/<path-to-alignment_testdata>/SA1090-A96213A-R20-C28_2.fastq.gz
@@ -17,7 +18,7 @@ SA1090-A96213A-R22-C43,L001,FL001,<path-to-alignment_testdata>/SA1090-A96213A-R2
 ```
 
 
-3. create params.yaml file:
+#### Create params.yaml file:
 
 ```
 
@@ -39,15 +40,15 @@ output_dir: 'results/'
 mode: 'qc'
 ```
 
-4. run pipeline
+#### Run
 ```
 ./nextflow pull mondrian-scwgs/mondrian_nf -r main
 
 ./nextflow run mondrian-scwgs/mondrian_nf -r main -params-file params.yaml -resume
 ```
 
-to launch using singularity please add: `-profile singularity`
-to launch using singularity and slurm please add: `-profile singularity,slurm`
-to launch using singularity and lsf please add: `-profile singularity,lsf`
-to launch using docker please add: `-profile docker`
-to specify number of jobs: `--max_cpus 45`
+- to launch using singularity please add: `-profile singularity`
+- to launch using singularity and slurm please add: `-profile singularity,slurm`
+- to launch using singularity and lsf please add: `-profile singularity,lsf`
+- to launch using docker please add: `-profile docker`
+- to specify number of jobs: `--max_cpus 45`
