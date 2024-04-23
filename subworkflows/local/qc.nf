@@ -57,11 +57,11 @@ workflow MONDRIAN_QC{
                        primary_reference+'.fai', primary_reference+'.amb', primary_reference+'.ann',
                        primary_reference+'.bwt', primary_reference+'.pac', primary_reference+'.sa',
                        secondary_reference_1, secondary_reference_1_version, secondary_reference_1_name,
-                       secondary_reference+'.fai', secondary_reference+'.amb', secondary_reference+'.ann',
-                       secondary_reference+'.bwt', secondary_reference+'.pac', secondary_reference+'.sa',
-                       salmon_reference, salmon_reference_version,
-                       salmon_reference+'.fai', salmon_reference+'.amb', salmon_reference+'.ann',
-                       salmon_reference+'.bwt', salmon_reference+'.pac', salmon_reference+'.sa',
+                       secondary_reference_1+'.fai', secondary_reference_1+'.amb', secondary_reference_1+'.ann',
+                       secondary_reference_1+'.bwt', secondary_reference_1+'.pac', secondary_reference_1+'.sa',
+                       secondary_reference_2, secondary_reference_2_version, secondary_reference_2_name,
+                       secondary_reference_2+'.fai', secondary_reference_2+'.amb', secondary_reference_2+'.ann',
+                       secondary_reference_2+'.bwt', secondary_reference_2+'.pac', secondary_reference_2+'.sa',
                        metadata_yaml
         )
     }
