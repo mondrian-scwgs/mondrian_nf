@@ -34,7 +34,7 @@ process ALIGN {
     def flowcells = flowcells.join(' ')
     def supplementary_2 = ''
     if(secondary_reference_2_name) {
-        supplementary_2 = '--supplementary_reference ' + secondary_reference_2_name + ',' + secondary_reference_2_version + ',' + secondary_reference_2
+        supplementary_2 = '--supplementary_references ' + secondary_reference_2_name + ',' + secondary_reference_2_version + ',' + secondary_reference_2
     } else {
         supplementary_2 = ''
     }
