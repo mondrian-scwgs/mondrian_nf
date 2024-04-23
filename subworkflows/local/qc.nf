@@ -23,12 +23,15 @@ workflow MONDRIAN_QC{
     take:
         fastqs
         metadata_yaml
-        human_reference
-        human_reference_version
-        mouse_reference
-        mouse_reference_version
-        salmon_reference
-        salmon_reference_version
+        primary_reference
+        primary_reference_version
+        primary_reference_name
+        secondary_reference_1
+        secondary_reference_1_version
+        secondary_reference_1_name
+        secondary_reference_2
+        secondary_reference_2_version
+        secondary_reference_2_name
         gc_wig
         map_wig
         quality_classifier_training_data
@@ -50,12 +53,12 @@ workflow MONDRIAN_QC{
     fastqs = lanes.join(flowcells).join(lanes1).join(lanes2).map{
         row -> tuple(
             row[0], row[1], row[2], row[3], row[4],
-                       human_reference, human_reference_version,
-                       human_reference+'.fai', human_reference+'.amb', human_reference+'.ann',
-                       human_reference+'.bwt', human_reference+'.pac', human_reference+'.sa',
-                       mouse_reference, mouse_reference_version,
-                       mouse_reference+'.fai', mouse_reference+'.amb', mouse_reference+'.ann',
-                       mouse_reference+'.bwt', mouse_reference+'.pac', mouse_reference+'.sa',
+                       primary_reference, primary_reference_version, primary_reference_name,
+                       primary_reference+'.fai', primary_reference+'.amb', primary_reference+'.ann',
+                       primary_reference+'.bwt', primary_reference+'.pac', primary_reference+'.sa',
+                       secondary_reference_1, secondary_reference_1_version, secondary_reference_1_name,
+                       secondary_reference+'.fai', secondary_reference+'.amb', secondary_reference+'.ann',
+                       secondary_reference+'.bwt', secondary_reference+'.pac', secondary_reference+'.sa',
                        salmon_reference, salmon_reference_version,
                        salmon_reference+'.fai', salmon_reference+'.amb', salmon_reference+'.ann',
                        salmon_reference+'.bwt', salmon_reference+'.pac', salmon_reference+'.sa',

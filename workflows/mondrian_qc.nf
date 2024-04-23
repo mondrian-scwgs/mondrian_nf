@@ -9,12 +9,15 @@ def assert_required_param(param, param_name){
         exit 1, param_name +' not specified. Please provide --${param_name} <value> !'
     }
 }
-assert_required_param(params.human_reference, 'human_reference')
-assert_required_param(params.human_reference_version, 'human_reference_version')
-assert_required_param(params.mouse_reference, 'mouse_reference')
-assert_required_param(params.mouse_reference_version, 'mouse_reference_version')
-assert_required_param(params.salmon_reference, 'mouse_reference')
-assert_required_param(params.salmon_reference_version, 'mouse_reference_version')
+assert_required_param(params.primary_reference, 'primary_reference')
+assert_required_param(params.primary_reference_version, 'primary_reference_version')
+assert_required_param(params.primary_reference_name, 'primary_reference_name')
+assert_required_param(params.secondary_reference_1, 'secondary_reference_1')
+assert_required_param(params.secondary_reference_1_version, 'secondary_reference_1_version')
+assert_required_param(params.secondary_reference_1_version, 'secondary_reference_1_name')
+assert_required_param(params.secondary_reference_2, 'secondary_2_reference')
+assert_required_param(params.secondary_reference_2_version, 'secondary_reference_2_version')
+assert_required_param(params.secondary_reference_2_name, 'secondary_reference_2_name')
 assert_required_param(params.gc_wig, 'gc_wig')
 assert_required_param(params.map_wig, 'map_wig')
 assert_required_param(params.quality_classifier_training_data, 'quality_classifier_training_data')
@@ -24,12 +27,15 @@ assert_required_param(params.fastqs, 'fastqs')
 assert_required_param(params.metadata, 'metadata')
 assert_required_param(params.sample_id, 'sample_id')
 
-human_reference = file(params.human_reference)
-human_reference_version = params.human_reference_version
-mouse_reference = file(params.mouse_reference)
-mouse_reference_version = params.mouse_reference_version
-salmon_reference = file(params.salmon_reference)
-salmon_reference_version = params.salmon_reference_version
+primary_reference = file(params.primary_reference)
+primary_reference_version = params.primary_reference_version
+primary_reference_name = params.primary_reference_name
+secondary_reference_1 = file(params.secondary_reference_1)
+secondary_reference_1_version = params.secondary_reference_1_version
+secondary_reference_1_name = params.secondary_reference_1_name
+secondary_reference_2 = file(params.secondary_reference_2)
+secondary_reference_2_version = params.secondary_reference_2_version
+secondary_reference_2_name = params.secondary_reference_2_name
 gc_wig = file(params.gc_wig)
 map_wig = file(params.map_wig)
 quality_classifier_training_data = file(params.quality_classifier_training_data)
@@ -56,12 +62,15 @@ workflow MONDRIAN_QC_PIPELINE{
     MONDRIAN_QC(
         fastqs,
         metadata,
-        human_reference,
-        human_reference_version,
-        mouse_reference,
-        mouse_reference_version,
-        salmon_reference,
-        salmon_reference_version,
+        primary_reference,
+        primary_reference_version,
+        primary_reference_name,
+        secondary_reference_1,
+        secondary_reference_1_version,
+        secondary_reference_1_name,
+        secondary_reference_2,
+        secondary_reference_2_version,
+        secondary_reference_2_name,
         gc_wig,
         map_wig,
         quality_classifier_training_data,
