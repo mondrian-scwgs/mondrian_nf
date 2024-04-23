@@ -15,9 +15,6 @@ assert_required_param(params.primary_reference_name, 'primary_reference_name')
 assert_required_param(params.secondary_reference_1, 'secondary_reference_1')
 assert_required_param(params.secondary_reference_1_version, 'secondary_reference_1_version')
 assert_required_param(params.secondary_reference_1_version, 'secondary_reference_1_name')
-assert_required_param(params.secondary_reference_2, 'secondary_2_reference')
-assert_required_param(params.secondary_reference_2_version, 'secondary_reference_2_version')
-assert_required_param(params.secondary_reference_2_name, 'secondary_reference_2_name')
 assert_required_param(params.gc_wig, 'gc_wig')
 assert_required_param(params.map_wig, 'map_wig')
 assert_required_param(params.quality_classifier_training_data, 'quality_classifier_training_data')
@@ -33,9 +30,6 @@ primary_reference_name = params.primary_reference_name
 secondary_reference_1 = file(params.secondary_reference_1)
 secondary_reference_1_version = params.secondary_reference_1_version
 secondary_reference_1_name = params.secondary_reference_1_name
-secondary_reference_2 = file(params.secondary_reference_2)
-secondary_reference_2_version = params.secondary_reference_2_version
-secondary_reference_2_name = params.secondary_reference_2_name
 gc_wig = file(params.gc_wig)
 map_wig = file(params.map_wig)
 quality_classifier_training_data = file(params.quality_classifier_training_data)
@@ -44,6 +38,21 @@ chromosomes = params.chromosomes
 fastqs = file(params.fastqs)
 metadata = file(params.metadata)
 sample_id = params.sample_id
+
+
+
+if(params.secondary_reference_2){
+    secondary_reference_2 = file(params.secondary_reference_2)
+    secondary_reference_2_version = params.secondary_reference_2_version
+    secondary_reference_2_name = params.secondary_reference_2_name
+} else {
+    secondary_reference_2 = file("$baseDir/assets/dummy_file.txt")
+    secondary_reference_2_version = null
+    secondary_reference_2_name = null
+}
+
+
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     IMPORT LOCAL MODULES/SUBWORKFLOWS
