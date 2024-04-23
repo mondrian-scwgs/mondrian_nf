@@ -32,6 +32,12 @@ process ALIGN {
   script:
     def lanes = lanes.join(' ')
     def flowcells = flowcells.join(' ')
+    def supplementary_2 = ''
+    if(secondary_reference_2_name) {
+        supplementary_2 = '--supplementary_reference ' + secondary_reference_2_name + ',' + secondary_reference_2_version + ',' + secondary_reference_2
+    } else {
+        supplementary_2 = ''
+    }
     """
 
         fastqs_cmd=`python -c 'x=["${lanes}","${flowcells}","${fastqs1}","${fastqs2}"];x=[v.split() for v in x];x=[",".join(v) for v in zip(*x)];x=" --fastq_pairs ".join(x);print(x)'`
@@ -41,7 +47,7 @@ process ALIGN {
         --metadata_yaml ${metadata} \
         --reference ${primary_reference_name},${primary_reference_version},${primary_reference} \
         --supplementary_references ${secondary_reference_1_name},${secondary_reference_1_version},${secondary_reference_1} \
-        --supplementary_references ${secondary_reference_2_name},${secondary_reference_2_version},${secondary_reference_2} \
+        ${supplementary_2} \
         --tempdir tempdir \
         --adapter1 CTGTCTCTTATACACATCTCCGAGCCCACGAGAC \
         --adapter2 CTGTCTCTTATACACATCTGACGCTGCCGACGA \
