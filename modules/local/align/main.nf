@@ -39,9 +39,9 @@ process ALIGN {
         alignment_utils alignment \
         --fastq_pairs \${fastqs_cmd} \
         --metadata_yaml ${metadata} \
-        --reference human,${human_reference_version},${human_reference} \
-        --supplementary_references mouse,${mouse_reference_version},${mouse_reference} \
-        --supplementary_references salmon,${salmon_reference_version},${salmon_reference} \
+        --reference ${primary_reference_name},${primary_reference_version},${primary_reference} \
+        --supplementary_references ${secondary_reference_1_name},${secondary_reference_1_version},${secondary_reference_1} \
+        --supplementary_references ${secondary_reference_2_name},${secondary_reference_2_version},${secondary_reference_2} \
         --tempdir tempdir \
         --adapter1 CTGTCTCTTATACACATCTCCGAGCCCACGAGAC \
         --adapter2 CTGTCTCTTATACACATCTGACGCTGCCGACGA \
