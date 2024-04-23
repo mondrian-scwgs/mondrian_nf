@@ -77,7 +77,7 @@ workflow MONDRIAN_QC{
     hmm_input = ALIGN.out.map {
         it -> tuple(
             it[0],it[1],it[2], gc_wig, map_wig,
-            human_reference, human_reference+'.fai',
+            primary_reference, primary_reference+'.fai',
             it[3],it[4],
             repeats_satellite_regions, quality_classifier_training_data,
             chromosomes, "0.9"
@@ -95,7 +95,7 @@ workflow MONDRIAN_QC{
 
     BAMMERGECELLS(
       ALIGN.out.collect{it[0]}, ALIGN.out.collect{it[1]}, ALIGN.out.collect{it[2]},
-      human_reference, human_reference + '.fai',
+      primary_reference, primary_reference + '.fai',
       CONCATMETRICS.out.csv, CONCATMETRICS.out.yaml,
       sample_id
     )
