@@ -21,7 +21,7 @@ process SNVGENOTYPINGMETADATA {
         snv_genotyping_utils generate-metadata \
         --vartrix_outputs ${vartrix_csv} ${vartrix_yaml} \
         ${barcodes} ${variants} ${ref_matrix} ${alt_matrix} \
-        --pysam_genotyper ${pysam_genotyper_csv} ${pysam_genotyper_yaml} \
+        --outputs ${pysam_genotyper_csv} ${pysam_genotyper_yaml} \
         --metadata_input ${metadata_input} \
         --metadata_output metadata.yaml
     """
