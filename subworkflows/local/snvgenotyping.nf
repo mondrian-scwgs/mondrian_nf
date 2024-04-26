@@ -64,7 +64,7 @@ workflow MONDRIAN_SNVGENOTYPING{
 
         SNVGENOTYPINGMETADATA(
             vartrix_all_chroms.csv, vartrix_all_chroms.yaml, vartrix_outputs.barcodes, vartrix_outputs.variants,
-            vartrix_outputs.ref_counts, vartrix_outputs.alt_counts, metadata_input
+            vartrix_outputs.ref_counts, vartrix_outputs.alt_counts, genotyper.csv, genotyper.yaml, metadata_input
 
         )
 
