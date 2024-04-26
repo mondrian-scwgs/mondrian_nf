@@ -35,11 +35,11 @@ process PYSAMGENOTYPER {
             ls tempdir/vcf_split|while read x; do bgzip temp_output/\${x} && tabix temp_output/\${x}.gz;done
             split_vcf_files=`ls tempdir/vcf_split/*.vcf.gz`
 
-            for split_vcf_file in ${split_vcf_files}
+            for split_vcf_file in \${split_vcf_files}
                 do
                     echo "snv_genotyping_utils snv-genotyper \
                     --bam ${bam}  ${cell_barcodes_arg} ${ignore_untagged_reads_arg} ${skip_header_arg} ${sparse_arg}\
-                     --targets_vcf ${split_vcf_file}  --output outdir/${basename $split_vcf_file}.genotype.csv.gz" >> commands.txt
+                     --targets_vcf \${split_vcf_file}  --output outdir/${basename $split_vcf_file}.genotype.csv.gz" >> commands.txt
                 done
             parallel --jobs ${num_threads} < commands.txt
 
