@@ -33,7 +33,7 @@ process PYSAMGENOTYPER {
             mkdir outdir
             io_utils split-vcf --infile ${vcf_file} --outdir tempdir/vcf_split --num_lines 5000
             gunzip tempdir/vcf_split/*
-            ls tempdir/vcf_split|while read x; do bgzip tempdir/vcf_split/${x} && tabix tempdir/vcf_split/${x} ;done
+            ls tempdir/vcf_split|while read x; do bgzip tempdir/vcf_split/\${x} && tabix tempdir/vcf_split/\${x} ;done
             split_vcf_files=`ls tempdir/vcf_split/*.vcf.gz`
 
             for split_vcf_file in \${split_vcf_files}
