@@ -11,6 +11,7 @@ include { RECOPY } from '../../modules/local/recopy'
 include { CONCATCSV } from '../../modules/local/csverve_concat_csv'
 include { REGENERATEVARTRIXOUTPUTS } from '../../modules/local/regenerate_vartrix_outputs'
 include { SNVGENOTYPINGMETADATA } from '../../modules/local/snv_genotyping_metadata'
+include { PYSAMGENOTYPER } from '../../modules/local/pysam_genotyper'
 
 
 workflow MONDRIAN_SNVGENOTYPING{
@@ -41,6 +42,12 @@ workflow MONDRIAN_SNVGENOTYPING{
             blacklist_calls = RECOPY(uniq_calls[0], sample_id + '_unique_blacklist_removed.vcf.gz')
         }
         chrom_vcfs = SPLITVCFBYNUMLINES(blacklist_calls[0], numlines)
+
+
+        genotyper = PYSAMGENOTYPER(
+            bam_file, bam_file+'.bai', chrom_vcfs.vcf.flatten(), barcodes,
+            true, true, numcores, sample_id+'_pysam_genotyper'
+        )
 
         vartrix = VARTRIX(
             bam_file, bam_file+'.bai', chrom_vcfs.vcf.flatten(), barcodes,
