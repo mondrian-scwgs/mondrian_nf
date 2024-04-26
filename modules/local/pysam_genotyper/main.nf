@@ -39,11 +39,11 @@ process PYSAMGENOTYPER {
                 do
                     echo "snv_genotyping_utils snv-genotyper \
                     --bam ${bam}  ${cell_barcodes_arg} ${ignore_untagged_reads_arg} ${skip_header_arg} ${sparse_arg}\
-                     --targets_vcf \${split_vcf_file}  --output outdir/${basename \$split_vcf_file}.genotype.csv.gz" >> commands.txt
+                     --targets_vcf \${split_vcf_file}  --output \${split_vcf_file}.genotype.csv.gz" >> commands.txt
                 done
             parallel --jobs ${num_threads} < commands.txt
 
-            inputs=`echo outdir/*genotype.csv.gz | sed "s/ / --in_f /g"`
+            inputs=`echo tempdir/vcf_split/*.genotype.csv.gz | sed "s/ / --in_f /g"`
             csverve concat --in_f $inputs  --out_f ${filename}.csv.gz
         fi
     """
