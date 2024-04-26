@@ -11,6 +11,8 @@ process SNVGENOTYPINGMETADATA {
     path(variants)
     path(ref_matrix)
     path(alt_matrix)
+    path(pysam_genotyper_csv)
+    path(pysam_genotyper_yaml)
     path(metadata_input)
   output:
     path("metadata.yaml"), emit: metadata
@@ -19,6 +21,7 @@ process SNVGENOTYPINGMETADATA {
         snv_genotyping_utils generate-metadata \
         --vartrix_outputs ${vartrix_csv} ${vartrix_yaml} \
         ${barcodes} ${variants} ${ref_matrix} ${alt_matrix} \
+        --pysam_genotyper ${pysam_genotyper_csv} ${pysam_genotyper_yaml} \
         --metadata_input ${metadata_input} \
         --metadata_output metadata.yaml
     """
