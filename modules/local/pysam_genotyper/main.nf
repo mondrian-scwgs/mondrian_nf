@@ -44,7 +44,7 @@ process PYSAMGENOTYPER {
             parallel --jobs ${num_threads} < commands.txt
 
             inputs=`echo tempdir/vcf_split/*.genotype.csv.gz | sed "s/ / --in_f /g"`
-            csverve concat --in_f $inputs  --out_f ${filename}.csv.gz
+            csverve concat --in_f \$inputs  --out_f ${filename}.csv.gz
         fi
     """
 }
