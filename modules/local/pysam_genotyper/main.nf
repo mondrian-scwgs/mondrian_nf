@@ -17,7 +17,7 @@ process PYSAMGENOTYPER {
     path("${filename}.csv.gz"), emit: csv
     path("${filename}.csv.gz.yaml"), emit: yaml
   script:
-    def sparse_arg = sparse ? "--sparse" : ""
+    def sparse_arg = "--sparse"
     def skip_header_arg = skip_header ? "--skip_header" : ""
     def ignore_untagged_reads_arg = ignore_untagged_reads ? "--ignore_untagged_reads" : ""
     def cell_barcodes_arg = cell_barcodes ? "--cell_barcodes "+cell_barcodes : ""
