@@ -26,7 +26,7 @@ process PYSAMGENOTYPER {
         if [[ ${num_threads} -eq 1 ]]
         then
             snv_genotyping_utils snv-genotyper --bam ${bam}  ${cell_barcodes_arg} \
-            --targets_vcf ${vcf_file} --output ${filename_prefix}.csv.gz \
+            --targets_vcf ${vcf_file} --output ${filename}.csv.gz \
             ${ignore_untagged_reads_arg} ${skip_header_arg} ${sparse_arg}
         else
             mkdir tempdir
@@ -44,7 +44,7 @@ process PYSAMGENOTYPER {
             parallel --jobs ${num_threads} < commands.txt
 
             inputs=`echo outdir/*genotype.csv.gz | sed "s/ / --in_f /g"`
-            csverve concat --in_f $inputs  --out_f ${filename_prefix}.csv.gz
+            csverve concat --in_f $inputs  --out_f ${filename}.csv.gz
         fi
     """
 }
