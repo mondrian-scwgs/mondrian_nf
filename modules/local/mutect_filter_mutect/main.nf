@@ -21,7 +21,7 @@ process FILTERMUTECT {
     path("${filename}.vcf.gz.tbi"), emit: tbi
     path("${filename}.stats"), emit: stats
   script:
-    def contamination_table_arg = contamination_table.contains("dummy_file.txt") ? "" : "--contamination-table "+contamination_table
+    def contamination_table_arg = has_contamination_data ? "--contamination-table "+contamination_table : ""
     def maf_segments_arg = has_contamination_data ? "--tumor-segmentation "+maf_segments : ""
     """
         echo ${has_contamination_data}
