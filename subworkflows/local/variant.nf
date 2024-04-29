@@ -155,7 +155,7 @@ workflow MONDRIAN_VARIANT {
             chromosomes, sample_id+'_consensus'
         )
 
-        vcf2maf = VCF2MAF(consensus.vcf, vep_ref, vep_fasta_suffix, ncbi_build, cache_version, species, sample_id+'_consensus')
+        vcf2maf = VCF2MAF(consensus.vcf, tumor, normal, vep_ref, vep_fasta_suffix, ncbi_build, cache_version, species, sample_id+'_consensus')
 
         VARIANTMETADATA(
             vcf2maf.maf, consensus.vcf, consensus.tbi, museq_reheader.vcf, museq_reheader.tbi,
