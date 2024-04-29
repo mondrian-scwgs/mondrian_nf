@@ -161,7 +161,7 @@ workflow MONDRIAN_VARIANT {
 
         VARIANTMETADATA(
             vcf2maf.maf, consensus.vcf, consensus.tbi, museq_reheader.vcf, museq_reheader.tbi,
-            alignment_artifacts.vcf, alignment_artifacts.tbi, reheader_strelka_snv.vcf, reheader_strelka_snv.tbi,
+            mutect_vcf, mutect_tbi, reheader_strelka_snv.vcf, reheader_strelka_snv.tbi,
             reheader_strelka_indel.vcf, reheader_strelka_indel.tbi, metadata
         )
 
