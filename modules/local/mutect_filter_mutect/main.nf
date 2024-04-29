@@ -12,8 +12,8 @@ process FILTERMUTECT {
     path(unfiltered_vcf_tbi)
     path(mutect_stats)
     val(has_contamination_data)
-    path(contamination_table, stageAs: "?/*")
-    path(maf_segments, stageAs: "?/*")
+    path(contamination_table, stageAs: "?/table/*")
+    path(maf_segments, stageAs: "?/segments/*")
     path(artifact_priors_tar_gz)
     val(filename)
   output:
