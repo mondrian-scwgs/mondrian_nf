@@ -18,12 +18,12 @@ fi
 cd $TYPE
 
 
-docker build --build-arg VERSION=$VERSION -t quay.io/mondrian_nf/$TYPE:$DOCKER_VERSION .
+docker build --build-arg VERSION=$VERSION -t quay.io/mondrianscwgs/$TYPE:$DOCKER_VERSION .
 
 
 
 docker login quay.io -u $USERNAME --password $PASSWORD
-docker push quay.io/mondrian_nf/$TYPE:$DOCKER_VERSION
+docker push quay.io/mondrianscwgs/$TYPE:$DOCKER_VERSION
 
 
 cd ../
