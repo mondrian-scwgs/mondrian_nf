@@ -11,6 +11,7 @@ process FILTERMUTECT {
     path(unfiltered_vcf)
     path(unfiltered_vcf_tbi)
     path(mutect_stats)
+    val(has_contamination_data)
     path(contamination_table)
     path(maf_segments)
     path(artifact_priors_tar_gz)
@@ -20,6 +21,8 @@ process FILTERMUTECT {
     path("${filename}.vcf.gz.tbi"), emit: tbi
     path("${filename}.stats"), emit: stats
   script:
+    def contamination_table_arg = has_contamination_data ? "--contamination-table "+contamination_table : ""
+    def maf_segments_arg = has_contamination_data ? "--tumor-segmentation "+maf_segments : ""
     """
         set -e
         gatk FilterMutectCalls -V ${unfiltered_vcf} \
