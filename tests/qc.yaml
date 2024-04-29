@@ -13,7 +13,7 @@ secondary_reference_1_name: 'mouse'
 secondary_reference_2: 'mondrian-ref-path-here/salmon/GCF_002021735.1_Okis_V1_genomic.fna'
 secondary_reference_2_version: 'salmon'
 secondary_reference_2_name: 'salmon'
-fastqs: 'fastqs.csv'
+fastqs: 'samplesheet.csv'
 sample_id: SAMP123
 output_dir: 'results/'
 mode: 'qc'

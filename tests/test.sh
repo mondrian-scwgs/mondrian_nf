@@ -21,6 +21,7 @@ sed -i 's@mondrian-ref-path-here@'"$RESOURCE_DIR"'/mondrian-ref-20-22@g' ${TEST_
 sed -i 's@mondrian-data-path-here@'"$DATA_DIR"'/@g' ${TEST_DIR}/${PIPELINE}.yaml
 sed -i 's@mondrian-data-path-here@'"$DATA_DIR"'/@g' ${TEST_DIR}/samplesheet.csv
 
+cp ${TEST_DIR}/samplesheet.csv .
 
 cat ${TEST_DIR}/${PIPELINE}.yaml
 cat ${TEST_DIR}/samplesheet.csv
