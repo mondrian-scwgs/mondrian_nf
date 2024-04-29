@@ -100,11 +100,11 @@ workflow MONDRIAN_VARIANT {
         if (variants_for_contamination[0]) {
             normal_pileups=NORMAL_PILEUP(
                 normal_variant_bam.bam, reference, reference+'.fai', reference_dict,
-                variants_for_contamination, variants_for_contamination+'.tbi', chromosomes.flatten(), 'normal'
+                variants_for_contamination[1], variants_for_contamination[1]+'.tbi', chromosomes.flatten(), 'normal'
             )
             tumor_pileups=TUMOR_PILEUP(
                 tumor_variant_bam.bam, reference, reference+'.fai', reference_dict,
-                variants_for_contamination, variants_for_contamination+'.tbi', chromosomes.flatten(), 'tumor'
+                variants_for_contamination[1], variants_for_contamination[1]+'.tbi', chromosomes.flatten(), 'tumor'
             )
             normal_merged_pileups = NORMAL_MERGEPILEUPS(normal_pileups.table, reference_dict, 'normal_pileups_merged')
             tumor_merged_pileups = TUMOR_MERGEPILEUPS(tumor_pileups.table, reference_dict, 'tumor_pileups_merged')
