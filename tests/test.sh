@@ -27,5 +27,5 @@ cat ${TEST_DIR}/${PIPELINE}.yaml
 cat ${TEST_DIR}/samplesheet.csv
 
 $RESOURCE_DIR/nextflow pull mondrian-scwgs/mondrian_nf -r $TAG
-$RESOURCE_DIR/nextflow run mondrian-scwgs/mondrian_nf -r $TAG -params-file ${TEST_DIR}/${PIPELINE}.yaml -resume --max_cpus 4  -profile docker
+$RESOURCE_DIR/nextflow run mondrian-scwgs/mondrian_nf -r $TAG -params-file ${TEST_DIR}/${PIPELINE}.yaml -resume --max_cpus 1  -profile docker
 
