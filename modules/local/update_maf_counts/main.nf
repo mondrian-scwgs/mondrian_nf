@@ -5,7 +5,7 @@ process UPDATEMAFCOUNTS {
     label 'process_high'
 
   input:
-    path(maf_file)
+    path(maf_file, stageAs: '?/inputs/*')
     path(counts_file)
     val(filename)
   output:
