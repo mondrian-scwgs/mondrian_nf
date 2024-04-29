@@ -19,6 +19,7 @@ process VARIANTCONSENSUS {
     path("${filename}.vcf.gz"), emit: vcf
     path("${filename}.vcf.gz.tbi"), emit: tbi
     path("${filename}.vcf.gz.csi"), emit: csi
+    path("counts.csv"), emit: counts
   script:
     def chromosomes = "--chromosomes " + chromosomes.join(" --chromosomes ")
     """

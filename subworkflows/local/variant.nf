@@ -35,6 +35,8 @@ include { FILTERALIGNMENTARTIFACTS } from '../../modules/local/mutect_filter_ali
 include { VARIANTCONSENSUS } from '../../modules/local/variant_consensus'
 
 include { VCF2MAF } from '../../modules/local/vcf2maf'
+include { UPDATEMAFCOUNTS } from '../../modules/local/update_maf_counts'
+
 include { REHEADERID as REHEADER_CONSENSUS } from '../../modules/local/vcf_reheader_id'
 
 include { VARIANTMETADATA } from '../../modules/local/variant_metadata'
@@ -156,9 +158,11 @@ workflow MONDRIAN_VARIANT {
         )
 
         vcf2maf = VCF2MAF(consensus.vcf, tumor, normal, vep_ref, vep_fasta_suffix, ncbi_build, cache_version, species, sample_id+'_consensus')
+        updated_maf = UPDATEMAFCOUNTS(vcf2maf.maf, consensus.counts, sample_id+'_consensus')
+
 
         VARIANTMETADATA(
-            vcf2maf.maf, consensus.vcf, consensus.tbi, museq_reheader.vcf, museq_reheader.tbi,
+            updated_maf.maf, consensus.vcf, consensus.tbi, museq_reheader.vcf, museq_reheader.tbi,
             mutect_vcf, mutect_tbi, reheader_strelka_snv.vcf, reheader_strelka_snv.tbi,
             reheader_strelka_indel.vcf, reheader_strelka_indel.tbi, metadata
         )
