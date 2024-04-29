@@ -17,7 +17,6 @@ assert_required_param(params.chromosomes, 'chromosomes')
 assert_required_param(params.reference, 'reference')
 assert_required_param(params.reference_dict, 'reference_dict')
 assert_required_param(params.panel_of_normals, 'panel_of_normals')
-assert_required_param(params.variants_for_contamination, 'variants_for_contamination')
 assert_required_param(params.gnomad, 'gnomad')
 assert_required_param(params.realignment_index_bundle, 'realignment_index_bundle')
 assert_required_param(params.vep_ref, 'vep_ref')
@@ -28,6 +27,7 @@ assert_required_param(params.species, 'species')
 assert_required_param(params.sample_id, 'sample_id')
 assert_required_param(params.numcores, 'numcores')
 
+
 normal = params.normal
 tumor = params.tumor
 metadata = params.metadata
@@ -35,7 +35,6 @@ chromosomes = params.chromosomes
 reference = params.reference
 reference_dict = params.reference_dict
 panel_of_normals = params.panel_of_normals
-variants_for_contamination = params.variants_for_contamination
 gnomad = params.gnomad
 realignment_index_bundle = params.realignment_index_bundle
 vep_ref = params.vep_ref
@@ -47,6 +46,13 @@ sample_id = params.sample_id
 numcores = params.numcores
 
 maxcoverage = params.maxcoverage ? maxcoverage : 10000
+
+
+if(params.variants_for_contamination){
+    variants_for_contamination = tuple(true, file(params.variants_for_contamination))
+} else {
+    variants_for_contamination = tuple(false, file("$baseDir/assets/dummy_file.txt"))
+}
 
 
 /*
