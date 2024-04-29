@@ -10,6 +10,7 @@ TEMP_DIR=$TEST_DIR/$PIPELINE
 
 mkdir -p $TEMP_DIR && cd $TEMP_DIR
 
+mkdir data
 wget -nv https://mondriantestdata.s3.amazonaws.com/${TEST_DATA}_testdata.tar.gz
 tar -xvf ${TEST_DATA}_testdata.tar.gz -C data
 
