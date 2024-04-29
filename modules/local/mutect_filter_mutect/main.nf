@@ -31,8 +31,8 @@ process FILTERMUTECT {
             -O ${filename}.vcf.gz \
             -stats ${mutect_stats} \
             --ob-priors ${artifact_priors_tar_gz} \
-            --contamination-table ${contamination_table} \
-            --tumor-segmentation ${maf_segments} \
+            ${contamination_table_arg} \
+            ${maf_segments_arg} \
             --filtering-stats ${filename}.stats
     """
 }
