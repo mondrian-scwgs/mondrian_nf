@@ -96,18 +96,30 @@ workflow MONDRIAN_VARIANT {
         filter_strelka_indel = FILTER_STRELKA_INDEL(concat_strelka_indel.vcf, 'filter_strelka_indel')
         reheader_strelka_indel = REHEADER_STRELKA_INDEL(filter_strelka_indel.vcf, normal, tumor, 'TUMOR', 'NORMAL', sample_id+'_strelka_indel')
 
-        normal_pileups=NORMAL_PILEUP(
-            normal_variant_bam.bam, reference, reference+'.fai', reference_dict,
-            variants_for_contamination, variants_for_contamination+'.tbi', chromosomes.flatten(), 'normal'
-        )
-        tumor_pileups=TUMOR_PILEUP(
-            tumor_variant_bam.bam, reference, reference+'.fai', reference_dict,
-            variants_for_contamination, variants_for_contamination+'.tbi', chromosomes.flatten(), 'tumor'
-        )
-        normal_merged_pileups = NORMAL_MERGEPILEUPS(normal_pileups.table, reference_dict, 'normal_pileups_merged')
-        tumor_merged_pileups = TUMOR_MERGEPILEUPS(tumor_pileups.table, reference_dict, 'tumor_pileups_merged')
 
-        contamination = CALCULATECONTAMINATION(tumor_merged_pileups.tsv, normal_merged_pileups.tsv)
+
+
+        if (variants_for_contamination[0]) {
+            normal_pileups=NORMAL_PILEUP(
+                normal_variant_bam.bam, reference, reference+'.fai', reference_dict,
+                variants_for_contamination, variants_for_contamination+'.tbi', chromosomes.flatten(), 'normal'
+            )
+            tumor_pileups=TUMOR_PILEUP(
+                tumor_variant_bam.bam, reference, reference+'.fai', reference_dict,
+                variants_for_contamination, variants_for_contamination+'.tbi', chromosomes.flatten(), 'tumor'
+            )
+            normal_merged_pileups = NORMAL_MERGEPILEUPS(normal_pileups.table, reference_dict, 'normal_pileups_merged')
+            tumor_merged_pileups = TUMOR_MERGEPILEUPS(tumor_pileups.table, reference_dict, 'tumor_pileups_merged')
+            contamination = CALCULATECONTAMINATION(tumor_merged_pileups.tsv, normal_merged_pileups.tsv)
+            contamination_table = contamination.table
+            contamination_segments = contamination.segments
+            has_contamination_data = true
+        } else {
+            contamination_table = file("$baseDir/assets/dummy_file.txt")
+            contamination_segments = file("$baseDir/assets/dummy_file.txt")
+            has_contamination_data = false
+        }
+
 
         mutect = MUTECT(
             normal_variant_bam.bam, normal_variant_bam.bai, tumor_variant_bam.bam, tumor_variant_bam.bai,
@@ -121,7 +133,7 @@ workflow MONDRIAN_VARIANT {
 
         filter_mutect = FILTERMUTECT(
             reference, reference+'.fai', reference_dict, merge_vcfs.vcf, merge_vcfs.tbi,
-            merge_stats.stats, contamination.table, contamination.segments, orientation_model.artifact_priors,
+            merge_stats.stats, has_contamination_data, contamination_table, contamination_segments, orientation_model.artifact_priors,
             sample_id+'_filter_mutect'
         )
         alignment_artifacts = FILTERALIGNMENTARTIFACTS(
