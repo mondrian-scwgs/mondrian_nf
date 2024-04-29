@@ -18,7 +18,6 @@ assert_required_param(params.reference, 'reference')
 assert_required_param(params.reference_dict, 'reference_dict')
 assert_required_param(params.panel_of_normals, 'panel_of_normals')
 assert_required_param(params.gnomad, 'gnomad')
-assert_required_param(params.realignment_index_bundle, 'realignment_index_bundle')
 assert_required_param(params.vep_ref, 'vep_ref')
 assert_required_param(params.vep_fasta_suffix, 'vep_fasta_suffix')
 assert_required_param(params.ncbi_build, 'ncbi_build')
@@ -36,7 +35,6 @@ reference = params.reference
 reference_dict = params.reference_dict
 panel_of_normals = params.panel_of_normals
 gnomad = params.gnomad
-realignment_index_bundle = params.realignment_index_bundle
 vep_ref = params.vep_ref
 vep_fasta_suffix = params.vep_fasta_suffix
 ncbi_build = params.ncbi_build
@@ -52,6 +50,12 @@ if(params.variants_for_contamination){
     variants_for_contamination = tuple(true, file(params.variants_for_contamination))
 } else {
     variants_for_contamination = tuple(false, file("$baseDir/assets/dummy_file.txt"))
+}
+
+if(params.realignment_index_bundle){
+    realignment_index_bundle = tuple(true, file(params.realignment_index_bundle))
+} else {
+    realignment_index_bundle = tuple(false, file("$baseDir/assets/dummy_file.txt"))
 }
 
 

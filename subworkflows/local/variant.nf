@@ -136,15 +136,24 @@ workflow MONDRIAN_VARIANT {
             merge_stats.stats, has_contamination_data, contamination_table, contamination_segments, orientation_model.artifact_priors,
             sample_id+'_filter_mutect'
         )
-        alignment_artifacts = FILTERALIGNMENTARTIFACTS(
-            reference, reference+'.fai', reference_dict, realignment_index_bundle,
-            filter_mutect.vcf, filter_mutect.tbi,  tumor_variant_bam.bam, tumor_variant_bam.bai,
-            sample_id+'_mutect'
-        )
+
+
+        if (realignment_index_bundle[0]){
+            alignment_artifacts = FILTERALIGNMENTARTIFACTS(
+                reference, reference+'.fai', reference_dict, realignment_index_bundle[1],
+                filter_mutect.vcf, filter_mutect.tbi,  tumor_variant_bam.bam, tumor_variant_bam.bai,
+                sample_id+'_mutect'
+            )
+            mutect_vcf = alignment_artifacts.vcf
+            mutect_tbi = alignment_artifacts.tbi
+        } else {
+            mutect_vcf = filter_mutect.vcf
+            mutect_tbi = filter_mutect.tbi
+        }
 
         consensus = VARIANTCONSENSUS(
             museq_reheader.vcf, museq_reheader.tbi, reheader_strelka_snv.vcf, reheader_strelka_snv.tbi,
-            reheader_strelka_indel.vcf, reheader_strelka_indel.tbi, alignment_artifacts.vcf, alignment_artifacts.tbi,
+            reheader_strelka_indel.vcf, reheader_strelka_indel.tbi, mutect_vcf, mutect_tbi,
             chromosomes, sample_id+'_consensus'
         )
 
