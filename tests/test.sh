@@ -19,7 +19,7 @@ DATA_DIR=`ls -d $PWD/data/*`
 TAG=`git describe --tags $(git rev-list --tags --max-count=1)`
 sed -i 's@mondrian-ref-path-here@'"$RESOURCE_DIR"'/mondrian-ref-20-22@g' ${TEST_DIR}/${PIPELINE}.yaml
 sed -i 's@mondrian-data-path-here@'"$DATA_DIR"'/@g' ${TEST_DIR}/${PIPELINE}.yaml
-sed -i 's@mondrian-data-path-here@'"$DATA_DIR"'/@g' ${TEST_DIR}/$samplesheet.csv
+sed -i 's@mondrian-data-path-here@'"$DATA_DIR"'/@g' ${TEST_DIR}/samplesheet.csv
 
 $RESOURCE_DIR/nextflow pull -r $TAG
 $RESOURCE_DIR/nextflow run -r $TAG -params-file params.yaml -resume --max_cpus 4  -profile docker
