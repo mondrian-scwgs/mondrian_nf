@@ -24,6 +24,7 @@ process FILTERMUTECT {
     def contamination_table_arg = has_contamination_data ? "--contamination-table "+contamination_table : ""
     def maf_segments_arg = has_contamination_data ? "--tumor-segmentation "+maf_segments : ""
     """
+        echo ${has_contamination_data}
         set -e
         gatk FilterMutectCalls -V ${unfiltered_vcf} \
             -R ${reference} \
