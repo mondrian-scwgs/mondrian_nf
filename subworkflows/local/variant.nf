@@ -96,6 +96,7 @@ workflow MONDRIAN_VARIANT {
         filter_strelka_indel = FILTER_STRELKA_INDEL(concat_strelka_indel.vcf, 'filter_strelka_indel')
         reheader_strelka_indel = REHEADER_STRELKA_INDEL(filter_strelka_indel.vcf, normal, tumor, 'TUMOR', 'NORMAL', sample_id+'_strelka_indel')
 
+        variants_for_contamination.view()
 
         if (variants_for_contamination[0]) {
             normal_pileups=NORMAL_PILEUP(
