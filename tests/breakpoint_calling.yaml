@@ -1,6 +1,6 @@
-normal: "mondrian-data-path-here/breakpoint_testdata/normal.bam"
-tumor: "mondrian-data-path-here/breakpoint_testdata/medium.bam"
-metadata: "mondrian-data-path-here/breakpoint_testdata/metadata.yaml"
+normal: "mondrian-data-path-here/normal.bam"
+tumor: "mondrian-data-path-here/medium.bam"
+metadata: "mondrian-data-path-here/metadata.yaml"
 chromosomes: ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","X","Y"]
 reference: "mondrian-ref-path-here/mondrian-ref-20-22/human/GRCh37-lite.fa"
 reference_gtf: "mondrian-ref-path-here/mondrian-ref-20-22/human/GRCh37-lite.gtf"
