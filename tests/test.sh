@@ -20,15 +20,15 @@ TAG=`git describe --tags $(git rev-list --tags --max-count=1)`
 sed -i 's@mondrian-ref-path-here@'"$RESOURCE_DIR"'/mondrian-ref-20-22@g' ${TEST_DIR}/${PIPELINE}.yaml
 sed -i 's@mondrian-data-path-here@'"$DATA_DIR"'/@g' ${TEST_DIR}/${PIPELINE}.yaml
 sed -i 's@mondrian-data-path-here@'"$DATA_DIR"'/@g' ${TEST_DIR}/samplesheet.csv
+sed -i 's@mondrian-data-path-here@'"$DATA_DIR"'/@g' ${TEST_DIR}/reference.csv
+
 
 cp ${TEST_DIR}/samplesheet.csv .
 cp ${TEST_DIR}/nextflow.config .
+cp ${TEST_DIR}/reference.csv .
 
 
 cat ${TEST_DIR}/${PIPELINE}.yaml
-
-ls -l ${DATA_DIR}/normal.bam
-ls -l ${RESOURCE_DIR}/mondrian-ref-20-22/human/GRCh37-lite.fa
 
 
 echo "" >> nextflow.config
