@@ -1,6 +1,6 @@
 process HTMLREPORT {
     time '48h'
-    cpus 12
+    cpus 1
     memory '12 GB'
     label 'process_high'
 
