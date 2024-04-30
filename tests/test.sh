@@ -27,6 +27,8 @@ cp ${TEST_DIR}/nextflow.config .
 
 cat ${TEST_DIR}/${PIPELINE}.yaml
 
+ls -l ${TEST_DIR}/normal.bam
+
 $RESOURCE_DIR/nextflow pull mondrian-scwgs/mondrian_nf -r $TAG
 $RESOURCE_DIR/nextflow run mondrian-scwgs/mondrian_nf -r $TAG -params-file ${TEST_DIR}/${PIPELINE}.yaml -resume --max_cpus 2  -profile docker
 
