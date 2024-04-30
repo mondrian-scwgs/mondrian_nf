@@ -31,6 +31,7 @@ ls -l ${DATA_DIR}/normal.bam
 ls -l ${RESOURCE_DIR}/mondrian-ref-20-22/human/GRCh37-lite.fa
 
 
+echo "" >> nextflow.config
 echo "providers.github.user = "$GHUB_USERNAME >> nextflow.config
 echo "providers.github.token = "$GHUB_PASSWORD >> nextflow.config
 
