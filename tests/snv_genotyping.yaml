@@ -1,0 +1,9 @@
+vcf_files: ["mondrian-data-path-here/merged_sorted.vcf.gz"]
+bam_file: "mondrian-data-path-here/merged.bam"
+reference_fasta: "mondrian-ref-path-here/human/GRCh37-lite.fa"
+mode: "snv_genotyping"
+metadata_input: "mondrian-data-path-here/metadata.yaml"
+numlines: 5000
+numcores: 1
+sample_id: "SA123"
+output_dir: "results"
