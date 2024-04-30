@@ -1,0 +1,20 @@
+normal: "mondrian-data-path-here/normal_realign.bam"
+tumor: "mondrian-data-path-here/variants_realign.bam"
+metadata: "mondrian-data-path-here/metadata.yaml"
+chromosomes: ["22"]
+reference: "mondrian-ref-path-here/human/GRCh37-lite.fa"
+reference_dict: "mondrian-ref-path-here/human/GRCh37-lite.dict"
+panel_of_normals: "mondrian-ref-path-here/human/small_exac_common_3.vcf.gz"
+variants_for_contamination: "mondrian-ref-path-here/human/small_exac_common_3.vcf.gz"
+gnomad: "mondrian-ref-path-here/human/gnomad.vcf.gz"
+realignment_index_bundle: "mondrian-ref-path-here/human/GRCh37-lite.fa.img"
+vep_ref: "mondrian-ref-path-here/vep.tar"
+vep_fasta_suffix: "homo_sapiens/99_GRCh37/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa.gz"
+ncbi_build: "GRCh37"
+cache_version: "99"
+species: "homo_sapiens"
+sample_id: "SA123T"
+numcores: 1
+mode: 'variant'
+output_dir: "results"
+
