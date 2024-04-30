@@ -22,9 +22,7 @@ sed -i 's@mondrian-data-path-here@'"$DATA_DIR"'/@g' ${TEST_DIR}/${PIPELINE}.yaml
 sed -i 's@mondrian-data-path-here@'"$DATA_DIR"'/@g' ${TEST_DIR}/samplesheet.csv
 
 cp ${TEST_DIR}/samplesheet.csv .
-
-cat ${TEST_DIR}/${PIPELINE}.yaml
-cat ${TEST_DIR}/samplesheet.csv
+cp ${TEST_DIR}/nextflow.config .
 
 $RESOURCE_DIR/nextflow pull mondrian-scwgs/mondrian_nf -r $TAG
 $RESOURCE_DIR/nextflow run mondrian-scwgs/mondrian_nf -r $TAG -params-file ${TEST_DIR}/${PIPELINE}.yaml -resume --max_cpus 2  -profile docker
