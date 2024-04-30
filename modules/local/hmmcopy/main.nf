@@ -38,6 +38,9 @@ process HMMCOPY {
   script:
     def chromosomes = "--chromosomes " + chromosomes.join(" --chromosomes ")
     """
+        grep fixed ${gc_wig}
+        grep fixed ${map_wig}
+
         cp ${quality_classifier_training_data} training_data.h5
         hmmcopy_utils run-cell-hmmcopy \
         --bam_file ${bamfile} \
