@@ -5,8 +5,8 @@
 
   we'll start with this smaller reference dataset for our quickstart guide. 
   ```
-  wget https://mondriantestdata.s3.amazonaws.com/mondrian-ref-20-22.tar.gz
-  tar -xvf mondrian-ref-20-22.tar.gz
+  wget https://mondriantestdata.s3.amazonaws.com/mondrian-ref-nf-20-22.tar.gz
+  tar -xvf mondrian-ref-nf-20-22.tar.gz
   ```
   
   full GRCh37 reference data is available at
