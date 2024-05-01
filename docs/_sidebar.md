@@ -13,15 +13,13 @@
   - [GRCh38](reference/GRCh38.md)
 
 - [Analyses](analyses/README.md)
-  - [Alignment](analyses/alignment.md)
-  - [Hmmcopy](analyses/hmmcopy.md)
+  - [QC](analyses/qc.md)
   - [Variant Calling](analyses/variant_calling.md)
   - [Breakpoint Calling](analyses/breakpoint_calling.md)
   - [Snv Genotyping](analyses/snv_genotyping.md)
 
 - [Data Formats](data_formats/README.md)
-  - [Alignment](data_formats/alignment.md)
-  - [Hmmcopy](data_formats/hmmcopy.md)
+  - [QC](data_formats/qc.md)
   - [Breakpoint Calling](data_formats/breakpoint_calling.md)
   - [Variant Calling](data_formats/variant_calling.md)
   - [Snv Genotyping](data_formats/snv_genotyping.md)
