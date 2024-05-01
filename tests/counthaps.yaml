@@ -1,0 +1,11 @@
+tumor_bam: "mondrian-data-path-here/data/merged_reheader.bam"
+haplotypes_csv: "mondrian-data-path-here/data/haps.csv.gz"
+chromosomes: ["15"]
+snp_positions: "mondrian-data-path-here/ref/thousand_genomes_snps.tsv"
+reference_fasta: "mondrian-data-path-here/ref/GRCh37-lite.fa"
+gap_table: "mondrian-data-path-here/ref/hg19_gap.txt.gz"
+mode: "counthaps"
+numcores: 8
+sample_id: "SA123"
+output_dir: "results"
+metadata_input: "mondrian-data-path-here/data/metadata.yaml"

@@ -21,6 +21,7 @@ process GRIDSS {
     path("${filename}.vcf.gz"), emit: vcf
   script:
     """
+        ls -l 
         gridss.sh \
         --assembly assembly/assembly.bam \
         --reference ${reference} \

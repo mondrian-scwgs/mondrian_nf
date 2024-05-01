@@ -16,6 +16,8 @@ process GETREGIONS {
     script:
     chromosomes_arg = '--chromosomes ' + chromosomes.join(' --chromosomes ')
     """
+    ls
+    head ${reference}
     variant_utils generate-intervals --reference ${reference} ${chromosomes_arg} --size ${size} > intervals.txt
     """
 }

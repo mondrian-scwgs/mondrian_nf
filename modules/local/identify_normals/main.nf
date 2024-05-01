@@ -23,6 +23,7 @@ process IDENTIFYNORMALS {
   script:
     def blacklist_arg = blacklist ? "--blacklist_file "+blacklist : ""
     """
+        ls -l
         normalizer_utils identify-normal-cells \
         --reads_data ${reads} \
         --metrics_data ${metrics} \

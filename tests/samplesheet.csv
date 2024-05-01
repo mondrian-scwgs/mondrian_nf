@@ -1,0 +1,3 @@
+cellid,laneid,flowcellid,fastq1,fastq2
+SA1090-A96213A-R20-C28,L001,FL001,mondrian-data-path-here/SA1090-A96213A-R20-C28_1.fastq.gz,mondrian-data-path-here/SA1090-A96213A-R20-C28_2.fastq.gz
+SA1090-A96213A-R22-C43,L001,FL001,mondrian-data-path-here/SA1090-A96213A-R22-C43_1.fastq.gz,mondrian-data-path-here/SA1090-A96213A-R22-C43_2.fastq.gz

@@ -5,16 +5,15 @@
 #### Download test data set
 
 ```
-wget https://mondriantestdata.s3.amazonaws.com/alignment_testdata.tar.gz
-tar -xvf alignment_testdata.tar.gz
-
+wget https://mondriantestdata.s3.amazonaws.com/qc_testdata.tar.gz
+tar -xvf qc_testdata.tar.gz
 ```
 
 #### Create fastqs.csv file:
 ```
 cellid,laneid,flowcellid,fastq1,fastq2
-SA1090-A96213A-R20-C28,L001,FL001,<path-to-alignment_testdata>/SA1090-A96213A-R20-C28_1.fastq.gz,<path-to-alignment_testdata>/SA1090-A96213A-R20-C28_2.fastq.gz
-SA1090-A96213A-R22-C43,L001,FL001,<path-to-alignment_testdata>/SA1090-A96213A-R22-C43_1.fastq.gz,<path-to-alignment_testdata>/SA1090-A96213A-R22-C43_2.fastq.gz
+SA1090-A96213A-R20-C28,L001,FL001,<path-to-qc_testdata>/SA1090-A96213A-R20-C28_1.fastq.gz,<path-to-qc_testdata>/SA1090-A96213A-R20-C28_2.fastq.gz
+SA1090-A96213A-R22-C43,L001,FL001,<path-to-qc_testdata>/SA1090-A96213A-R22-C43_1.fastq.gz,<path-to-qc_testdata>/SA1090-A96213A-R22-C43_2.fastq.gz
 ```
 
 
