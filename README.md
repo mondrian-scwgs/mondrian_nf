@@ -21,7 +21,7 @@ https://quay.io/organization/mondrianscwgs
 [GPL v3.0](LICENSE)
 
 ## Documentation
-The official documentation is hosted on https://mondrian-scwgs.github.io/mondrian/
+The official documentation is hosted on [https://mondrian-scwgs.github.io/mondrian/](https://mondrian-scwgs.github.io/mondrian_nf/)
 
 ## Getting Help
 
