@@ -16,10 +16,10 @@ phases:
       # - cd $CODEBUILD_SRC_DIR/docker && sh build.sh haplotype_calling $QUAY_USR $QUAY_PSW
   build:
     commands:
-      - sh $CODEBUILD_SRC_DIR/tests/test.sh $CODEBUILD_SRC_DIR/tests $CODEBUILD_SRC_DIR/tests/shared_resources inferhaps haplotype_calling haplotype_calling
-      - sh $CODEBUILD_SRC_DIR/tests/test.sh $CODEBUILD_SRC_DIR/tests $CODEBUILD_SRC_DIR/tests/shared_resources counthaps haplotype_calling haplotype_calling
       - sh $CODEBUILD_SRC_DIR/tests/test.sh $CODEBUILD_SRC_DIR/tests $CODEBUILD_SRC_DIR/tests/shared_resources qc qc qc
       - sh $CODEBUILD_SRC_DIR/tests/test.sh $CODEBUILD_SRC_DIR/tests $CODEBUILD_SRC_DIR/tests/shared_resources breakpoint_calling breakpoint_calling breakpoint_calling
       - sh $CODEBUILD_SRC_DIR/tests/test.sh $CODEBUILD_SRC_DIR/tests $CODEBUILD_SRC_DIR/tests/shared_resources variant_calling variant_calling variant_calling
       - sh $CODEBUILD_SRC_DIR/tests/test.sh $CODEBUILD_SRC_DIR/tests $CODEBUILD_SRC_DIR/tests/shared_resources normalizer alignment normalizer
+      - sh $CODEBUILD_SRC_DIR/tests/test.sh $CODEBUILD_SRC_DIR/tests $CODEBUILD_SRC_DIR/tests/shared_resources inferhaps haplotype_calling haplotype_calling
+      - sh $CODEBUILD_SRC_DIR/tests/test.sh $CODEBUILD_SRC_DIR/tests $CODEBUILD_SRC_DIR/tests/shared_resources counthaps haplotype_calling haplotype_calling
       - sh $CODEBUILD_SRC_DIR/tests/test.sh $CODEBUILD_SRC_DIR/tests $CODEBUILD_SRC_DIR/tests/shared_resources snv_genotyping variant_calling snv_genotyping
