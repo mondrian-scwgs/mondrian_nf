@@ -5,6 +5,7 @@ include { CONCATCSV as CONCATSEGMENTS } from '../../modules/local/csverve_concat
 include { CONCATCSV as CONCATPARAMS } from '../../modules/local/csverve_concat_csv'
 include { CONCATCSV as CONCATMETRICS } from '../../modules/local/csverve_concat_csv'
 include { CONCATCSV as CONCATGCMETRICS } from '../../modules/local/csverve_concat_csv'
+include { CONCATCSV as CONCATREADSMETRICS } from '../../modules/local/csverve_concat_csv'
 include { BUILDTAR as HMMTAR } from '../../modules/local/tar'
 include { BUILDTAR as ALIGNTAR } from '../../modules/local/tar'
 include { ALIGN } from '../../modules/local/align'
@@ -68,6 +69,7 @@ workflow MONDRIAN_QC{
 
     ALIGN(fastqs)
 
+    CONCATREADSMETRICS(ALIGN.out.collect{it[3]}, ALIGN.out.collect{it[4]}, sample_id+'_alignment_metrics', false)
     CONCATGCMETRICS(ALIGN.out.collect{it[5]}, ALIGN.out.collect{it[6]}, sample_id+'_gc_metrics', true)
 
     ALIGNTAR(ALIGN.out.collect{it[7]}, sample_id+'_alignment_data')
@@ -89,8 +91,8 @@ workflow MONDRIAN_QC{
     HMMTAR(HMMCOPY.out.collect{it[9]}, sample_id+'_hmmcopy_data')
 
     CONCATREADS(HMMCOPY.out.collect{it[1]}, HMMCOPY.out.collect{it[2]}, sample_id+'_hmmcopy_reads', false)
-    CONCATMETRICS(HMMCOPY.out.collect{it[3]}, HMMCOPY.out.collect{it[4]}, sample_id+'_metrics', false)
-    CONCATPARAMS(HMMCOPY.out.collect{it[5]}, HMMCOPY.out.collect{it[6]}, sample_id+'_hmcopy_params', false)
+    CONCATMETRICS(HMMCOPY.out.collect{it[3]}, HMMCOPY.out.collect{it[4]}, sample_id+'_hmmcopy_metrics', false)
+    CONCATPARAMS(HMMCOPY.out.collect{it[5]}, HMMCOPY.out.collect{it[6]}, sample_id+'_hmmcopy_params', false)
     CONCATSEGMENTS(HMMCOPY.out.collect{it[7]}, HMMCOPY.out.collect{it[8]}, sample_id+'_hmmcopy_segments', false)
 
     BAMMERGECELLS(
