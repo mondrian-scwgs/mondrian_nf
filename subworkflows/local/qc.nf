@@ -3,7 +3,7 @@ nextflow.enable.dsl=2
 include { CONCATCSV as CONCATREADS } from '../../modules/local/csverve_concat_csv'
 include { CONCATCSV as CONCATSEGMENTS } from '../../modules/local/csverve_concat_csv'
 include { CONCATCSV as CONCATPARAMS } from '../../modules/local/csverve_concat_csv'
-include { CONCATCSV as CONCATMETRICS } from '../../modules/local/csverve_concat_csv'
+include { CONCATCSV as CONCATHMMMETRICS } from '../../modules/local/csverve_concat_csv'
 include { CONCATCSV as CONCATGCMETRICS } from '../../modules/local/csverve_concat_csv'
 include { CONCATCSV as CONCATREADSMETRICS } from '../../modules/local/csverve_concat_csv'
 include { BUILDTAR as HMMTAR } from '../../modules/local/tar'
@@ -91,18 +91,18 @@ workflow MONDRIAN_QC{
     HMMTAR(HMMCOPY.out.collect{it[9]}, sample_id+'_hmmcopy_data')
 
     CONCATREADS(HMMCOPY.out.collect{it[1]}, HMMCOPY.out.collect{it[2]}, sample_id+'_hmmcopy_reads', false)
-    CONCATMETRICS(HMMCOPY.out.collect{it[3]}, HMMCOPY.out.collect{it[4]}, sample_id+'_hmmcopy_metrics', false)
+    CONCATHMMMETRICS(HMMCOPY.out.collect{it[3]}, HMMCOPY.out.collect{it[4]}, sample_id+'_hmmcopy_metrics', false)
     CONCATPARAMS(HMMCOPY.out.collect{it[5]}, HMMCOPY.out.collect{it[6]}, sample_id+'_hmmcopy_params', false)
     CONCATSEGMENTS(HMMCOPY.out.collect{it[7]}, HMMCOPY.out.collect{it[8]}, sample_id+'_hmmcopy_segments', false)
 
     BAMMERGECELLS(
       ALIGN.out.collect{it[0]}, ALIGN.out.collect{it[1]}, ALIGN.out.collect{it[2]},
       primary_reference, primary_reference + '.fai',
-      CONCATMETRICS.out.csv, CONCATMETRICS.out.yaml,
+      CONCATHMMMETRICS.out.csv, CONCATHMMMETRICS.out.yaml,
       sample_id
     )
     CELLCYCLECLASSIFIER(
-        CONCATMETRICS.out.csv, CONCATMETRICS.out.yaml,
+        CONCATHMMMETRICS.out.csv, CONCATHMMMETRICS.out.yaml,
         CONCATREADS.out.csv, CONCATREADS.out.yaml,
     )
 
@@ -113,13 +113,13 @@ workflow MONDRIAN_QC{
     )
 
     PLOTHEATMAP(
-        CONCATMETRICS.out.csv, CONCATMETRICS.out.yaml,
+        CONCATHMMMETRICS.out.csv, CONCATHMMMETRICS.out.yaml,
         CONCATREADS.out.csv, CONCATREADS.out.yaml,
         chromosomes, sample_id + '_heatmap'
     )
 
     HTMLREPORT(
-        CONCATMETRICS.out.csv, CONCATMETRICS.out.yaml,
+        CONCATHMMMETRICS.out.csv, CONCATHMMMETRICS.out.yaml,
         CONCATGCMETRICS.out.csv, CONCATGCMETRICS.out.yaml,
         sample_id + '_qcreport'
     )
