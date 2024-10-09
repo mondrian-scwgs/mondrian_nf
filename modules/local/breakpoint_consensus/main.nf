@@ -9,7 +9,7 @@ process BREAKPOINTCONSENSUS {
     path(lumpy)
     path(gridss)
     path(svaba)
-    path(blacklist_file)
+    path(blacklist)
     val(blacklist_flag)
     val(sample_id)
     val(filename)
