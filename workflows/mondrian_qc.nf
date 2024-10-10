@@ -46,7 +46,7 @@ if(params.secondary_reference_2){
     secondary_reference_2_version = params.secondary_reference_2_version
     secondary_reference_2_name = params.secondary_reference_2_name
 } else {
-    secondary_reference_2 = file("$baseDir/assets/dummy_file.txt")
+    secondary_reference_2 = file("$baseDir/docs/assets/dummy_file.txt")
     secondary_reference_2_version = null
     secondary_reference_2_name = null
 }

@@ -35,7 +35,7 @@ numcores = params.numcores
 if(params.blacklist){
     blacklist = tuple(true, file(params.blacklist))
 } else {
-    blacklist = tuple(false, file("$baseDir/assets/dummy_file.txt"))
+    blacklist = tuple(false, file("$baseDir/docs/assets/dummy_file.txt"))
 }
 
 jvm_heap_gb = params.jvm_heap_gb ? jvm_heap_gb : 10

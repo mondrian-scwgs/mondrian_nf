@@ -26,7 +26,7 @@ sample_id = params.sample_id
 if(params.blacklist){
     blacklist = tuple(true, file(params.blacklist))
 } else {
-    blacklist = tuple(false, file("$baseDir/assets/dummy_file.txt"))
+    blacklist = tuple(false, file("$baseDir/docs/assets/dummy_file.txt"))
 }
 
 if(params.qc_only){

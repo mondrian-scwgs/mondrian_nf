@@ -17,12 +17,12 @@ assert_required_param(params.reference_fasta, 'reference_fasta')
 if(params.blacklist){
     blacklist = tuple(true, file(params.blacklist))
 } else {
-    blacklist = tuple(false, file("$baseDir/assets/dummy_file.txt"))
+    blacklist = tuple(false, file("$baseDir/docs/assets/dummy_file.txt"))
 }
 if(params.barcodes){
     cell_barcodes = tuple(true, file(params.barcodes))
 } else {
-    cell_barcodes = tuple(false, file("$baseDir/assets/dummy_file.txt"))
+    cell_barcodes = tuple(false, file("$baseDir/docs/assets/dummy_file.txt"))
 }
 
 if(params.numlines){

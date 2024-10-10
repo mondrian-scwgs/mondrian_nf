@@ -49,13 +49,13 @@ maxcoverage = params.maxcoverage ? maxcoverage : 10000
 if(params.variants_for_contamination){
     variants_for_contamination = tuple(true, file(params.variants_for_contamination))
 } else {
-    variants_for_contamination = tuple(false, file("$baseDir/assets/dummy_file.txt"))
+    variants_for_contamination = tuple(false, file("$baseDir/docs/assets/dummy_file.txt"))
 }
 
 if(params.realignment_index_bundle){
     realignment_index_bundle = tuple(true, file(params.realignment_index_bundle))
 } else {
-    realignment_index_bundle = tuple(false, file("$baseDir/assets/dummy_file.txt"))
+    realignment_index_bundle = tuple(false, file("$baseDir/docs/assets/dummy_file.txt"))
 }
 
 
