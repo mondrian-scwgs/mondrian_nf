@@ -1,7 +1,7 @@
 process DESTRUCT {
     time '48h'
     cpus 12
-    memory '48 GB'
+    memory '96 GB'
     label 'process_high'
 
   input:
