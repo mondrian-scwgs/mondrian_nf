@@ -16,6 +16,8 @@ if (params.mode == "qc") {
     include { MONDRIAN_NORMALIZER_PIPELINE } from './workflows/mondrian_normalizer'
 } else if (params.mode == "breakpoint") {
     include { MONDRIAN_BREAKPOINT_PIPELINE } from './workflows/mondrian_breakpoint'
+} else if (params.mode == "destruct") {
+    include { MONDRIAN_DESTRUCT_PIPELINE } from './workflows/mondrian_destruct'
 } else if (params.mode == "variant") {
     include { MONDRIAN_VARIANT_PIPELINE } from './workflows/mondrian_variant'
 }
@@ -39,6 +41,9 @@ workflow MONDRIAN {
     }
     else if(params.mode == "breakpoint") {
         MONDRIAN_BREAKPOINT_PIPELINE ()
+    }
+    else if(params.mode == "destruct") {
+        MONDRIAN_DESTRUCT_PIPELINE ()
     }
     else if(params.mode == "variant") {
         MONDRIAN_VARIANT_PIPELINE ()
