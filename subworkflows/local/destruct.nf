@@ -32,15 +32,15 @@ process WRITEMETADATA {
     script:
         def output_metadata = [
             files: [
-                (destruct_breakpoints.name): [results_type: 'destruct_breakpoints'],
-                (destruct_libraries.name): [results_type: 'destruct_libraries'],
-                (destruct_reads.name): [results_type: 'destruct_reads'],
-                (destruct_somatic_breakpoints.name): [results_type: 'destruct_somatic_breakpoints'],
-                (destruct_somatic_library.name): [results_type: 'destruct_somatic_library'],
-                (destruct_vcf.name): [results_type: 'destruct_vcf'],
-                (destruct_vcf_tbi.name): [results_type: 'destruct_vcf'],
-                (destruct_counts.name): [results_type: 'destruct_counts'],
-                (destruct_counts_yaml.name): [results_type: 'destruct_counts'],
+                (destruct_breakpoints.name): [results_type: 'destruct_breakpoints', auxiliary: false],
+                (destruct_libraries.name): [results_type: 'destruct_libraries', auxiliary: false],
+                (destruct_reads.name): [results_type: 'destruct_reads', auxiliary: false],
+                (destruct_somatic_breakpoints.name): [results_type: 'destruct_somatic_breakpoints', auxiliary: false],
+                (destruct_somatic_library.name): [results_type: 'destruct_somatic_library', auxiliary: false],
+                (destruct_vcf.name): [results_type: 'destruct_vcf', auxiliary: false],
+                (destruct_vcf_tbi.name): [results_type: 'destruct_vcf', auxiliary: true],
+                (destruct_counts.name): [results_type: 'destruct_counts', auxiliary: false],
+                (destruct_counts_yaml.name): [results_type: 'destruct_counts', auxiliary: true],
             ]
         ]
         output_metadata['meta'] = metadata
