@@ -34,11 +34,6 @@ process WRITEMETADATA {
 
     output:
         path 'metadata.yaml'
-        path 
-        path 
-        path 
-        path 
-        path 
 
     script:
         def output_metadata = [
