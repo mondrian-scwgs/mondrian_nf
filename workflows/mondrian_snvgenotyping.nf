@@ -35,6 +35,10 @@ if(params.numlines){
 vcf_files = Channel.fromPath(params.vcf_files)
 bam_file = file(params.bam_file)
 reference_fasta = file(params.reference_fasta)
+<<<<<<< HEAD
+=======
+metadata = params.metadata
+>>>>>>> 722be1a (refactor: metadata generated in nf groovy instead of script)
 numcores = params.numcores
 sample_id = params.sample_id
 /*
@@ -58,6 +62,10 @@ workflow MONDRIAN_SNVGENOTYPING_PIPELINE{
         blacklist,
         cell_barcodes,
         reference_fasta,
+<<<<<<< HEAD
+=======
+        metadata,
+>>>>>>> 722be1a (refactor: metadata generated in nf groovy instead of script)
         numlines,
         numcores,
         sample_id
