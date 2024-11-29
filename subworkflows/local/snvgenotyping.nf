@@ -1,3 +1,5 @@
+import groovy.json.JsonOutput
+
 nextflow.enable.dsl=2
 
 
@@ -10,8 +12,55 @@ include { VARTRIX } from '../../modules/local/vartrix'
 include { RECOPY } from '../../modules/local/recopy'
 include { CONCATCSV } from '../../modules/local/csverve_concat_csv'
 include { REGENERATEVARTRIXOUTPUTS } from '../../modules/local/regenerate_vartrix_outputs'
-include { SNVGENOTYPINGMETADATA } from '../../modules/local/snv_genotyping_metadata'
 include { PYSAMGENOTYPER } from '../../modules/local/pysam_genotyper'
+
+
+process WRITEMETADATA {
+    time '1h'
+    cpus 1
+    memory '1 GB'
+    label 'process_low'
+
+    input:
+        val metadata
+        path vartrix_all_chroms_csv
+        path vartrix_all_chroms_yaml
+        path vartrix_outputs_barcodes
+        path vartrix_outputs_variants
+        path vartrix_outputs_ref_counts
+        path vartrix_outputs_alt_counts
+        path genotyper_csv
+        path genotyper_yaml
+
+    output:
+        path 'metadata.yaml'
+        path 
+        path 
+        path 
+        path 
+        path 
+
+    script:
+        def output_metadata = [
+            files: [
+                (vartrix_all_chroms_csv.name): [results_type: 'vartrix_all_chroms_csv', auxiliary: false],
+                (vartrix_all_chroms_yaml.name): [results_type: 'vartrix_all_chroms_csv', auxiliary: true],
+                (vartrix_outputs_barcodes.name): [results_type: 'vartrix_outputs_barcodes', auxiliary: false],
+                (vartrix_outputs_variants.name): [results_type: 'vartrix_outputs_variants', auxiliary: false],
+                (vartrix_outputs_ref_counts.name): [results_type: 'vartrix_outputs_ref_counts', auxiliary: false],
+                (vartrix_outputs_alt_counts.name): [results_type: 'vartrix_outputs_alt_counts', auxiliary: false],
+                (genotyper_csv.name): [results_type: 'genotyper_csv', auxiliary: false],
+                (genotyper_yaml.name): [results_type: 'genotyper_csv', auxiliary: true],
+            ]
+        ]
+        output_metadata['meta'] = metadata
+
+        output_metadata_json = JsonOutput.toJson(output_metadata)
+
+        """
+        write_yaml_from_json.py '${output_metadata_json}' metadata.yaml
+        """
+}
 
 
 workflow MONDRIAN_SNVGENOTYPING{
@@ -22,7 +71,7 @@ workflow MONDRIAN_SNVGENOTYPING{
         blacklist
         cell_barcodes
         reference_fasta
-        metadata_input
+        metadata
         numlines
         numcores
         sample_id
@@ -62,10 +111,15 @@ workflow MONDRIAN_SNVGENOTYPING{
             sample_id+'_vartrix'
         )
 
-        SNVGENOTYPINGMETADATA(
-            vartrix_all_chroms.csv, vartrix_all_chroms.yaml, vartrix_outputs.barcodes, vartrix_outputs.variants,
-            vartrix_outputs.ref_counts, vartrix_outputs.alt_counts, genotyper.csv, genotyper.yaml, metadata_input
-
+        WRITEMETADATA(
+            metadata,
+            vartrix_all_chroms.csv,
+            vartrix_all_chroms.yaml,
+            vartrix_outputs.barcodes,
+            vartrix_outputs.variants,
+            vartrix_outputs.ref_counts,
+            vartrix_outputs.alt_counts,
+            genotyper.csv,
+            genotyper.yaml,
         )
-
 }
