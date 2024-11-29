@@ -11,7 +11,7 @@ def assert_required_param(param, param_name){
 }
 assert_required_param(params.vcf_files, 'vcf_files')
 assert_required_param(params.bam_file, 'bam_file')
-assert_required_param(params.metadata_input, 'metadata_input')
+assert_required_param(params.metadata, 'metadata')
 assert_required_param(params.reference_fasta, 'reference_fasta')
 
 if(params.blacklist){
