@@ -11,7 +11,7 @@ def assert_required_param(param, param_name){
 }
 assert_required_param(params.vcf_files, 'vcf_files')
 assert_required_param(params.bam_file, 'bam_file')
-assert_required_param(params.metadata_input, 'metadata_input')
+assert_required_param(params.metadata, 'metadata')
 assert_required_param(params.reference_fasta, 'reference_fasta')
 
 if(params.blacklist){
@@ -35,7 +35,7 @@ if(params.numlines){
 vcf_files = Channel.fromPath(params.vcf_files)
 bam_file = file(params.bam_file)
 reference_fasta = file(params.reference_fasta)
-metadata_input = file(params.metadata_input)
+metadata = params.metadata
 numcores = params.numcores
 sample_id = params.sample_id
 /*
@@ -59,7 +59,7 @@ workflow MONDRIAN_SNVGENOTYPING_PIPELINE{
         blacklist,
         cell_barcodes,
         reference_fasta,
-        metadata_input,
+        metadata,
         numlines,
         numcores,
         sample_id
