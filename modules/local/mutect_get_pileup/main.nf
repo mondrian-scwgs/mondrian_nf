@@ -31,6 +31,6 @@ process GETPILEUP {
         gatk GatherPileupSummaries \
             --sequence-dictionary ${reference_dict} \
             \${merge_inputs} \
-            -O ${filename}.tsv
+            -O ${filename}.table
     """
 }
