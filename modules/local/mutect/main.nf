@@ -58,14 +58,13 @@ process MUTECT {
                     --f1r2-tar-gz raw_data/\${sub_interval}_f1r2.tar.gz \
                     -R ${reference} -O raw_data/\${sub_interval}.vcf.gz  --intervals \${sub_interval} ">> commands.txt
                     merge_vcf_inputs="\${merge_vcf_inputs} --inputs raw_data/\${sub_interval}.vcf.gz"
-                    merge_stats_inputs="\${merge_stats_inputs} -stats raw_data/\${sub_interval}.vcf.gz.stats"
+                    merge_stats_inputs="\${merge_stats_inputs} --stats raw_data/\${sub_interval}.vcf.gz.stats"
                 done
             parallel --jobs ${numcores} < commands.txt
             echo \${merge_vcf_inputs}
             echo \${merge_stats_inputs}
             variant_utils merge-vcf-files \${merge_vcf_inputs} --output merged.vcf
-            gatk --java-options "-Xmx4G" MergeMutectStats \
-                -stats \${merge_stats_inputs} -O merged.stats
+            gatk --java-options "-Xmx4G" MergeMutectStats \${merge_stats_inputs} -O merged.stats
         fi
 
         variant_utils fix-museq-vcf --input merged.vcf --output merged.fixed.vcf
