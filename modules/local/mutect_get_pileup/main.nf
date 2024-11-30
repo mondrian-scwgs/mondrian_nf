@@ -19,7 +19,7 @@ process GETPILEUP {
     def chromosomes = chromosome.join(' ')
     """
         output_files=()
-        for chromosome in $chromosomes; do
+        for chromosome in ${chromosomes}; do
             gatk GetPileupSummaries \
                 -R ${reference} -I ${bam} \
                 --interval-set-rule INTERSECTION  -L \${chromosome} \
