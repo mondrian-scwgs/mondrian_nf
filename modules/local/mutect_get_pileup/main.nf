@@ -26,6 +26,7 @@ process GETPILEUP {
                 -V ${variants_for_contamination} \
                 -L ${variants_for_contamination} \
                 -O ${filename}.\${chromosome}.table
+            output_files+=("${filename}.\${chromosome}.table")
         done
         concat_csvs.py --tsv \
             ${filename}.table \
