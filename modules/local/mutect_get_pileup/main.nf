@@ -18,7 +18,7 @@ process GETPILEUP {
   script:
     def chromosomes = chromosome.join(' ')
     """
-        output_files=()
+        merge_inputs=()
         for chromosome in ${chromosomes}; do
             gatk GetPileupSummaries \
                 -R ${reference} -I ${bam} \
@@ -26,10 +26,11 @@ process GETPILEUP {
                 -V ${variants_for_contamination} \
                 -L ${variants_for_contamination} \
                 -O ${filename}.\${chromosome}.table
-            output_files+=("${filename}.\${chromosome}.table")
+            merge_inputs="\${merge_inputs} -I ${filename}.\${chromosome}.table"
         done
-        concat_csvs.py --tsv \
-            ${filename}.table \
-            \${output_files[@]}
+        gatk GatherPileupSummaries \
+            --sequence-dictionary ${reference_dict} \
+            \${merge_inputs} \
+            -O ${filename}.tsv
     """
 }
