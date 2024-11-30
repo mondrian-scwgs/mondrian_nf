@@ -30,6 +30,7 @@ process MUTECT {
 
         gatk GetSampleName -R ${reference} -I ${tumor_bam} -O tumor_name.txt
         gatk GetSampleName -R ${reference} -I ${normal_bam} -O normal_name.txt
+        mkdir raw_data
 
         if [[ ${numcores} -eq 1 ]]
         then
@@ -45,15 +46,15 @@ process MUTECT {
         else
             intervals=`variant_utils split-interval --interval ${interval} --num_splits ${numcores}`
             echo \${intervals}
-            for interval in \${intervals}
+            for sub_interval in \${intervals}
                 do
                     echo "gatk Mutect2 \
                     -I ${normal_bam} -normal `cat normal_name.txt` \
                     -I ${tumor_bam}  -tumor `cat tumor_name.txt` \
                     -pon  ${panel_of_normals} \
                     --germline-resource  ${gnomad} \
-                    --f1r2-tar-gz raw_data/${interval}_f1r2.tar.gz \
-                    -R ${reference} -O raw_data/${interval}.vcf.gz  --intervals ${interval} ">> commands.txt
+                    --f1r2-tar-gz raw_data/\${sub_interval}_f1r2.tar.gz \
+                    -R ${reference} -O raw_data/\${sub_interval}.vcf.gz  --intervals \${sub_interval} ">> commands.txt
                 done
             parallel --jobs ${numcores} < commands.txt
             variant_utils merge-vcf-files --inputs raw_data/*vcf.gz --output merged.vcf
