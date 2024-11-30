@@ -20,16 +20,7 @@ process GETPILEUP {
     """
         output_files=()
         for chromosome in ${chromosomes}; do
-            gatk GetPileupSummaries \
-                -R ${reference} -I ${bam} \
-                --interval-set-rule INTERSECTION  -L \$\{chromosome\} \
-                -V ${variants_for_contamination} \
-                -L ${variants_for_contamination} \
-                -O ${filename}.\$\{chromosome\}.table
-            output_files+=("${filename}.\$\{chromosome\}.table")
+            echo "Processing chromosome \${chromosome}"
         done
-        concat_csvs.py --tsv \
-            ${filename}.table \
-            ${output_files[@]}
     """
 }
