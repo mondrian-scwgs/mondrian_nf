@@ -64,7 +64,7 @@ process MUTECT {
             echo \${merge_vcf_inputs}
             echo \${merge_stats_inputs}
             variant_utils merge-vcf-files \${merge_vcf_inputs} --output merged.vcf
-            gatk --java-options "-Xmx4G" MergeMutectStats \${merge_stats_inputs} -O merged.stats
+            gatk --java-options "-Xmx4G" MergeMutectStats \${merge_stats_inputs} -O ${filename}.stats
         fi
 
         variant_utils fix-museq-vcf --input merged.vcf --output merged.fixed.vcf
