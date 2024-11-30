@@ -16,7 +16,7 @@ process READORIENTATIONMODEL {
 
         mkdir tempdir
 
-        gatk LearnReadOrientationModel \
+        gatk --java-options "-Xmx4G" LearnReadOrientationModel \
             --arguments_file arguments_list \
             -O artifact-priors.tar.gz \
             --tmp-dir tempdir

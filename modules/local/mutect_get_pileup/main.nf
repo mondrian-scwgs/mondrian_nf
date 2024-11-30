@@ -20,7 +20,7 @@ process GETPILEUP {
     """
         merge_inputs=""
         for chromosome in ${chromosomes}; do
-            gatk GetPileupSummaries \
+            gatk --java-options "-Xmx4G" GetPileupSummaries \
                 -R ${reference} -I ${bam} \
                 --interval-set-rule INTERSECTION  -L \${chromosome} \
                 -V ${variants_for_contamination} \
@@ -28,7 +28,7 @@ process GETPILEUP {
                 -O ${filename}.\${chromosome}.table
             merge_inputs="\${merge_inputs} -I ${filename}.\${chromosome}.table"
         done
-        gatk GatherPileupSummaries \
+        gatk --java-options "-Xmx4G" GatherPileupSummaries \
             --sequence-dictionary ${reference_dict} \
             \${merge_inputs} \
             -O ${filename}.table
