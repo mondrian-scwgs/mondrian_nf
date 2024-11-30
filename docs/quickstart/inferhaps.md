@@ -32,7 +32,6 @@ num_samples : 100
 confidence_threshold: 0.95
 mode: inferhaps
 sample_id: SA123
-metadata_input: "<path-to-haplotype_testdata>/data/metadata.yaml"
 ```
 
 #### Run pipeline
