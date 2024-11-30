@@ -49,7 +49,7 @@ process MUTECT {
             echo \${intervals}
             for sub_interval in \${intervals}
                 do
-                    echo "gatk --java-options \"-Xmx4G\" Mutect2 \
+                    echo "gatk --java-options \\"-Xmx4G\\" Mutect2 \
                     -I ${normal_bam} -normal `cat normal_name.txt` \
                     -I ${tumor_bam}  -tumor `cat tumor_name.txt` \
                     -pon  ${panel_of_normals} \
