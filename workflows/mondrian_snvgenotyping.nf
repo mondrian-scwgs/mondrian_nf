@@ -4,15 +4,16 @@ nextflow.enable.dsl=2
 /* --          VALIDATE INPUTS                 -- */
 ////////////////////////////////////////////////////
 
-def assert_required_param(param, param_name){
-    if(! param){
-        exit 1, param_name +' not specified. Please provide --${param_name} <value> !'
+def assert_required_param(param_name){
+    if(!params.containsKey(param_name)){
+        exit 1, "${param_name} not specified. Please provide --${param_name} <value>!"
     }
 }
-assert_required_param(params.vcf_files, 'vcf_files')
-assert_required_param(params.bam_file, 'bam_file')
-assert_required_param(params.metadata, 'metadata')
-assert_required_param(params.reference_fasta, 'reference_fasta')
+
+assert_required_param('vcf_files')
+assert_required_param('bam_file')
+assert_required_param('metadata')
+assert_required_param('reference_fasta')
 
 if(params.blacklist){
     blacklist = tuple(true, file(params.blacklist))

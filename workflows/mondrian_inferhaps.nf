@@ -4,19 +4,20 @@ nextflow.enable.dsl=2
 /* --          VALIDATE INPUTS                 -- */
 ////////////////////////////////////////////////////
 
-def assert_required_param(param, param_name){
-    if(! param){
-        exit 1, param_name +' not specified. Please provide --${param_name} <value> !'
+def assert_required_param(param_name){
+    if(!params.containsKey(param_name)){
+        exit 1, "${param_name} not specified. Please provide --${param_name} <value>!"
     }
 }
-assert_required_param(params.bam, 'bam')
-assert_required_param(params.reference_fasta, 'reference_fasta')
-assert_required_param(params.chromosome_references, 'chromosome_references')
-assert_required_param(params.phased_chromosomes, 'phased_chromosomes')
-assert_required_param(params.phased_chromosome_x, 'phased_chromosome_x')
-// assert_required_param(params.is_female, 'is_female')
-assert_required_param(params.sample_id, 'sample_id')
-assert_required_param(params.metadata_input, 'metadata_input')
+
+assert_required_param('bam')
+assert_required_param('reference_fasta')
+assert_required_param('chromosome_references')
+assert_required_param('phased_chromosomes')
+assert_required_param('phased_chromosome_x')
+assert_required_param('is_female')
+assert_required_param('sample_id')
+assert_required_param('metadata_input')
 
 
 bam = file(params.bam)

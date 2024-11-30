@@ -4,25 +4,26 @@ nextflow.enable.dsl=2
 /* --          VALIDATE INPUTS                 -- */
 ////////////////////////////////////////////////////
 
-def assert_required_param(param, param_name){
-    if(! param){
-        exit 1, param_name +' not specified. Please provide --${param_name} <value> !'
+def assert_required_param(param_name){
+    if(!params.containsKey(param_name)){
+        exit 1, "${param_name} not specified. Please provide --${param_name} <value>!"
     }
 }
-assert_required_param(params.primary_reference, 'primary_reference')
-assert_required_param(params.primary_reference_version, 'primary_reference_version')
-assert_required_param(params.primary_reference_name, 'primary_reference_name')
-assert_required_param(params.secondary_reference_1, 'secondary_reference_1')
-assert_required_param(params.secondary_reference_1_version, 'secondary_reference_1_version')
-assert_required_param(params.secondary_reference_1_version, 'secondary_reference_1_name')
-assert_required_param(params.gc_wig, 'gc_wig')
-assert_required_param(params.map_wig, 'map_wig')
-assert_required_param(params.quality_classifier_training_data, 'quality_classifier_training_data')
-assert_required_param(params.repeats_satellite_regions, 'repeats_satellite_regions')
-assert_required_param(params.chromosomes, 'chromosomes')
-assert_required_param(params.fastqs, 'fastqs')
-assert_required_param(params.metadata, 'metadata')
-assert_required_param(params.sample_id, 'sample_id')
+
+assert_required_param('primary_reference')
+assert_required_param('primary_reference_version')
+assert_required_param('primary_reference_name')
+assert_required_param('secondary_reference_1')
+assert_required_param('secondary_reference_1_version')
+assert_required_param('secondary_reference_1_name')
+assert_required_param('gc_wig')
+assert_required_param('map_wig')
+assert_required_param('quality_classifier_training_data')
+assert_required_param('repeats_satellite_regions')
+assert_required_param('chromosomes')
+assert_required_param('fastqs')
+assert_required_param('metadata')
+assert_required_param('sample_id')
 
 primary_reference = file(params.primary_reference)
 primary_reference_version = params.primary_reference_version

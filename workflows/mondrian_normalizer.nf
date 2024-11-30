@@ -4,17 +4,18 @@ nextflow.enable.dsl=2
 /* --          VALIDATE INPUTS                 -- */
 ////////////////////////////////////////////////////
 
-def assert_required_param(param, param_name){
-    if(! param){
-        exit 1, param_name +' not specified. Please provide --${param_name} <value> !'
+def assert_required_param(param_name){
+    if(!params.containsKey(param_name)){
+        exit 1, "${param_name} not specified. Please provide --${param_name} <value>!"
     }
 }
-assert_required_param(params.reads, 'reads')
-assert_required_param(params.metrics, 'metrics')
-assert_required_param(params.bam, 'bam')
-assert_required_param(params.metadata, 'metadata')
-assert_required_param(params.chromosomes, 'chromosomes')
-assert_required_param(params.sample_id, 'sample_id')
+
+assert_required_param('reads')
+assert_required_param('metrics')
+assert_required_param('bam')
+assert_required_param('metadata')
+assert_required_param('chromosomes')
+assert_required_param('sample_id')
 
 reads = params.reads
 metrics = params.metrics

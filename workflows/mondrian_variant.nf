@@ -4,27 +4,27 @@ nextflow.enable.dsl=2
 /* --          VALIDATE INPUTS                 -- */
 ////////////////////////////////////////////////////
 
-def assert_required_param(param, param_name){
-    if(! param){
-        exit 1, param_name +' not specified. Please provide --${param_name} <value> !'
+def assert_required_param(param_name){
+    if(!params.containsKey(param_name)){
+        exit 1, "${param_name} not specified. Please provide --${param_name} <value>!"
     }
 }
 
-assert_required_param(params.normal, 'normal')
-assert_required_param(params.tumor, 'tumor')
-assert_required_param(params.metadata, 'metadata')
-assert_required_param(params.chromosomes, 'chromosomes')
-assert_required_param(params.reference, 'reference')
-assert_required_param(params.reference_dict, 'reference_dict')
-assert_required_param(params.panel_of_normals, 'panel_of_normals')
-assert_required_param(params.gnomad, 'gnomad')
-assert_required_param(params.vep_ref, 'vep_ref')
-assert_required_param(params.vep_fasta_suffix, 'vep_fasta_suffix')
-assert_required_param(params.ncbi_build, 'ncbi_build')
-assert_required_param(params.cache_version, 'cache_version')
-assert_required_param(params.species, 'species')
-assert_required_param(params.sample_id, 'sample_id')
-assert_required_param(params.numcores, 'numcores')
+assert_required_param('normal')
+assert_required_param('tumor')
+assert_required_param('metadata')
+assert_required_param('chromosomes')
+assert_required_param('reference')
+assert_required_param('reference_dict')
+assert_required_param('panel_of_normals')
+assert_required_param('gnomad')
+assert_required_param('vep_ref')
+assert_required_param('vep_fasta_suffix')
+assert_required_param('ncbi_build')
+assert_required_param('cache_version')
+assert_required_param('species')
+assert_required_param('sample_id')
+assert_required_param('numcores')
 
 
 normal = params.normal

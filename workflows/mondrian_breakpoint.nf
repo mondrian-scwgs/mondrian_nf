@@ -4,22 +4,22 @@ nextflow.enable.dsl=2
 /* --          VALIDATE INPUTS                 -- */
 ////////////////////////////////////////////////////
 
-def assert_required_param(param, param_name){
-    if(! param){
-        exit 1, param_name +' not specified. Please provide --${param_name} <value> !'
+def assert_required_param(param_name){
+    if(!params.containsKey(param_name)){
+        exit 1, "${param_name} not specified. Please provide --${param_name} <value>!"
     }
 }
 
-assert_required_param(params.normal, 'normal')
-assert_required_param(params.tumor, 'tumor')
-assert_required_param(params.metadata, 'metadata')
-assert_required_param(params.chromosomes, 'chromosomes')
-assert_required_param(params.reference, 'reference')
-assert_required_param(params.reference_gtf, 'reference_gtf')
-assert_required_param(params.reference_dgv, 'reference_dgv')
-assert_required_param(params.repeats_satellite_regions, 'repeats_satellite_regions')
-assert_required_param(params.sample_id, 'sample_id')
-assert_required_param(params.numcores, 'numcores')
+assert_required_param('normal')
+assert_required_param('tumor')
+assert_required_param('metadata')
+assert_required_param('chromosomes')
+assert_required_param('reference')
+assert_required_param('reference_gtf')
+assert_required_param('reference_dgv')
+assert_required_param('repeats_satellite_regions')
+assert_required_param('sample_id')
+assert_required_param('numcores')
 
 normal = params.normal
 tumor = params.tumor
