@@ -18,7 +18,7 @@ process GETPILEUP {
   script:
     def chromosomes = chromosome.join(' ')
     """
-        merge_inputs=()
+        merge_inputs=""
         for chromosome in ${chromosomes}; do
             gatk GetPileupSummaries \
                 -R ${reference} -I ${bam} \
