@@ -20,7 +20,11 @@ process GETPILEUP {
     """
         output_files=()
         for chromosome in ${chromosomes}; do
-            echo "Processing chromosome \${chromosome}"
+            gatk GetPileupSummaries \
+                -R ${reference} -I ${bam} \
+                --interval-set-rule INTERSECTION  -L "\${chromosome}" \
+                -V ${variants_for_contamination} \
+                -L ${variants_for_contamination} \
         done
     """
 }
