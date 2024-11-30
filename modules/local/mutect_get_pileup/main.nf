@@ -22,10 +22,13 @@ process GETPILEUP {
         for chromosome in ${chromosomes}; do
             gatk GetPileupSummaries \
                 -R ${reference} -I ${bam} \
-                --interval-set-rule INTERSECTION  -L "\${chromosome}" \
+                --interval-set-rule INTERSECTION  -L \${chromosome} \
                 -V ${variants_for_contamination} \
                 -L ${variants_for_contamination} \
                 -O ${filename}.\${chromosome}.table
         done
+        concat_csvs.py --tsv \
+            ${filename}.table \
+            ${output_files[@]}
     """
 }
