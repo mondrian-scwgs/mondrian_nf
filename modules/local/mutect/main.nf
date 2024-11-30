@@ -30,7 +30,6 @@ process MUTECT {
 
         gatk GetSampleName -R ${reference} -I ${tumor_bam} -O tumor_name.txt
         gatk GetSampleName -R ${reference} -I ${normal_bam} -O normal_name.txt
-        mkdir raw_data
 
         if [[ ${numcores} -eq 1 ]]
         then
