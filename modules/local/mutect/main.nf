@@ -45,8 +45,8 @@ process MUTECT {
             mv raw_data/${interval}.vcf.stats ${filename}.stats
         else
             intervals=`variant_utils split-interval --interval ${interval} --num_splits ${numcores}`
-            vcf_inputs=""
             echo \${intervals}
+            vcf_inputs=""
             for sub_interval in \${intervals}
                 do
                     echo "gatk --java-options \\"-Xmx4G\\" Mutect2 \
@@ -59,7 +59,8 @@ process MUTECT {
                     vcf_inputs="\${vcf_inputs} --inputs raw_data/\${sub_interval}.vcf.gz"
                 done
             parallel --jobs ${numcores} < commands.txt
-            variant_utils merge-vcf-files --inputs \${vcf_inputs} --output merged.vcf
+            echo \${vcf_inputs}
+            variant_utils merge-vcf-files \${vcf_inputs} --output merged.vcf
             inputs=`ls raw_data/*stats | awk 'ORS=" -stats "' | head -c -8`
             echo \${inputs}
             gatk --java-options "-Xmx4G" MergeMutectStats \
