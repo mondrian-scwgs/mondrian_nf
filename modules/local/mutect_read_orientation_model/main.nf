@@ -1,7 +1,7 @@
 process READORIENTATIONMODEL {
     time '48h'
-    cpus 12
-    memory '12 GB'
+    cpus 1
+    memory '64 GB'
     label 'process_high'
 
   input:
@@ -16,7 +16,7 @@ process READORIENTATIONMODEL {
 
         mkdir tempdir
 
-        gatk --java-options "-Xmx4G" LearnReadOrientationModel \
+        gatk --java-options "-Xmx48G" LearnReadOrientationModel \
             --arguments_file arguments_list \
             -O artifact-priors.tar.gz \
             --tmp-dir tempdir
