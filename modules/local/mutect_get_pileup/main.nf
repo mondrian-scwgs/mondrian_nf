@@ -29,6 +29,6 @@ process GETPILEUP {
         done
         concat_csvs.py --tsv \
             ${filename}.table \
-            ${output_files[@]}
+            \${output_files[@]}
     """
 }
