@@ -25,6 +25,7 @@ process GETPILEUP {
                 --interval-set-rule INTERSECTION  -L "\${chromosome}" \
                 -V ${variants_for_contamination} \
                 -L ${variants_for_contamination} \
+                -O ${filename}.\${chromosome}.table
         done
     """
 }
