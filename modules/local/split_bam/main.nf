@@ -16,7 +16,7 @@ process SPLITBAM {
 
         samtools split -d CB -M 5200 --output-fmt bam -f 'outdir/%!.bam' --threads ${num_threads} ${bamfile}
 
-        barcode_lines=$(samtools view -H ${bamfile} | grep -P "^@CO" | awk -F'\t' '{print \$2}')
+        barcode_lines=\$(samtools view -H ${bamfile} | grep -P "^@CO" | awk -F'\t' '{print \$2}')
 
         for barcode_line in \${barcode_lines}; do
             barcode=\${barcode_line:3}
