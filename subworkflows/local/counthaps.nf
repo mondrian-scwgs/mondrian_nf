@@ -22,7 +22,7 @@ workflow MONDRIAN_COUNTHAPS{
     main:
 
         splitbams = SPLITBAM(
-            tumor_bam, tumor_bam+'.bai', chromosomes, numcores
+            tumor_bam, tumor_bam+'.bai', numcores
         )
 
         segments = CREATESEGMENTS(
