@@ -14,8 +14,6 @@ include { PLOTHEATMAP } from '../../modules/local/heatmap'
 include { HMMCOPY } from '../../modules/local/hmmcopy'
 include { HTMLREPORT } from '../../modules/local/html_report'
 include { BAMMERGECELLS } from '../../modules/local/merge_cells'
-include { QCMETADATA } from '../../modules/local/qc_metadata'
-include { RECOPY as RECOPYMETADATA } from '../../modules/local/recopy'
 
 
 workflow MONDRIAN_QC{
@@ -121,21 +119,4 @@ workflow MONDRIAN_QC{
         CONCATGCMETRICS.out.csv, CONCATGCMETRICS.out.yaml,
         sample_id + '_qcreport'
     )
-
-    QCMETADATA(
-        BAMMERGECELLS.out.bam, BAMMERGECELLS.out.bai,
-        BAMMERGECELLS.out.contaminated_bam, BAMMERGECELLS.out.contaminated_bai,
-        BAMMERGECELLS.out.control_bam, BAMMERGECELLS.out.control_bai,
-        CONCATGCMETRICS.out.csv, CONCATGCMETRICS.out.yaml,
-        ADDCLUSTERINGORDER.out.csv, ADDCLUSTERINGORDER.out.yaml,
-        CONCATPARAMS.out.csv, CONCATPARAMS.out.yaml,
-        CONCATSEGMENTS.out.csv, CONCATSEGMENTS.out.yaml,
-        CONCATREADS.out.csv, CONCATREADS.out.yaml,
-        PLOTHEATMAP.out.pdf, HTMLREPORT.out.html,
-        ALIGNTAR.out.tar, HMMTAR.out.tar,
-        metadata_yaml
-    )
-
-    RECOPYMETADATA(QCMETADATA.out.metadata, 'metadata.yaml')
-
 }
