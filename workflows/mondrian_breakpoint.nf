@@ -12,7 +12,6 @@ def assert_required_param(param_name){
 
 assert_required_param('normal')
 assert_required_param('tumor')
-assert_required_param('metadata')
 assert_required_param('chromosomes')
 assert_required_param('reference')
 assert_required_param('reference_gtf')
@@ -23,7 +22,6 @@ assert_required_param('numcores')
 
 normal = params.normal
 tumor = params.tumor
-metadata = params.metadata
 chromosomes = params.chromosomes
 reference = params.reference
 reference_dgv = params.reference_dgv
@@ -58,7 +56,6 @@ workflow MONDRIAN_BREAKPOINT_PIPELINE{
     MONDRIAN_BREAKPOINT(
         normal,
         tumor,
-        metadata,
         chromosomes,
         reference,
         reference_gtf,

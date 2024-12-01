@@ -16,13 +16,11 @@ assert_required_param('chromosomes')
 assert_required_param('snp_positions')
 assert_required_param('reference_fasta')
 assert_required_param('gap_table')
-assert_required_param('metadata_input')
 
 tumor_bam = file(params.tumor_bam)
 haplotypes_csv = file(params.haplotypes_csv)
 snp_positions = file(params.snp_positions)
 reference_fasta = file(params.reference_fasta)
-metadata_input = file(params.metadata_input)
 gap_table = file(params.gap_table)
 chromosomes = params.chromosomes
 numcores = params.numcores
@@ -47,7 +45,6 @@ workflow MONDRIAN_COUNTHAPS_PIPELINE{
         haplotypes_csv,
         snp_positions,
         reference_fasta,
-        metadata_input,
         gap_table,
         chromosomes,
         numcores,

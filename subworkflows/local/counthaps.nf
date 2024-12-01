@@ -6,7 +6,6 @@ include { CREATESEGMENTS } from '../../modules/local/create_segments'
 include { CONVERTHAPLOTYPESCSVTOTSV } from '../../modules/local/convert_haplotypes_csv_to_tsv'
 include { EXTRACTSEQDATAANDREADCOUNT } from '../../modules/local/extract_seqdata_and_readcount'
 include { CONCATCSV as CONCATALLELECOUNTS } from '../../modules/local/csverve_concat_csv'
-include { COUNTHAPSMETADATA } from '../../modules/local/count_haps_metadata'
 
 
 workflow MONDRIAN_COUNTHAPS{
@@ -16,7 +15,6 @@ workflow MONDRIAN_COUNTHAPS{
         haplotypes_csv
         snp_positions
         reference_fasta
-        metadata_input
         gap_table
         chromosomes
         numcores
@@ -46,9 +44,4 @@ workflow MONDRIAN_COUNTHAPS{
         allele_counts = CONCATALLELECOUNTS(
             cell_allele_counts.csv.collect(), cell_allele_counts.yaml.collect(), sample_id+'_allele_count', true
         )
-
-        COUNTHAPSMETADATA(
-        allele_counts.csv, allele_counts.yaml, metadata_input
-        )
-
 }

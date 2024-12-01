@@ -8,4 +8,3 @@ mode: "counthaps"
 numcores: 8
 sample_id: "SA123"
 output_dir: "results"
-metadata_input: "mondrian-data-path-here/data/metadata.yaml"

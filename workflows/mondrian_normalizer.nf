@@ -13,14 +13,12 @@ def assert_required_param(param_name){
 assert_required_param('reads')
 assert_required_param('metrics')
 assert_required_param('bam')
-assert_required_param('metadata')
 assert_required_param('chromosomes')
 assert_required_param('sample_id')
 
 reads = params.reads
 metrics = params.metrics
 bam = params.bam
-metadata = params.metadata
 chromosomes = params.chromosomes
 sample_id = params.sample_id
 
@@ -74,7 +72,6 @@ workflow MONDRIAN_NORMALIZER_PIPELINE{
         reads,
         metrics,
         bam,
-        metadata,
         blacklist,
         qc_only,
         chromosomes,
