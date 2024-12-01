@@ -1,7 +1,7 @@
 process FILTERALIGNMENTARTIFACTS {
     time '48h'
-    cpus 12
-    memory '12 GB'
+    cpus 4
+    memory '64 GB'
     label 'process_high'
 
   input:
