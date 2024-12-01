@@ -19,14 +19,14 @@ process VARIANTCONSENSUS {
     path("${filename}.vcf.gz"), emit: vcf
     path("${filename}.vcf.gz.tbi"), emit: tbi
     path("${filename}.vcf.gz.csi"), emit: csi
-    path("counts.csv"), emit: counts
+    path("${filename}.counts.csv"), emit: counts
   script:
     def chromosomes = "--chromosomes " + chromosomes.join(" --chromosomes ")
     """
       variant_utils consensus --museq_vcf ${museq_vcf} \
          --strelka_snv ${strelka_snv_vcf} --strelka_indel ${strelka_indel_vcf} \
          --mutect_vcf ${mutect_vcf} ${chromosomes} \
-         --consensus_output consensus.vcf --counts_output counts.csv
+         --consensus_output consensus.vcf --counts_output ${filename}.counts.csv
 
         vcf-sort consensus.vcf > vcf_uncompressed.vcf
         bgzip vcf_uncompressed.vcf -c > ${filename}.vcf.gz
