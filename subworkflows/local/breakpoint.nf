@@ -15,7 +15,6 @@ include { GETREGIONS } from '../../modules/local/get_regions'
 include { BREAKPOINTCONSENSUS } from '../../modules/local/breakpoint_consensus'
 include { CONCATCSV } from '../../modules/local/csverve_concat_csv'
 include { CSVERVEREMOVEDUPLICATES } from '../../modules/local/csverve_remove_duplicates'
-include { BREAKPOINTMETADATA } from '../../modules/local/breakpoint_metadata'
 
 
 workflow MONDRIAN_BREAKPOINT{
@@ -23,7 +22,6 @@ workflow MONDRIAN_BREAKPOINT{
     take:
         normal
         tumor
-        metadata
         chromosomes
         reference
         reference_gtf
@@ -75,10 +73,4 @@ workflow MONDRIAN_BREAKPOINT{
             breakpoint_consensus.csv.collect(), breakpoint_consensus.yaml.collect(), sample_id+'_merged_consensus', true
         )
         allele_counts = CSVERVEREMOVEDUPLICATES(allele_counts_concat.csv, allele_counts_concat.yaml, sample_id+'_consensus')
-
-        BREAKPOINTMETADATA(
-            extract_somatic.breakpoints, destruct.read, extract_somatic.library, destruct_counts.csv, destruct_counts.yaml,
-            destruct_vcf.vcf, destruct_vcf.tbi, lumpy.vcf, svaba.vcf, gridss.vcf, allele_counts.csv, allele_counts.yaml,
-            metadata
-        )
 }

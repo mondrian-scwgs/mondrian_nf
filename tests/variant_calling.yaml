@@ -1,6 +1,5 @@
 normal: "mondrian-data-path-here/normal_realign.bam"
 tumor: "mondrian-data-path-here/variants_realign.bam"
-metadata: "mondrian-data-path-here/metadata.yaml"
 chromosomes: ["22"]
 reference: "mondrian-ref-path-here/human/GRCh37-lite.fa"
 reference_dict: "mondrian-ref-path-here/human/GRCh37-lite.dict"

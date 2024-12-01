@@ -12,7 +12,6 @@ def assert_required_param(param_name){
 
 assert_required_param('normal')
 assert_required_param('tumor')
-assert_required_param('metadata')
 assert_required_param('chromosomes')
 assert_required_param('reference')
 assert_required_param('reference_dict')
@@ -29,7 +28,6 @@ assert_required_param('numcores')
 
 normal = params.normal
 tumor = params.tumor
-metadata = params.metadata
 chromosomes = params.chromosomes
 reference = params.reference
 reference_dict = params.reference_dict
@@ -77,7 +75,6 @@ workflow MONDRIAN_VARIANT_PIPELINE{
     MONDRIAN_VARIANT(
         normal,
         tumor,
-        metadata,
         chromosomes,
         reference,
         reference_dict,

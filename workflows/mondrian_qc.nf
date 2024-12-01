@@ -22,7 +22,6 @@ assert_required_param('quality_classifier_training_data')
 assert_required_param('repeats_satellite_regions')
 assert_required_param('chromosomes')
 assert_required_param('fastqs')
-assert_required_param('metadata')
 assert_required_param('sample_id')
 
 primary_reference = file(params.primary_reference)
@@ -37,7 +36,6 @@ quality_classifier_training_data = file(params.quality_classifier_training_data)
 repeats_satellite_regions = file(params.repeats_satellite_regions)
 chromosomes = params.chromosomes
 fastqs = file(params.fastqs)
-metadata = file(params.metadata)
 sample_id = params.sample_id
 
 
@@ -71,7 +69,6 @@ workflow MONDRIAN_QC_PIPELINE{
 
     MONDRIAN_QC(
         fastqs,
-        metadata,
         primary_reference,
         primary_reference_version,
         primary_reference_name,
