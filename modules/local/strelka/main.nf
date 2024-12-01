@@ -76,9 +76,11 @@ process STRELKA {
             --strelka-max-depth-factor \${depth_filter_multiple}
         else
             intervals=`variant_utils split-interval --interval ${interval} --num_splits ${numcores}`
-            for interval in \$intervals
+            merge_snv_inputs=""
+            merge_indel_inputs=""
+            for sub_interval in \$intervals
                 do
-                    echo "run_strelka ${normal_bam} ${tumor_bam} \${interval}.indels.vcf \${interval}.snv.vcf \${interval}.stats.txt \${interval} \
+                    echo "run_strelka ${normal_bam} ${tumor_bam} \${sub_interval}.indels.vcf \${sub_interval}.snv.vcf \${sub_interval}.stats.txt \${sub_interval} \
                     ${reference} \${genome_size} \
                     -max-indel-size 50 -min-qscore \${min_qscore} -max-window-mismatch \${max_window_mismatch} \
                     -indel-nonsite-match-prob \${indel_nonsite_match_prob} \
@@ -102,10 +104,12 @@ process STRELKA {
                     --indel-contam-tolerance \${indel_contam_tolerance} \
                     --strelka-chrom-depth-file ${chrom_depth} \
                     --strelka-max-depth-factor \${depth_filter_multiple}" >> commands.txt
+                    merge_snv_inputs="\${merge_snv_inputs} --inputs \${sub_interval}.snv.vcf"
+                    merge_indel_inputs="\${merge_indel_inputs} --inputs \${sub_interval}.indels.vcf"
                 done
             parallel --jobs ${numcores} < commands.txt
-            variant_utils merge-vcf-files --inputs *.snv.vcf --output merged_snv.vcf
-            variant_utils merge-vcf-files --inputs *.indels.vcf --output merged_indels.vcf
+            variant_utils merge-vcf-files \${merge_snv_inputs} --output merged_snv.vcf
+            variant_utils merge-vcf-files \${merge_indel_inputs} --output merged_indels.vcf
         fi
 
         variant_utils fix-museq-vcf --input merged_snv.vcf --output merged_snv.fixed.vcf
