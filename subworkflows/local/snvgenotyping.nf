@@ -15,49 +15,6 @@ include { REGENERATEVARTRIXOUTPUTS } from '../../modules/local/regenerate_vartri
 include { PYSAMGENOTYPER } from '../../modules/local/pysam_genotyper'
 
 
-process WRITEMETADATA {
-    time '1h'
-    cpus 1
-    memory '1 GB'
-    label 'process_low'
-
-    input:
-        val metadata
-        path vartrix_all_chroms_csv
-        path vartrix_all_chroms_yaml
-        path vartrix_outputs_barcodes
-        path vartrix_outputs_variants
-        path vartrix_outputs_ref_counts
-        path vartrix_outputs_alt_counts
-        path genotyper_csv
-        path genotyper_yaml
-
-    output:
-        path 'metadata.yaml'
-
-    script:
-        def output_metadata = [
-            files: [
-                (vartrix_all_chroms_csv.name): [results_type: 'vartrix_all_chroms_csv', auxiliary: false],
-                (vartrix_all_chroms_yaml.name): [results_type: 'vartrix_all_chroms_csv', auxiliary: true],
-                (vartrix_outputs_barcodes.name): [results_type: 'vartrix_outputs_barcodes', auxiliary: false],
-                (vartrix_outputs_variants.name): [results_type: 'vartrix_outputs_variants', auxiliary: false],
-                (vartrix_outputs_ref_counts.name): [results_type: 'vartrix_outputs_ref_counts', auxiliary: false],
-                (vartrix_outputs_alt_counts.name): [results_type: 'vartrix_outputs_alt_counts', auxiliary: false],
-                (genotyper_csv.name): [results_type: 'genotyper_csv', auxiliary: false],
-                (genotyper_yaml.name): [results_type: 'genotyper_csv', auxiliary: true],
-            ]
-        ]
-        output_metadata['meta'] = metadata
-
-        output_metadata_json = JsonOutput.toJson(output_metadata)
-
-        """
-        write_yaml_from_json.py '${output_metadata_json}' metadata.yaml
-        """
-}
-
-
 workflow MONDRIAN_SNVGENOTYPING{
 
     take:
