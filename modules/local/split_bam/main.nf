@@ -7,17 +7,24 @@ process SPLITBAM {
   input:
     path(bamfile)
     path(baifile)
-    val(chromosomes)
     val(num_threads)
   output:
     path("outdir/*bam"), emit: bams
   script:
-    def chromosomes = "--chromosomes " + chromosomes.join(" --chromosomes ")
     """
-        io_utils split-bam-by-barcode \
-          --infile ${bamfile} \
-          --outdir outdir --tempdir tempdir \
-          ${chromosomes} \
-          --ncores ${num_threads}
+        ulimit -n 5250
+
+        samtools split -d CB -M 5200 --output-fmt bam -f 'outdir/%!.bam' --threads ${num_threads} ${bamfile}
+
+        barcode_lines=$(samtools view -H ${bamfile} | grep -P "^@CO" | awk -F'\t' '{print \$2}')
+
+        for barcode_line in \${barcode_lines}; do
+            barcode=\${barcode_line:3}
+            output_bam="outdir/\${barcode}.bam"
+
+            if [[ ! -e "\$output_bam" ]]; then
+                samtools view -Hb ${bamfile} > \${output_bam}
+            fi
+        done
     """
 }
