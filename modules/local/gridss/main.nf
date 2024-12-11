@@ -1,7 +1,7 @@
 process GRIDSS {
     time '48h'
     cpus 12
-    memory '12 GB'
+    memory '60 GB'
     label 'process_high'
 
   input:
