@@ -28,7 +28,7 @@ workflow MONDRIAN_NORMALIZER{
         )
 
         heatmap = ANEUPLOIDYHEATMAP(
-            normal_cells.csv, normal_cells.yaml, reads, reads+'.yaml', relative_aneuploidy_threshold, sample_id
+            normal_cells.csv, normal_cells.yaml, reads, reads+'.yaml', allowed_aneuploidy_score, sample_id
         )
 
         if (! qc_only){
