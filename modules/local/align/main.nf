@@ -6,7 +6,7 @@ process ALIGN {
 
   input:
     tuple(
-      val(cell_id), val(lanes), val(flowcells), path(fastqs1), path(fastqs2),
+      val(cell_id), val(lanes), val(flowcells), path(fastqs1, stageAs: "?/*"), path(fastqs2, stageAs: "?/*"),
       path(primary_reference), val(primary_reference_version), val(primary_reference_name),
       path(primary_reference_fai), path(primary_reference_amb),path(primary_reference_ann),
       path(primary_reference_bwt),path(primary_reference_pac),path(primary_reference_sa),
