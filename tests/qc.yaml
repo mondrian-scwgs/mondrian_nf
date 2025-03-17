@@ -1,3 +1,4 @@
+metadata: "mondrian-data-path-here/metadata.yaml"
 chromosomes: ["20","21","22"]
 gc_wig: "mondrian-ref-path-here/human/GRCh37-lite.gc.ws_500000.wig"
 map_wig: "mondrian-ref-path-here/human/GRCh37-lite.map.ws_125_to_500000.wig"
