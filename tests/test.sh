@@ -39,8 +39,8 @@ cat reference.csv
 
 
 echo "" >> nextflow.config
-echo "providers {github {user = '${GHUB_USERNAME}'" >> nextflow.config
-echo "password = '${GHUB_PASSWORD}'}}" >> nextflow.config
+echo "providers {github {user = '${GHUB_USERNAME2}'" >> nextflow.config
+echo "password = '${GHUB_PASSWORD2}'}}" >> nextflow.config
 
 
 
