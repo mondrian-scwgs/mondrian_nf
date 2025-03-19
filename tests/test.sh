@@ -43,6 +43,7 @@ echo "providers {github {user = '${GHUB_USERNAME2}'" >> nextflow.config
 echo "password = '${GHUB_PASSWORD2}'}}" >> nextflow.config
 
 
+java -XX:+PrintFlagsFinal -version | grep 'HeapSize\|RAM'
 
 $RESOURCE_DIR/nextflow pull mondrian-scwgs/mondrian_nf -r $TAG
 $RESOURCE_DIR/nextflow run mondrian-scwgs/mondrian_nf -r $TAG -params-file ${PIPELINE}.yaml -resume --max_cpus 2  -profile docker
