@@ -9,7 +9,11 @@ phases:
       - TAG=`git describe --tags $(git rev-list --tags --max-count=1)`
       - cd $CODEBUILD_SRC_DIR/tests/shared_resources && wget -nv https://mondriantestdata.s3.amazonaws.com/mondrian-ref-nf-20-22.tar.gz && tar -xvf mondrian-ref-nf-20-22.tar.gz
       - cd $CODEBUILD_SRC_DIR/tests/shared_resources && wget -qO- https://get.nextflow.io | bash      
-
+      - cd $CODEBUILD_SRC_DIR/docker && sh build.sh alignment $QUAY_USR $QUAY_PSW
+      - cd $CODEBUILD_SRC_DIR/docker && sh build.sh hmmcopy $QUAY_USR $QUAY_PSW
+      - cd $CODEBUILD_SRC_DIR/docker && sh build.sh breakpoint_calling $QUAY_USR $QUAY_PSW
+      - cd $CODEBUILD_SRC_DIR/docker && sh build.sh variant_calling $QUAY_USR $QUAY_PSW
+      - cd $CODEBUILD_SRC_DIR/docker && sh build.sh haplotype_calling $QUAY_USR $QUAY_PSW
 
   build:
     commands:
