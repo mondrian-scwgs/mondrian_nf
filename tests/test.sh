@@ -37,10 +37,13 @@ cat ${PIPELINE}.yaml
 cat nextflow.config
 cat reference.csv
 
+SCM=$HOME/.nextflow/scm
+mkdir -p $HOME/.nextflow
+touch $SCM
 
-echo "" >> nextflow.config
-echo "providers {github {user = '${GHUB_USERNAME}'" >> nextflow.config
-echo "password = '${GHUB_PASSWORD}'}}" >> nextflow.config
+echo "" >> $SCM
+echo "providers {github {user = '${GHUB_USERNAME}'" >> $SCM
+echo "password = '${GHUB_PASSWORD}'}}" >> $SCM
 
 
 $RESOURCE_DIR/nextflow pull mondrian-scwgs/mondrian_nf -r $TAG
