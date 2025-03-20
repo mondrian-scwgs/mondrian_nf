@@ -40,7 +40,7 @@ cat reference.csv
 
 echo "" >> nextflow.config
 echo "providers {github {user = '${GHUB_USERNAME}'" >> nextflow.config
-echo "token = '${GHUB_PASSWORD}'}}" >> nextflow.config
+echo "password = '${GHUB_PASSWORD}'}}" >> nextflow.config
 
 
 $RESOURCE_DIR/nextflow pull mondrian-scwgs/mondrian_nf -r $TAG
