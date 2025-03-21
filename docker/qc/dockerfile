@@ -15,7 +15,6 @@ RUN pip install tables jinja2 statsmodels pypdf2
 RUN conda create --name trimgalore
 SHELL ["conda", "run", "-n", "trimgalore", "/bin/bash", "-c"]
 RUN conda install --file /app/trimgalore_requirements.yml
-RUN wget https://mghp.osn.xsede.org/bir190004-bucket01/archive.bioconductor.org%2Fpackages%2F3.6%2Fbioc%2Fsrc%2Fcontrib%2FArchive%2FATACseqQC%2FATACseqQC_1.2.6.tar.gz && R CMD INSTALL archive.bioconductor.org%2Fpackages%2F3.6%2Fbioc%2Fsrc%2Fcontrib%2FArchive%2FATACseqQC%2FATACseqQC_1.2.6.tar.gz && rm archive.bioconductor.org%2Fpackages%2F3.6%2Fbioc%2Fsrc%2Fcontrib%2FArchive%2FATACseqQC%2FATACseqQC_1.2.6.tar.gz
 SHELL ["conda", "run", "-n", "base", "/bin/bash", "-c"]
 ENV PATH="${PATH}:/opt/conda/envs/trimgalore/bin"
 
