@@ -1,8 +1,8 @@
 process CSVERVEREMOVEDUPLICATES {
     time '24h'
-    cpus 2
+    cpus 1
     memory '12 GB'
-    label 'process_high'
+    label 'process_low'
 
   input:
       path(input_csv)
