@@ -68,8 +68,7 @@ process RUN_KRAKEN {
     
     # Parse Kraken2 output using mondrian_utils
     qc_utils parse-kraken-output \\
-        --results_dir . \\
-        --cell_id ${cell_id} \\
+        --kraken_output_file ${cell_id}_output.txt \\
         --output_table ${cell_id}_parsed_table.csv \\
         --output_human ${cell_id}_human_reads.txt \\
         --output_nonhuman ${cell_id}_nonhuman_reads.txt
