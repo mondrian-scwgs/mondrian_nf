@@ -17,8 +17,9 @@ workflow MONDRIAN_CONTAMINATION{
     // Create channel for cell IDs from a text file (one per line)
     cell_ids_ch = Channel
         .fromPath(cell_ids_file)
-        .map { cell_id -> 
-            tuple(cell_id, bam_file, bam_file + ".bai")
+        .splitCsv(header:false)
+        .map { row -> 
+            tuple(row[0], bam_file, bam_file + ".bai")
         }
 
     // Generate FASTQs from BAM file for each cell

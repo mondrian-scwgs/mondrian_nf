@@ -11,7 +11,7 @@ def assert_required_param(param_name){
 }
 
 assert_required_param('bam_file')
-assert_required_param('cell_ids')
+assert_required_param('cell_ids_file')
 assert_required_param('kraken_db')
 assert_required_param('sample_id')
 
