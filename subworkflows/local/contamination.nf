@@ -17,9 +17,10 @@ workflow MONDRIAN_CONTAMINATION{
     // Create channel for cell IDs from a text file (one per line)
     cell_ids_ch = Channel
         .fromPath(cell_ids_file)
-        .splitCsv(header:false)
-        .map { row -> 
-            tuple(row[0], bam_file, bam_file + ".bai")
+        .splitText()
+        .map { it.trim() }
+        .map { cell_id -> 
+            tuple(cell_id, bam_file, bam_file + ".bai")
         }
 
     // Generate FASTQs from BAM file for each cell
@@ -37,5 +38,12 @@ workflow MONDRIAN_CONTAMINATION{
     emit:
     kraken_results = RUN_KRAKEN.out
     fastq_files = GENERATE_FASTQS.out
+    
+    // Individual output components for easier access
+    kraken_output = RUN_KRAKEN.out.map { cell_id, output, report, table, human, nonhuman -> tuple(cell_id, output) }
+    kraken_reports = RUN_KRAKEN.out.map { cell_id, output, report, table, human, nonhuman -> tuple(cell_id, report) }
+    parsed_tables = RUN_KRAKEN.out.map { cell_id, output, report, table, human, nonhuman -> tuple(cell_id, table) }
+    human_reads = RUN_KRAKEN.out.map { cell_id, output, report, table, human, nonhuman -> tuple(cell_id, human) }
+    nonhuman_reads = RUN_KRAKEN.out.map { cell_id, output, report, table, human, nonhuman -> tuple(cell_id, nonhuman) }
 
 }

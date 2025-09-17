@@ -43,13 +43,17 @@ process RUN_KRAKEN {
     tuple(
         val(cell_id),
         path("${cell_id}_output.txt"),
-        path("${cell_id}_report.txt")
+        path("${cell_id}_report.txt"),
+        path("${cell_id}_parsed_table.csv"),
+        path("${cell_id}_human_reads.txt"),
+        path("${cell_id}_nonhuman_reads.txt")
     )
 
     script:
     """
     mkdir -p ${cell_id}
     
+    # Run Kraken2 classification
     kraken2 \\
         --db ${kraken_db} \\
         --threads ${kraken_threads} \\
@@ -61,5 +65,13 @@ process RUN_KRAKEN {
         ${fastq1} \\
         ${fastq2} \\
         --output ${cell_id}_output.txt
+    
+    # Parse Kraken2 output using mondrian_utils
+    qc_utils parse-kraken-output \\
+        --results_dir . \\
+        --cell_id ${cell_id} \\
+        --output_table ${cell_id}_parsed_table.csv \\
+        --output_human ${cell_id}_human_reads.txt \\
+        --output_nonhuman ${cell_id}_nonhuman_reads.txt
     """
 }

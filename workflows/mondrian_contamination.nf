@@ -47,8 +47,8 @@ workflow MONDRIAN_CONTAMINATION_PIPELINE{
     )
 
     // Output results for monitoring
-    MONDRIAN_CONTAMINATION.out.kraken_results.view { cell_id, output_file, report_file ->
-        "Completed contamination analysis for cell: ${cell_id}"
+    MONDRIAN_CONTAMINATION.out.kraken_results.view { cell_id, output_file, report_file, parsed_table, human_reads, nonhuman_reads ->
+        "Completed contamination analysis for cell: ${cell_id} - Generated parsed table and read classifications"
     }
 
 }
