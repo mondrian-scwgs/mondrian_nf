@@ -26,10 +26,10 @@ workflow MONDRIAN_CONTAMINATION{
     // Generate FASTQs from BAM file for each cell
     GENERATE_FASTQS(cell_ids_ch)
 
-    // Prepare input for Kraken2
+    // Prepare input for Kraken2 (including BAM file for stats generation)
     kraken_input_ch = GENERATE_FASTQS.out
         .map { cell_id, fastq1, fastq2 ->
-            tuple(cell_id, fastq1, fastq2, kraken_db, kraken_threads)
+            tuple(cell_id, fastq1, fastq2, kraken_db, kraken_threads, bam_file, bam_file + ".bai")
         }
 
     // Run Kraken2 classification
@@ -40,10 +40,13 @@ workflow MONDRIAN_CONTAMINATION{
     fastq_files = GENERATE_FASTQS.out
     
     // Individual output components for easier access
-    kraken_output = RUN_KRAKEN.out.map { cell_id, output, report, table, human, nonhuman -> tuple(cell_id, output) }
-    kraken_reports = RUN_KRAKEN.out.map { cell_id, output, report, table, human, nonhuman -> tuple(cell_id, report) }
-    parsed_tables = RUN_KRAKEN.out.map { cell_id, output, report, table, human, nonhuman -> tuple(cell_id, table) }
-    human_reads = RUN_KRAKEN.out.map { cell_id, output, report, table, human, nonhuman -> tuple(cell_id, human) }
-    nonhuman_reads = RUN_KRAKEN.out.map { cell_id, output, report, table, human, nonhuman -> tuple(cell_id, nonhuman) }
+    kraken_output = RUN_KRAKEN.out.map { cell_id, output, report, table, human, nonhuman, all_stats, human_stats, nonhuman_stats -> tuple(cell_id, output) }
+    kraken_reports = RUN_KRAKEN.out.map { cell_id, output, report, table, human, nonhuman, all_stats, human_stats, nonhuman_stats -> tuple(cell_id, report) }
+    parsed_tables = RUN_KRAKEN.out.map { cell_id, output, report, table, human, nonhuman, all_stats, human_stats, nonhuman_stats -> tuple(cell_id, table) }
+    human_reads = RUN_KRAKEN.out.map { cell_id, output, report, table, human, nonhuman, all_stats, human_stats, nonhuman_stats -> tuple(cell_id, human) }
+    nonhuman_reads = RUN_KRAKEN.out.map { cell_id, output, report, table, human, nonhuman, all_stats, human_stats, nonhuman_stats -> tuple(cell_id, nonhuman) }
+    all_reads_stats = RUN_KRAKEN.out.map { cell_id, output, report, table, human, nonhuman, all_stats, human_stats, nonhuman_stats -> tuple(cell_id, all_stats) }
+    human_reads_stats = RUN_KRAKEN.out.map { cell_id, output, report, table, human, nonhuman, all_stats, human_stats, nonhuman_stats -> tuple(cell_id, human_stats) }
+    nonhuman_reads_stats = RUN_KRAKEN.out.map { cell_id, output, report, table, human, nonhuman, all_stats, human_stats, nonhuman_stats -> tuple(cell_id, nonhuman_stats) }
 
 }

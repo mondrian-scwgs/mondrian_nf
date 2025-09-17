@@ -36,7 +36,9 @@ process RUN_KRAKEN {
         path(fastq1),
         path(fastq2),
         path(kraken_db),
-        val(kraken_threads)
+        val(kraken_threads),
+        path(bamfile),
+        path(baifile)
     )
 
     output:
@@ -46,7 +48,10 @@ process RUN_KRAKEN {
         path("${cell_id}_report.txt"),
         path("${cell_id}_parsed_table.csv"),
         path("${cell_id}_human_reads.txt"),
-        path("${cell_id}_nonhuman_reads.txt")
+        path("${cell_id}_nonhuman_reads.txt"),
+        path("${cell_id}_all_reads_stats.pickle"),
+        path("${cell_id}_human_reads_stats.pickle"),
+        path("${cell_id}_nonhuman_reads_stats.pickle")
     )
 
     script:
@@ -72,5 +77,19 @@ process RUN_KRAKEN {
         --output_table ${cell_id}_parsed_table.csv \\
         --output_human ${cell_id}_human_reads.txt \\
         --output_nonhuman ${cell_id}_nonhuman_reads.txt
+    
+    # Generate BAM stats for all reads from this cell
+    samtools view ${bamfile} --tag CB:${cell_id} -b | samtools stats > ${cell_id}_all_reads_stats.txt
+    
+    # Generate BAM stats for human reads subset
+    samtools view ${bamfile} --qname-file ${cell_id}_human_reads.txt -b | samtools stats > ${cell_id}_human_reads_stats.txt
+    
+    # Generate BAM stats for non-human reads subset  
+    samtools view ${bamfile} --qname-file ${cell_id}_nonhuman_reads.txt -b | samtools stats > ${cell_id}_nonhuman_reads_stats.txt
+    
+    # Parse all BAM stats files using mondrian_utils
+    qc_utils parse-bamstats --stats_file ${cell_id}_all_reads_stats.txt --output_file ${cell_id}_all_reads_stats.pickle
+    qc_utils parse-bamstats --stats_file ${cell_id}_human_reads_stats.txt --output_file ${cell_id}_human_reads_stats.pickle
+    qc_utils parse-bamstats --stats_file ${cell_id}_nonhuman_reads_stats.txt --output_file ${cell_id}_nonhuman_reads_stats.pickle
     """
 }
