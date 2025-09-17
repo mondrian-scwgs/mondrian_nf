@@ -7,16 +7,16 @@ workflow MONDRIAN_CONTAMINATION{
 
     take:
         bam_file
-        cell_ids
+        cell_ids_file
         kraken_db
         kraken_threads
         sample_id
 
     main:
 
-    // Create channel for cell IDs
+    // Create channel for cell IDs from a text file (one per line)
     cell_ids_ch = Channel
-        .fromList(cell_ids)
+        .fromPath(cell_ids_file)
         .map { cell_id -> 
             tuple(cell_id, bam_file, bam_file + ".bai")
         }

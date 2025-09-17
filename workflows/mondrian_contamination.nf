@@ -16,7 +16,7 @@ assert_required_param('kraken_db')
 assert_required_param('sample_id')
 
 bam_file = file(params.bam_file)
-cell_ids = params.cell_ids
+cell_ids_file = params.cell_ids_file
 kraken_db = file(params.kraken_db)
 sample_id = params.sample_id
 
@@ -40,7 +40,7 @@ workflow MONDRIAN_CONTAMINATION_PIPELINE{
 
     MONDRIAN_CONTAMINATION(
         bam_file,
-        cell_ids,
+        cell_ids_file,
         kraken_db,
         kraken_threads,
         sample_id
