@@ -58,22 +58,22 @@ workflow MONDRIAN_CONTAMINATION{
         .map { cell_id, report, all_stats, human_stats, nonhuman_stats -> nonhuman_stats }
         .collect()
 
-    // Combine all collected files for the generate contamination table figures process
-    collected_inputs = kraken_reports
-        .combine(all_stats)
-        .combine(human_stats)
-        .combine(nonhuman_stats)
-        .map { reports, all_st, human_st, nonhuman_st -> 
-            tuple(sample_id, reports, all_st, human_st, nonhuman_st, hmmcopy_metrics_file, ncbi_taxonomy_database,
-                  min_percent_aggregate, min_percent_show, min_num_taxa_condense)
-        }
-
     // Generate contamination analysis tables and figures
-    GENERATE_CONTAMINATION_TABLE_FIGURES(collected_inputs)
+    GENERATE_CONTAMINATION_TABLE_FIGURES(
+        sample_id,
+        kraken_reports,
+        all_stats,
+        human_stats,
+        nonhuman_stats,
+        hmmcopy_metrics_file,
+        ncbi_taxonomy_database,
+        min_percent_aggregate,
+        min_percent_show,
+        min_num_taxa_condense,
+    )
 
     emit:
     // Only emit the final aggregated results
     contamination_results = GENERATE_CONTAMINATION_TABLE_FIGURES.out
-    fastq_files = GENERATE_FASTQS.out
 
 }

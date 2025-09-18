@@ -97,18 +97,16 @@ process GENERATE_CONTAMINATION_TABLE_FIGURES {
     label 'process_medium'
 
     input:
-    tuple(
-        val(library_id),
-        path(kraken_report_files),
-        path(all_reads_stats_files),
-        path(human_reads_stats_files),
-        path(nonhuman_reads_stats_files),
-        path(hmmcopy_metrics_file),
-        path(ncbi_taxonomy_database),
-        val(min_percent_aggregate),
-        val(min_percent_show),
+        val(library_id)
+        path(kraken_report_files)
+        path(all_reads_stats_files)
+        path(human_reads_stats_files)
+        path(nonhuman_reads_stats_files)
+        path(hmmcopy_metrics_file)
+        path(ncbi_taxonomy_database)
+        val(min_percent_aggregate)
+        val(min_percent_show)
         val(min_num_taxa_condense)
-    )
 
     output:
     tuple(
