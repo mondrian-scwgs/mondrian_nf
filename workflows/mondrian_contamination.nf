@@ -14,14 +14,21 @@ assert_required_param('bam_file')
 assert_required_param('cell_ids_file')
 assert_required_param('kraken_db')
 assert_required_param('sample_id')
+assert_required_param('hmmcopy_metrics_file')
+assert_required_param('ncbi_taxonomy_database')
 
 bam_file = file(params.bam_file)
 cell_ids_file = params.cell_ids_file
 kraken_db = file(params.kraken_db)
 sample_id = params.sample_id
+hmmcopy_metrics_file = file(params.hmmcopy_metrics_file)
+ncbi_taxonomy_database = file(params.ncbi_taxonomy_database)
 
 // Optional parameters with defaults
 kraken_threads = params.kraken_threads ?: 4
+min_percent_aggregate = params.min_percent_aggregate ?: 0.0
+min_percent_show = params.min_percent_show ?: 2.0
+min_num_taxa_condense = params.min_num_taxa_condense ?: 25
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -43,12 +50,17 @@ workflow MONDRIAN_CONTAMINATION_PIPELINE{
         cell_ids_file,
         kraken_db,
         kraken_threads,
-        sample_id
+        sample_id,
+        hmmcopy_metrics_file,
+        ncbi_taxonomy_database,
+        min_percent_aggregate,
+        min_percent_show,
+        min_num_taxa_condense
     )
 
     // Output results for monitoring
-    MONDRIAN_CONTAMINATION.out.kraken_results.view { cell_id, output_file, report_file, parsed_table, human_reads, nonhuman_reads, all_stats, human_stats, nonhuman_stats ->
-        "Completed contamination analysis for cell: ${cell_id} - Generated parsed table, read classifications, and BAM statistics"
+    MONDRIAN_CONTAMINATION.out.contamination_results.view { library_id, summary_table, multipanel_figure, chip_figure, control_cells, nonhuman_percentage_taxon, nonhuman_percentage_clade, nonhuman_composition, contam_by_column ->
+        "Completed contamination analysis for library: ${library_id} - Generated summary tables and figures"
     }
 
 }
