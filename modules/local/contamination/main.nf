@@ -68,7 +68,7 @@ process RUN_KRAKEN {
         --output ${cell_id}/${cell_id}_output.txt
     
     # Parse Kraken2 output using mondrian_utils
-    qc_utils parse-kraken-output \\
+    contamination_utils parse-kraken-output \\
         --kraken_output_file ${cell_id}/${cell_id}_output.txt \\
         --output_table ${cell_id}/${cell_id}_parsed_table.csv \\
         --output_human ${cell_id}/${cell_id}_human_reads.txt \\
@@ -84,9 +84,9 @@ process RUN_KRAKEN {
     samtools view ${bamfile} --qname-file ${cell_id}/${cell_id}_nonhuman_reads.txt -b | samtools stats > ${cell_id}/${cell_id}_nonhuman_reads_stats.txt
     
     # Parse all BAM stats files using mondrian_utils
-    qc_utils parse-bamstats --stats_file ${cell_id}/${cell_id}_all_reads_stats.txt --output_file ${cell_id}/${cell_id}_all_reads_stats.pickle
-    qc_utils parse-bamstats --stats_file ${cell_id}/${cell_id}_human_reads_stats.txt --output_file ${cell_id}/${cell_id}_human_reads_stats.pickle
-    qc_utils parse-bamstats --stats_file ${cell_id}/${cell_id}_nonhuman_reads_stats.txt --output_file ${cell_id}/${cell_id}_nonhuman_reads_stats.pickle
+    contamination_utils parse-bamstats --stats_file ${cell_id}/${cell_id}_all_reads_stats.txt --output_file ${cell_id}/${cell_id}_all_reads_stats.pickle
+    contamination_utils parse-bamstats --stats_file ${cell_id}/${cell_id}_human_reads_stats.txt --output_file ${cell_id}/${cell_id}_human_reads_stats.pickle
+    contamination_utils parse-bamstats --stats_file ${cell_id}/${cell_id}_nonhuman_reads_stats.txt --output_file ${cell_id}/${cell_id}_nonhuman_reads_stats.pickle
     """
 }
 
@@ -123,7 +123,7 @@ process GENERATE_CONTAMINATION_TABLE_FIGURES {
 
     script:
     """
-    qc_utils generate-contamination-table-figures \\
+    contamination_utils generate-contamination-table-figures \\
         \$(for file in ${kraken_report_files}; do echo "--kraken_report_files \$file"; done) \\
         \$(for file in ${all_reads_stats_files}; do echo "--all_reads_stats_files \$file"; done) \\
         \$(for file in ${human_reads_stats_files}; do echo "--human_reads_stats_files \$file"; done) \\
