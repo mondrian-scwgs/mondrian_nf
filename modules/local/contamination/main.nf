@@ -45,9 +45,9 @@ process RUN_KRAKEN {
     tuple(
         val(cell_id),
         path("${cell_id}/${cell_id}_report.txt"),
-        path("${cell_id}/${cell_id}_all_reads_stats.pickle"),
-        path("${cell_id}/${cell_id}_human_reads_stats.pickle"),
-        path("${cell_id}/${cell_id}_nonhuman_reads_stats.pickle")
+        path("${cell_id}/${cell_id}_all_reads_stats.txt"),
+        path("${cell_id}/${cell_id}_human_reads_stats.txt"),
+        path("${cell_id}/${cell_id}_nonhuman_reads_stats.txt")
     )
 
     script:
@@ -82,11 +82,6 @@ process RUN_KRAKEN {
     
     # Generate BAM stats for non-human reads subset  
     samtools view ${bamfile} --qname-file ${cell_id}/${cell_id}_nonhuman_reads.txt -b | samtools stats > ${cell_id}/${cell_id}_nonhuman_reads_stats.txt
-    
-    # Parse all BAM stats files using mondrian_utils
-    contamination_utils parse-bamstats --stats_file ${cell_id}/${cell_id}_all_reads_stats.txt --output_file ${cell_id}/${cell_id}_all_reads_stats.pickle
-    contamination_utils parse-bamstats --stats_file ${cell_id}/${cell_id}_human_reads_stats.txt --output_file ${cell_id}/${cell_id}_human_reads_stats.pickle
-    contamination_utils parse-bamstats --stats_file ${cell_id}/${cell_id}_nonhuman_reads_stats.txt --output_file ${cell_id}/${cell_id}_nonhuman_reads_stats.pickle
     """
 }
 
