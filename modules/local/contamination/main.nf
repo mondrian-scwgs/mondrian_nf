@@ -1,26 +1,29 @@
-process GENERATE_FASTQS {
-    time '1h'
-    cpus 1
-    memory '8 GB'
+process SPLIT_BAM_BY_CELL {
+    time '2h'
+    cpus 2
+    memory '16 GB'
     label 'process_medium'
 
     input:
     tuple(
-        val(cell_id),
         path(bamfile),
         path(baifile)
     )
 
     output:
-    tuple(
-        val(cell_id),
-        path("${cell_id}_fastq_R1.fastq.gz"),
-        path("${cell_id}_fastq_R2.fastq.gz")
-    )
+    path("split_bams/*.bam")
 
     script:
     """
-    samtools fastq -d CB:${cell_id} -1 ${cell_id}_fastq_R1.fastq.gz -2 ${cell_id}_fastq_R2.fastq.gz ${bamfile}
+    mkdir -p split_bams
+    
+    # Split BAM by cell barcode using samtools split
+    samtools split -d CB -f 'split_bams/%!.bam' ${bamfile}
+    
+    # Index each split BAM file
+    for bam_file in split_bams/*.bam; do
+        samtools index "\$bam_file"
+    done
     """
 }
 
@@ -33,12 +36,9 @@ process RUN_KRAKEN {
     input:
     tuple(
         val(cell_id),
-        path(fastq1),
-        path(fastq2),
+        path(cell_bam),
         path(kraken_db),
-        val(kraken_threads),
-        path(bamfile),
-        path(baifile)
+        val(kraken_threads)
     )
 
     output:
@@ -54,6 +54,9 @@ process RUN_KRAKEN {
     """
     mkdir -p ${cell_id}
     
+    # Extract fastqs from the cell BAM
+    samtools fastq -1 ${cell_id}/${cell_id}_fastq_R1.fastq.gz -2 ${cell_id}/${cell_id}_fastq_R2.fastq.gz ${cell_bam}
+    
     # Run Kraken2 classification
     kraken2 \\
         --db ${kraken_db} \\
@@ -63,8 +66,8 @@ process RUN_KRAKEN {
         --memory-mapping \\
         --use-names \\
         --paired \\
-        ${fastq1} \\
-        ${fastq2} \\
+        ${cell_id}/${cell_id}_fastq_R1.fastq.gz \\
+        ${cell_id}/${cell_id}_fastq_R2.fastq.gz \\
         --output ${cell_id}/${cell_id}_output.txt
     
     # Parse Kraken2 output using mondrian_utils
@@ -75,13 +78,13 @@ process RUN_KRAKEN {
         --output_nonhuman ${cell_id}/${cell_id}_nonhuman_reads.txt
     
     # Generate BAM stats for all reads from this cell
-    samtools view ${bamfile} --tag CB:${cell_id} -b | samtools stats > ${cell_id}/${cell_id}_all_reads_stats.txt
+    samtools stats ${cell_bam} > ${cell_id}/${cell_id}_all_reads_stats.txt
     
     # Generate BAM stats for human reads subset
-    samtools view ${bamfile} --qname-file ${cell_id}/${cell_id}_human_reads.txt -b | samtools stats > ${cell_id}/${cell_id}_human_reads_stats.txt
+    samtools view ${cell_bam} --qname-file ${cell_id}/${cell_id}_human_reads.txt -b | samtools stats > ${cell_id}/${cell_id}_human_reads_stats.txt
     
     # Generate BAM stats for non-human reads subset  
-    samtools view ${bamfile} --qname-file ${cell_id}/${cell_id}_nonhuman_reads.txt -b | samtools stats > ${cell_id}/${cell_id}_nonhuman_reads_stats.txt
+    samtools view ${cell_bam} --qname-file ${cell_id}/${cell_id}_nonhuman_reads.txt -b | samtools stats > ${cell_id}/${cell_id}_nonhuman_reads_stats.txt
     """
 }
 

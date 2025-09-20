@@ -1,6 +1,6 @@
 nextflow.enable.dsl=2
 
-include { GENERATE_FASTQS } from '../../modules/local/contamination/main'
+include { SPLIT_BAM_BY_CELL } from '../../modules/local/contamination/main'
 include { RUN_KRAKEN     } from '../../modules/local/contamination/main'
 include { GENERATE_CONTAMINATION_TABLE_FIGURES } from '../../modules/local/contamination/main'
 
@@ -20,26 +20,19 @@ workflow MONDRIAN_CONTAMINATION{
 
     main:
 
-    // Create channel for cell IDs from a text file (one per line)
-    cell_ids_ch = Channel
-        .fromPath(cell_ids_file)
-        .splitText()
-        .map { it.trim() }
-        .map { cell_id -> 
-            tuple(cell_id, bam_file, bam_file + ".bai")
+    // Split BAM by cell barcodes
+    SPLIT_BAM_BY_CELL(tuple(bam_file, bam_file + ".bai"))
+
+    // Create channel from split BAMs and extract cell IDs from filenames
+    split_bams_ch = SPLIT_BAM_BY_CELL.out
+        .flatten()
+        .map { bam_file ->
+            def cell_id = bam_file.baseName
+            tuple(cell_id, bam_file, kraken_db, kraken_threads)
         }
 
-    // Generate FASTQs from BAM file for each cell
-    GENERATE_FASTQS(cell_ids_ch)
-
-    // Prepare input for Kraken2 (including BAM file for stats generation)
-    kraken_input_ch = GENERATE_FASTQS.out
-        .map { cell_id, fastq1, fastq2 ->
-            tuple(cell_id, fastq1, fastq2, kraken_db, kraken_threads, bam_file, bam_file + ".bai")
-        }
-
-    // Run Kraken2 classification
-    RUN_KRAKEN(kraken_input_ch)
+    // Run Kraken2 classification on each cell BAM
+    RUN_KRAKEN(split_bams_ch)
 
     // Collect all per-cell outputs by file type for generate_contamination_table_figures
     kraken_reports = RUN_KRAKEN.out
