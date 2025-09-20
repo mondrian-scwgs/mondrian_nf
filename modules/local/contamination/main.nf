@@ -1,32 +1,3 @@
-process SPLIT_BAM_BY_CELL {
-    time '2h'
-    cpus 2
-    memory '16 GB'
-    label 'process_medium'
-
-    input:
-    tuple(
-        path(bamfile),
-        path(baifile)
-    )
-
-    output:
-    path("split_bams/*.bam")
-
-    script:
-    """
-    mkdir -p split_bams
-    
-    # Split BAM by cell barcode using samtools split
-    samtools split -d CB -f 'split_bams/%!.bam' ${bamfile}
-    
-    # Index each split BAM file
-    for bam_file in split_bams/*.bam; do
-        samtools index "\$bam_file"
-    done
-    """
-}
-
 process RUN_KRAKEN {
     time '6h'
     cpus 4

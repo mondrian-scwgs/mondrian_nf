@@ -1,6 +1,6 @@
 nextflow.enable.dsl=2
 
-include { SPLIT_BAM_BY_CELL } from '../../modules/local/contamination/main'
+include { SPLITBAM } from '../../modules/local/split_bam/main'
 include { RUN_KRAKEN     } from '../../modules/local/contamination/main'
 include { GENERATE_CONTAMINATION_TABLE_FIGURES } from '../../modules/local/contamination/main'
 
@@ -10,7 +10,7 @@ workflow MONDRIAN_CONTAMINATION{
         bam_file
         cell_ids_file
         kraken_db
-        kraken_threads
+        num_cores
         sample_id
         hmmcopy_metrics_file
         ncbi_taxonomy_database
@@ -20,15 +20,15 @@ workflow MONDRIAN_CONTAMINATION{
 
     main:
 
-    // Split BAM by cell barcodes
-    SPLIT_BAM_BY_CELL(tuple(bam_file, bam_file + ".bai"))
+    // Split BAM by cell barcodes using existing SPLITBAM module
+    SPLITBAM(bam_file, bam_file + ".bai", num_cores)
 
     // Create channel from split BAMs and extract cell IDs from filenames
-    split_bams_ch = SPLIT_BAM_BY_CELL.out
+    split_bams_ch = SPLITBAM.out.bams
         .flatten()
         .map { bam_file ->
             def cell_id = bam_file.baseName
-            tuple(cell_id, bam_file, kraken_db, kraken_threads)
+            tuple(cell_id, bam_file, kraken_db, num_cores)
         }
 
     // Run Kraken2 classification on each cell BAM

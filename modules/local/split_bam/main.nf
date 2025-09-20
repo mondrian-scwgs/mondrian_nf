@@ -12,12 +12,20 @@ process SPLITBAM {
     path("outdir/*bam"), emit: bams
   script:
     """
-        ulimit -n 5250
+        MAX_BARCODES=5200
 
-        mkdir outdir
-        samtools split -d CB -M 5200 --output-fmt bam -f 'outdir/%!.bam' --threads ${num_threads} ${bamfile}
+        ulimit -n \$((MAX_BARCODES + 20))
 
         barcode_lines=\$(samtools view -H ${bamfile} | grep "^@CO" | awk -F'\\t' '{print \$2}')
+
+        num_barcodes=\$(echo "\${barcode_lines}" | wc -l)
+        if [[ \$num_barcodes -gt \$MAX_BARCODES ]]; then
+            echo "Error: Number of barcodes (\$num_barcodes) exceeds the maximum allowed (\$MAX_BARCODES)." >&2
+            exit 1
+        fi
+
+        mkdir outdir
+        samtools split -d CB -M \$MAX_BARCODES --output-fmt bam -f 'outdir/%!.bam' --threads ${num_threads} ${bamfile}
 
         for barcode_line in \${barcode_lines}; do
             barcode=\${barcode_line:3}
