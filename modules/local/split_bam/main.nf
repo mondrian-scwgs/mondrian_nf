@@ -1,6 +1,6 @@
-process SPLITBAM {
+process SPLITBAM_TASK {
     time '48h'
-    cpus 12
+    cpus 1
     memory '12 GB'
     label 'process_high'
 
@@ -30,10 +30,29 @@ process SPLITBAM {
         for barcode_line in \${barcode_lines}; do
             barcode=\${barcode_line:3}
             output_bam="outdir/\${barcode}.bam"
-
+            
             if [[ ! -e "\$output_bam" ]]; then
                 samtools view -Hb ${bamfile} > \${output_bam}
             fi
         done
     """
+}
+
+workflow SPLITBAM {
+    take:
+    bamfile
+    baifile
+    num_threads
+
+    main:
+    SPLITBAM_TASK(bamfile, baifile, num_threads)
+
+    split_bams = SPLITBAM_TASK.out.bams
+        .flatten()
+        .map { bam_file ->
+            def cell_id = bam_file.baseName
+            tuple(cell_id, bam_file)}
+
+    emit:
+    split_bams
 }

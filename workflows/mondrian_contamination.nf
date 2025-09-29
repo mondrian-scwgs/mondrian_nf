@@ -11,14 +11,12 @@ def assert_required_param(param_name){
 }
 
 assert_required_param('bam_file')
-assert_required_param('cell_ids_file')
 assert_required_param('kraken_db')
 assert_required_param('sample_id')
 assert_required_param('hmmcopy_metrics_file')
 assert_required_param('ncbi_taxonomy_database')
 
 bam_file = file(params.bam_file)
-cell_ids_file = params.cell_ids_file
 kraken_db = file(params.kraken_db)
 sample_id = params.sample_id
 hmmcopy_metrics_file = file(params.hmmcopy_metrics_file)
@@ -47,7 +45,6 @@ workflow MONDRIAN_CONTAMINATION_PIPELINE{
 
     MONDRIAN_CONTAMINATION(
         bam_file,
-        cell_ids_file,
         kraken_db,
         kraken_threads,
         sample_id,

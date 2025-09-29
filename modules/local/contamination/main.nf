@@ -8,9 +8,9 @@ process RUN_KRAKEN {
     tuple(
         val(cell_id),
         path(cell_bam),
-        path(kraken_db),
-        val(kraken_threads)
     )
+    path(kraken_db)
+    val(kraken_threads)
 
     output:
     tuple(

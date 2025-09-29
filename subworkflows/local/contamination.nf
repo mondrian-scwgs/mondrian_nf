@@ -8,7 +8,6 @@ workflow MONDRIAN_CONTAMINATION{
 
     take:
         bam_file
-        cell_ids_file
         kraken_db
         num_cores
         sample_id
@@ -23,16 +22,8 @@ workflow MONDRIAN_CONTAMINATION{
     // Split BAM by cell barcodes using existing SPLITBAM module
     SPLITBAM(bam_file, bam_file + ".bai", num_cores)
 
-    // Create channel from split BAMs and extract cell IDs from filenames
-    split_bams_ch = SPLITBAM.out.bams
-        .flatten()
-        .map { bam_file ->
-            def cell_id = bam_file.baseName
-            tuple(cell_id, bam_file, kraken_db, num_cores)
-        }
-
     // Run Kraken2 classification on each cell BAM
-    RUN_KRAKEN(split_bams_ch)
+    RUN_KRAKEN(SPLITBAM.out.split_bams, kraken_db, num_cores)
 
     // Collect all per-cell outputs by file type for generate_contamination_table_figures
     kraken_reports = RUN_KRAKEN.out
