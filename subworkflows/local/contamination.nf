@@ -7,7 +7,7 @@ include { GENERATE_CONTAMINATION_TABLE_FIGURES } from '../../modules/local/conta
 workflow MONDRIAN_CONTAMINATION{
 
     take:
-        bam_file
+        bam_files
         kraken_db
         num_cores
         sample_id
@@ -20,7 +20,7 @@ workflow MONDRIAN_CONTAMINATION{
     main:
 
     // Split BAM by cell barcodes using existing SPLITBAM module
-    SPLITBAM(bam_file, bam_file + ".bai", num_cores)
+    SPLITBAM(bam_files, num_cores)
 
     // Run Kraken2 classification on each cell BAM
     RUN_KRAKEN(SPLITBAM.out.split_bams, kraken_db, num_cores)

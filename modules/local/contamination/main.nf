@@ -24,7 +24,16 @@ process RUN_KRAKEN {
     script:
     """
     mkdir -p ${cell_id}
-    
+
+    # Check if the input BAM file is empty (no reads)
+    if [ \$(samtools view -c ${cell_bam}) -eq 0 ]; then
+        touch ${cell_id}/${cell_id}_report.txt
+        touch ${cell_id}/${cell_id}_all_reads_stats.txt
+        touch ${cell_id}/${cell_id}_human_reads_stats.txt
+        touch ${cell_id}/${cell_id}_nonhuman_reads_stats.txt
+        exit 0
+    fi
+
     # Extract fastqs from the cell BAM
     samtools fastq -1 ${cell_id}/${cell_id}_fastq_R1.fastq.gz -2 ${cell_id}/${cell_id}_fastq_R2.fastq.gz ${cell_bam}
     

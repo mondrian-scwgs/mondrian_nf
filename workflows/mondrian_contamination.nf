@@ -10,13 +10,13 @@ def assert_required_param(param_name){
     }
 }
 
-assert_required_param('bam_file')
+assert_required_param('bam_files')
 assert_required_param('kraken_db')
 assert_required_param('sample_id')
 assert_required_param('hmmcopy_metrics_file')
 assert_required_param('ncbi_taxonomy_database')
 
-bam_file = file(params.bam_file)
+bam_files = Channel.fromPath(params.bam_files.split(',') as List)
 kraken_db = file(params.kraken_db)
 sample_id = params.sample_id
 hmmcopy_metrics_file = file(params.hmmcopy_metrics_file)
@@ -44,7 +44,7 @@ include { MONDRIAN_CONTAMINATION } from '../subworkflows/local/contamination'
 workflow MONDRIAN_CONTAMINATION_PIPELINE{
 
     MONDRIAN_CONTAMINATION(
-        bam_file,
+        bam_files,
         kraken_db,
         kraken_threads,
         sample_id,

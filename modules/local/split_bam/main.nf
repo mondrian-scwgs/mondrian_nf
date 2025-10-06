@@ -6,7 +6,6 @@ process SPLITBAM_TASK {
 
   input:
     path(bamfile)
-    path(baifile)
     val(num_threads)
   output:
     path("outdir/*bam"), emit: bams
@@ -41,11 +40,10 @@ process SPLITBAM_TASK {
 workflow SPLITBAM {
     take:
     bamfile
-    baifile
     num_threads
 
     main:
-    SPLITBAM_TASK(bamfile, baifile, num_threads)
+    SPLITBAM_TASK(bamfile, num_threads)
 
     split_bams = SPLITBAM_TASK.out.bams
         .flatten()
