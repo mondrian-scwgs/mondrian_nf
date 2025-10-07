@@ -1,5 +1,33 @@
-process RUN_KRAKEN {
-    time '6h'
+process EXTRACT_FASTQ {
+    time '1h'
+    cpus 1
+    memory '8 GB'
+    label 'process_low'
+
+    input:
+    tuple(
+        val(cell_id),
+        path(cell_bam),
+    )
+
+    output:
+    tuple(
+        val(cell_id),
+        path("${cell_id}/${cell_id}_fastq_R1.fastq.gz"),
+        path("${cell_id}/${cell_id}_fastq_R2.fastq.gz")
+    )
+
+    script:
+    """
+    mkdir -p ${cell_id}
+
+    # Extract fastqs from the cell BAM
+    samtools fastq -1 ${cell_id}/${cell_id}_fastq_R1.fastq.gz -2 ${cell_id}/${cell_id}_fastq_R2.fastq.gz ${cell_bam}
+    """
+}
+
+process KRAKEN_CLASSIFICATION {
+    time '4h'
     cpus 4
     memory '96 GB'
     label 'process_high'
@@ -7,7 +35,8 @@ process RUN_KRAKEN {
     input:
     tuple(
         val(cell_id),
-        path(cell_bam),
+        path(fastq_r1),
+        path(fastq_r2)
     )
     path(kraken_db)
     val(kraken_threads)
@@ -16,27 +45,20 @@ process RUN_KRAKEN {
     tuple(
         val(cell_id),
         path("${cell_id}/${cell_id}_report.txt"),
-        path("${cell_id}/${cell_id}_all_reads_stats.txt"),
-        path("${cell_id}/${cell_id}_human_reads_stats.txt"),
-        path("${cell_id}/${cell_id}_nonhuman_reads_stats.txt")
+        path("${cell_id}/${cell_id}_output.txt")
     )
 
     script:
     """
     mkdir -p ${cell_id}
 
-    # Check if the input BAM file is empty (no reads)
-    if [ \$(samtools view -c ${cell_bam}) -eq 0 ]; then
+    # Check if the input FASTQ files contain any reads by testing decompressed content
+    if [ \$(gunzip -c ${fastq_r1} | wc -l) -eq 0 ] || [ \$(gunzip -c ${fastq_r2} | wc -l) -eq 0 ]; then
         touch ${cell_id}/${cell_id}_report.txt
-        touch ${cell_id}/${cell_id}_all_reads_stats.txt
-        touch ${cell_id}/${cell_id}_human_reads_stats.txt
-        touch ${cell_id}/${cell_id}_nonhuman_reads_stats.txt
+        touch ${cell_id}/${cell_id}_output.txt
         exit 0
     fi
 
-    # Extract fastqs from the cell BAM
-    samtools fastq -1 ${cell_id}/${cell_id}_fastq_R1.fastq.gz -2 ${cell_id}/${cell_id}_fastq_R2.fastq.gz ${cell_bam}
-    
     # Run Kraken2 classification
     kraken2 \\
         --db ${kraken_db} \\
@@ -46,25 +68,82 @@ process RUN_KRAKEN {
         --memory-mapping \\
         --use-names \\
         --paired \\
-        ${cell_id}/${cell_id}_fastq_R1.fastq.gz \\
-        ${cell_id}/${cell_id}_fastq_R2.fastq.gz \\
+        ${fastq_r1} \\
+        ${fastq_r2} \\
         --output ${cell_id}/${cell_id}_output.txt
-    
+    """
+}
+
+process PARSE_KRAKEN {
+    time '1h'
+    cpus 1
+    memory '8 GB'
+    label 'process_low'
+
+    input:
+    tuple(
+        val(cell_id),
+        path(kraken_report),
+        path(kraken_output)
+    )
+
+    output:
+    tuple(
+        val(cell_id),
+        path(kraken_report),
+        path("${cell_id}/${cell_id}_human_reads.txt"),
+        path("${cell_id}/${cell_id}_nonhuman_reads.txt")
+    )
+
+    script:
+    """
+    mkdir -p ${cell_id}
+
     # Parse Kraken2 output using mondrian_utils
     contamination_utils parse-kraken-output \\
-        --kraken_output_file ${cell_id}/${cell_id}_output.txt \\
+        --kraken_output_file ${kraken_output} \\
         --output_table ${cell_id}/${cell_id}_parsed_table.csv \\
         --output_human ${cell_id}/${cell_id}_human_reads.txt \\
         --output_nonhuman ${cell_id}/${cell_id}_nonhuman_reads.txt
-    
+    """
+}
+
+process GENERATE_BAM_STATS {
+    time '1h'
+    cpus 1
+    memory '8 GB'
+    label 'process_low'
+
+    input:
+    tuple(
+        val(cell_id),
+        path(kraken_report),
+        path(human_reads_file),
+        path(nonhuman_reads_file),
+        path(cell_bam)
+    )
+
+    output:
+    tuple(
+        val(cell_id),
+        path(kraken_report),
+        path("${cell_id}/${cell_id}_all_reads_stats.txt"),
+        path("${cell_id}/${cell_id}_human_reads_stats.txt"),
+        path("${cell_id}/${cell_id}_nonhuman_reads_stats.txt")
+    )
+
+    script:
+    """
+    mkdir -p ${cell_id}
+
     # Generate BAM stats for all reads from this cell
     samtools stats ${cell_bam} > ${cell_id}/${cell_id}_all_reads_stats.txt
     
     # Generate BAM stats for human reads subset
-    samtools view ${cell_bam} --qname-file ${cell_id}/${cell_id}_human_reads.txt -b | samtools stats > ${cell_id}/${cell_id}_human_reads_stats.txt
+    samtools view ${cell_bam} --qname-file ${human_reads_file} -b | samtools stats > ${cell_id}/${cell_id}_human_reads_stats.txt
     
     # Generate BAM stats for non-human reads subset  
-    samtools view ${cell_bam} --qname-file ${cell_id}/${cell_id}_nonhuman_reads.txt -b | samtools stats > ${cell_id}/${cell_id}_nonhuman_reads_stats.txt
+    samtools view ${cell_bam} --qname-file ${nonhuman_reads_file} -b | samtools stats > ${cell_id}/${cell_id}_nonhuman_reads_stats.txt
     """
 }
 

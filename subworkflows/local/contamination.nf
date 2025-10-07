@@ -1,7 +1,10 @@
 nextflow.enable.dsl=2
 
 include { SPLITBAM } from '../../modules/local/split_bam/main'
-include { RUN_KRAKEN     } from '../../modules/local/contamination/main'
+include { EXTRACT_FASTQ } from '../../modules/local/contamination/main'
+include { KRAKEN_CLASSIFICATION } from '../../modules/local/contamination/main'
+include { PARSE_KRAKEN } from '../../modules/local/contamination/main'
+include { GENERATE_BAM_STATS } from '../../modules/local/contamination/main'
 include { GENERATE_CONTAMINATION_TABLE_FIGURES } from '../../modules/local/contamination/main'
 
 workflow MONDRIAN_CONTAMINATION{
@@ -22,23 +25,32 @@ workflow MONDRIAN_CONTAMINATION{
     // Split BAM by cell barcodes using existing SPLITBAM module
     SPLITBAM(bam_files, num_cores)
 
-    // Run Kraken2 classification on each cell BAM
-    RUN_KRAKEN(SPLITBAM.out.split_bams, kraken_db, num_cores)
+    // Extract FASTQ files from each cell BAM
+    EXTRACT_FASTQ(SPLITBAM.out.split_bams)
+
+    // Run Kraken2 classification on each cell FASTQ pair
+    KRAKEN_CLASSIFICATION(EXTRACT_FASTQ.out, kraken_db, num_cores)
+
+    // Parse Kraken2 output to identify human vs non-human reads
+    PARSE_KRAKEN(KRAKEN_CLASSIFICATION.out)
+
+    // Generate BAM statistics for different read subsets
+    GENERATE_BAM_STATS(PARSE_KRAKEN.out.join(SPLITBAM.out.split_bams))
 
     // Collect all per-cell outputs by file type for generate_contamination_table_figures
-    kraken_reports = RUN_KRAKEN.out
+    kraken_reports = GENERATE_BAM_STATS.out
         .map { cell_id, report, all_stats, human_stats, nonhuman_stats -> report }
         .collect()
     
-    all_stats = RUN_KRAKEN.out
+    all_stats = GENERATE_BAM_STATS.out
         .map { cell_id, report, all_stats, human_stats, nonhuman_stats -> all_stats }
         .collect()
     
-    human_stats = RUN_KRAKEN.out
+    human_stats = GENERATE_BAM_STATS.out
         .map { cell_id, report, all_stats, human_stats, nonhuman_stats -> human_stats }
         .collect()
     
-    nonhuman_stats = RUN_KRAKEN.out
+    nonhuman_stats = GENERATE_BAM_STATS.out
         .map { cell_id, report, all_stats, human_stats, nonhuman_stats -> nonhuman_stats }
         .collect()
 
