@@ -20,6 +20,8 @@ if (params.mode == "qc") {
     include { MONDRIAN_DESTRUCT_PIPELINE } from './workflows/mondrian_destruct'
 } else if (params.mode == "variant") {
     include { MONDRIAN_VARIANT_PIPELINE } from './workflows/mondrian_variant'
+} else if (params.mode == "contamination") {
+    include { MONDRIAN_CONTAMINATION_PIPELINE } from './workflows/mondrian_contamination'
 }
 
 
@@ -47,6 +49,9 @@ workflow MONDRIAN {
     }
     else if(params.mode == "variant") {
         MONDRIAN_VARIANT_PIPELINE ()
+    }
+    else if(params.mode == "contamination") {
+        MONDRIAN_CONTAMINATION_PIPELINE ()
     }
 }
 
