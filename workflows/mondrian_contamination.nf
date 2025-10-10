@@ -16,7 +16,7 @@ assert_required_param('sample_id')
 assert_required_param('hmmcopy_metrics_file')
 assert_required_param('ncbi_taxonomy_database')
 
-bam_files = Channel.fromPath(params.bam_files.split(',') as List)
+bam_files = Channel.fromPath(params.bam_files)
 kraken_db = file(params.kraken_db)
 sample_id = params.sample_id
 hmmcopy_metrics_file = file(params.hmmcopy_metrics_file)
@@ -54,10 +54,5 @@ workflow MONDRIAN_CONTAMINATION_PIPELINE{
         min_percent_show,
         min_num_taxa_condense
     )
-
-    // Output results for monitoring
-    MONDRIAN_CONTAMINATION.out.contamination_results.view { library_id, summary_table, multipanel_figure, chip_figure, control_cells, nonhuman_percentage_taxon, nonhuman_percentage_clade, nonhuman_composition, contam_by_column ->
-        "Completed contamination analysis for library: ${library_id} - Generated summary tables and figures"
-    }
 
 }

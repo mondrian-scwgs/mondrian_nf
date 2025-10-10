@@ -67,9 +67,4 @@ workflow MONDRIAN_CONTAMINATION{
         min_percent_show,
         min_num_taxa_condense,
     )
-
-    emit:
-    // Only emit the final aggregated results
-    contamination_results = GENERATE_CONTAMINATION_TABLE_FIGURES.out
-
 }
