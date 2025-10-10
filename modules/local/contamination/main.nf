@@ -154,7 +154,7 @@ process GENERATE_CONTAMINATION_TABLE_FIGURES {
     label 'process_medium'
 
     input:
-        val(library_id)
+        val(sample_id)
         path(kraken_report_files)
         path(all_reads_stats_files)
         path(human_reads_stats_files)
@@ -167,15 +167,15 @@ process GENERATE_CONTAMINATION_TABLE_FIGURES {
 
     output:
     tuple(
-        val(library_id),
-        path("${library_id}_summary_table.csv"),
-        path("${library_id}_multipanel_figure.pdf"),
-        path("${library_id}_chip_figure.pdf"),
-        path("${library_id}_control_cells.pdf"),
-        path("${library_id}_nonhuman_percentage_taxon.csv"),
-        path("${library_id}_nonhuman_percentage_clade.csv"),
-        path("${library_id}_nonhuman_composition.pdf"),
-        path("${library_id}_contam_by_column.pdf")
+        val(sample_id),
+        path("${sample_id}_summary_table.csv"),
+        path("${sample_id}_multipanel_figure.pdf"),
+        path("${sample_id}_chip_figure.pdf"),
+        path("${sample_id}_control_cells.pdf"),
+        path("${sample_id}_nonhuman_percentage_taxon.csv"),
+        path("${sample_id}_nonhuman_percentage_clade.csv"),
+        path("${sample_id}_nonhuman_composition.pdf"),
+        path("${sample_id}_contam_by_column.pdf")
     )
 
     script:
@@ -186,15 +186,15 @@ process GENERATE_CONTAMINATION_TABLE_FIGURES {
         \$(for file in ${human_reads_stats_files}; do echo "--human_reads_stats_files \$file"; done) \\
         \$(for file in ${nonhuman_reads_stats_files}; do echo "--nonhuman_reads_stats_files \$file"; done) \\
         --hmmcopy_metrics_filename ${hmmcopy_metrics_file} \\
-        --library_id ${library_id} \\
-        --summary_table_output ${library_id}_summary_table.csv \\
-        --multipanel_figure_output ${library_id}_multipanel_figure.pdf \\
-        --chip_figure_output ${library_id}_chip_figure.pdf \\
-        --control_cells_output ${library_id}_control_cells.pdf \\
-        --nonhuman_percentage_taxon_output ${library_id}_nonhuman_percentage_taxon.csv \\
-        --nonhuman_percentage_clade_output ${library_id}_nonhuman_percentage_clade.csv \\
-        --nonhuman_composition_output ${library_id}_nonhuman_composition.pdf \\
-        --contam_by_column_output ${library_id}_contam_by_column.pdf \\
+        --sample_id ${sample_id} \\
+        --summary_table_output ${sample_id}_summary_table.csv \\
+        --multipanel_figure_output ${sample_id}_multipanel_figure.pdf \\
+        --chip_figure_output ${sample_id}_chip_figure.pdf \\
+        --control_cells_output ${sample_id}_control_cells.pdf \\
+        --nonhuman_percentage_taxon_output ${sample_id}_nonhuman_percentage_taxon.csv \\
+        --nonhuman_percentage_clade_output ${sample_id}_nonhuman_percentage_clade.csv \\
+        --nonhuman_composition_output ${sample_id}_nonhuman_composition.pdf \\
+        --contam_by_column_output ${sample_id}_contam_by_column.pdf \\
         --ncbi_taxonomy_database ${ncbi_taxonomy_database} \\
         --min_percent_aggregate ${min_percent_aggregate} \\
         --min_percent_show ${min_percent_show} \\
