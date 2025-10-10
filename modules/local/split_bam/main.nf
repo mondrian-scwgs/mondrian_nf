@@ -8,7 +8,7 @@ process SPLITBAM_TASK {
     path(bamfile)
     val(num_threads)
   output:
-    path("outdir/*bam"), emit: bams
+    path("outdir/*bam"), emit: bams, optional: true
   script:
     """
         MAX_BARCODES=5200
