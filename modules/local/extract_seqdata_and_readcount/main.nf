@@ -5,7 +5,10 @@ process EXTRACTSEQDATAANDREADCOUNT {
     label 'process_low'
 
   input:
-    path(bam)
+    tuple(
+      val(cell_id),
+      path(bam)
+    )
     path(snp_positions)
     path(segments)
     path(haplotypes)

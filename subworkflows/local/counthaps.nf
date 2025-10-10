@@ -22,7 +22,7 @@ workflow MONDRIAN_COUNTHAPS{
     main:
 
         splitbams = SPLITBAM(
-            tumor_bam, tumor_bam+'.bai', numcores
+            tumor_bam, numcores
         )
 
         segments = CREATESEGMENTS(
@@ -34,7 +34,7 @@ workflow MONDRIAN_COUNTHAPS{
         )
 
         cell_allele_counts = EXTRACTSEQDATAANDREADCOUNT(
-            splitbams.flatten(),
+            splitbams,
             snp_positions,
             segments,
             haps,
