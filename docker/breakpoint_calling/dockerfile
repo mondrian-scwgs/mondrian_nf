@@ -1,4 +1,4 @@
-FROM quay.io/singlecellpipelinetest/miniconda3:4.8.2
+FROM quay.io/singlecellpipelinetest/miniconda3:4.12.0
 ADD . /app
 ARG VERSION
 

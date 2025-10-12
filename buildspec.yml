@@ -14,6 +14,7 @@ phases:
       - cd $CODEBUILD_SRC_DIR/docker && sh build.sh breakpoint_calling $QUAY_USR $QUAY_PSW
       - cd $CODEBUILD_SRC_DIR/docker && sh build.sh variant_calling $QUAY_USR $QUAY_PSW
       - cd $CODEBUILD_SRC_DIR/docker && sh build.sh haplotype_calling $QUAY_USR $QUAY_PSW
+      - cd $CODEBUILD_SRC_DIR/docker && sh build.sh contamination $QUAY_USR $QUAY_PSW
   build:
     commands:
       - sh $CODEBUILD_SRC_DIR/tests/test.sh $CODEBUILD_SRC_DIR/tests $CODEBUILD_SRC_DIR/tests/shared_resources qc qc qc
