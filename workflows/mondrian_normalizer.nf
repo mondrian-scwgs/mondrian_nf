@@ -12,21 +12,15 @@ def assert_required_param(param_name){
 
 assert_required_param('reads')
 assert_required_param('metrics')
+assert_required_param('normal_copy')
 assert_required_param('bam')
-assert_required_param('chromosomes')
 assert_required_param('sample_id')
 
 reads = params.reads
 metrics = params.metrics
+normal_copy = params.normal_copy
 bam = params.bam
-chromosomes = params.chromosomes
 sample_id = params.sample_id
-
-if(params.blacklist){
-    blacklist = tuple(true, file(params.blacklist))
-} else {
-    blacklist = tuple(false, file("$baseDir/docs/assets/dummy_file.txt"))
-}
 
 if(params.qc_only){
     qc_only = params.qc_only
@@ -34,22 +28,16 @@ if(params.qc_only){
     qc_only = false
 }
 
-if(params.relative_aneuploidy_threshold){
-    relative_aneuploidy_threshold = params.relative_aneuploidy_threshold
+if(params.aneuploidy_score_threshold){
+    aneuploidy_score_threshold = params.aneuploidy_score_threshold
 } else {
-    relative_aneuploidy_threshold = 0.05
+    aneuploidy_score_threshold = 0.005
 }
 
 if(params.ploidy_threshold){
     ploidy_threshold = params.ploidy_threshold
 } else {
     ploidy_threshold = 2.5
-}
-
-if(params.allowed_aneuploidy_score){
-    allowed_aneuploidy_score = params.allowed_aneuploidy_score
-} else {
-    allowed_aneuploidy_score = 0.005
 }
 
 
@@ -71,13 +59,11 @@ workflow MONDRIAN_NORMALIZER_PIPELINE{
     bams = MONDRIAN_NORMALIZER(
         reads,
         metrics,
+        normal_copy,
         bam,
-        blacklist,
         qc_only,
-        chromosomes,
-        relative_aneuploidy_threshold,
+        aneuploidy_score_threshold,
         ploidy_threshold,
-        allowed_aneuploidy_score,
         sample_id
     )
 

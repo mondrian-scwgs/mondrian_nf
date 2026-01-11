@@ -1,7 +1,6 @@
 nextflow.enable.dsl=2
 
 include { IDENTIFYNORMALS } from '../../modules/local/identify_normals'
-include { ANEUPLOIDYHEATMAP } from '../../modules/local/aneuploidy_heatmap'
 include { SEPARATETUMORANDNORMALBAMS } from '../../modules/local/separate_tumor_and_normal_bams'
 
 
@@ -10,25 +9,18 @@ workflow MONDRIAN_NORMALIZER{
     take:
         reads
         metrics
+        normal_copy
         bam
-        blacklist
         qc_only
-        chromosomes
-        relative_aneuploidy_threshold
+        aneuploidy_score_threshold
         ploidy_threshold
-        allowed_aneuploidy_score
         sample_id
 
     main:
 
         normal_cells = IDENTIFYNORMALS(
-            reads, reads+'.yaml', metrics, metrics+'.yaml', blacklist[1], blacklist[0],
-            relative_aneuploidy_threshold, ploidy_threshold, allowed_aneuploidy_score,
-            sample_id
-        )
-
-        heatmap = ANEUPLOIDYHEATMAP(
-            normal_cells.csv, normal_cells.yaml, reads, reads+'.yaml', allowed_aneuploidy_score, sample_id
+            reads, reads+'.yaml', metrics, metrics+'.yaml', normal_copy,
+            aneuploidy_score_threshold, ploidy_threshold, sample_id
         )
 
         if (! qc_only){

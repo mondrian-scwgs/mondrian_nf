@@ -9,29 +9,26 @@ process IDENTIFYNORMALS {
     path(reads_yaml)
     path(metrics)
     path(metrics_yaml)
-    path(blacklist)
-    val(remove_blacklist)
-    val(relative_aneuploidy_threshold)
+    path(normal_copy)
+    val(aneuploidy_score_threshold)
     val(ploidy_threshold)
-    val(allowed_aneuploidy_score)
     val(filename)
   output:
     path("${filename}.yaml"), emit: normal_yaml
     path("${filename}.csv.gz"), emit: csv
-    path("${filename}.csv.gz.yaml"), emit: yaml
+    path("${filename}.pdf"), emit: pdf
 
   script:
-    def blacklist_arg = blacklist ? "--blacklist_file "+blacklist : ""
     """
         normalizer_utils identify-normal-cells \
         --reads_data ${reads} \
         --metrics_data ${metrics} \
+        --normal_copy ${normal_copy} \
         --output_yaml ${filename}.yaml \
         --output_csv ${filename}.csv.gz \
-        --relative_aneuploidy_threshold ${relative_aneuploidy_threshold} \
+        --output_plot ${filename}.pdf \
+        --aneuploidy_score_threshold ${aneuploidy_score_threshold} \
         --ploidy_threshold ${ploidy_threshold} \
-        --allowed_aneuploidy_score ${allowed_aneuploidy_score} \
-        ${blacklist_arg}
     """
 
 }
