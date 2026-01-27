@@ -7,7 +7,8 @@ include { CONCATCSV as CONCATMETRICS } from '../../modules/local/csverve_concat_
 include { CONCATCSV as CONCATGCMETRICS } from '../../modules/local/csverve_concat_csv'
 include { BUILDTAR as HMMTAR } from '../../modules/local/tar'
 include { BUILDTAR as ALIGNTAR } from '../../modules/local/tar'
-include { ALIGN } from '../../modules/local/align'
+include { ALIGN as ALIGN_SMALL } from '../../modules/local/align'
+include { ALIGN as ALIGN_LARGE } from '../../modules/local/align'
 include { CELLCYCLECLASSIFIER } from '../../modules/local/cell_cycle_classifier'
 include { ADDCLUSTERINGORDER } from '../../modules/local/clustering_order'
 include { PLOTHEATMAP } from '../../modules/local/heatmap'
@@ -48,10 +49,9 @@ workflow MONDRIAN_QC{
     lanes1 = fastqs_data.map{row -> tuple(row.cellid, row.fastq1)}.groupTuple(by: 0)
     lanes2 = fastqs_data.map{row -> tuple(row.cellid, row.fastq2)}.groupTuple(by: 0)
 
-    fastqs = lanes.join(flowcells).join(lanes1).join(lanes2).map{
+    fastqs_with_size = lanes.join(flowcells).join(lanes1).join(lanes2).map{
         row ->
             def total_fastq_size = row[3].collect { file(it).size() }.sum() + row[4].collect { file(it).size() }.sum()
-            println "DEBUG: cell_id=${row[0]}, total_fastq_size=${total_fastq_size}, threshold=1_000_000_000, should_use_12_cpus=${total_fastq_size >= 1_000_000_000}"
             tuple(
             row[0], row[1], row[2], row[3], row[4],
             total_fastq_size,
@@ -68,15 +68,39 @@ workflow MONDRIAN_QC{
         )
     }
 
-    ALIGN(fastqs)
+    // Split into small and large based on total fastq size (1 GB threshold)
+    fastqs_small = fastqs_with_size.filter { it[5] < 1_000_000_000 }.map {
+        row -> tuple(
+            row[0], row[1], row[2], row[3], row[4],
+            row[6], row[7], row[8], row[9], row[10], row[11], row[12], row[13], row[14],
+            row[15], row[16], row[17], row[18], row[19], row[20], row[21], row[22], row[23],
+            row[24], row[25], row[26], row[27], row[28], row[29], row[30], row[31], row[32],
+            row[33]
+        )
+    }
+    fastqs_large = fastqs_with_size.filter { it[5] >= 1_000_000_000 }.map {
+        row -> tuple(
+            row[0], row[1], row[2], row[3], row[4],
+            row[6], row[7], row[8], row[9], row[10], row[11], row[12], row[13], row[14],
+            row[15], row[16], row[17], row[18], row[19], row[20], row[21], row[22], row[23],
+            row[24], row[25], row[26], row[27], row[28], row[29], row[30], row[31], row[32],
+            row[33]
+        )
+    }
 
-    CONCATGCMETRICS(ALIGN.out.collect{it[5]}, ALIGN.out.collect{it[6]}, sample_id+'_gc_metrics', true)
+    ALIGN_SMALL(fastqs_small)
+    ALIGN_LARGE(fastqs_large)
 
-    ALIGNTAR(ALIGN.out.collect{it[7]}, sample_id+'_alignment_data')
+    // Merge outputs from both processes
+    align_out = ALIGN_SMALL.out.mix(ALIGN_LARGE.out)
+
+    CONCATGCMETRICS(align_out.collect{it[5]}, align_out.collect{it[6]}, sample_id+'_gc_metrics', true)
+
+    ALIGNTAR(align_out.collect{it[7]}, sample_id+'_alignment_data')
 
 
 
-    hmm_input = ALIGN.out.map {
+    hmm_input = align_out.map {
         it -> tuple(
             it[0],it[1],it[2], gc_wig, map_wig,
             primary_reference, primary_reference+'.fai',
@@ -96,7 +120,7 @@ workflow MONDRIAN_QC{
     CONCATSEGMENTS(HMMCOPY.out.collect{it[7]}, HMMCOPY.out.collect{it[8]}, sample_id+'_hmmcopy_segments', false)
 
     BAMMERGECELLS(
-      ALIGN.out.collect{it[0]}, ALIGN.out.collect{it[1]}, ALIGN.out.collect{it[2]},
+      align_out.collect{it[0]}, align_out.collect{it[1]}, align_out.collect{it[2]},
       primary_reference, primary_reference + '.fai',
       CONCATMETRICS.out.csv, CONCATMETRICS.out.yaml,
       sample_id
