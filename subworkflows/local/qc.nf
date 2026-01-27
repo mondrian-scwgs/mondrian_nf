@@ -51,6 +51,7 @@ workflow MONDRIAN_QC{
     fastqs = lanes.join(flowcells).join(lanes1).join(lanes2).map{
         row ->
             def total_fastq_size = row[3].collect { file(it).size() }.sum() + row[4].collect { file(it).size() }.sum()
+            println "DEBUG: cell_id=${row[0]}, total_fastq_size=${total_fastq_size}, threshold=1_000_000_000, should_use_12_cpus=${total_fastq_size >= 1_000_000_000}"
             tuple(
             row[0], row[1], row[2], row[3], row[4],
             total_fastq_size,
