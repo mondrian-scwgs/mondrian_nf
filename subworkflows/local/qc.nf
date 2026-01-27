@@ -49,8 +49,11 @@ workflow MONDRIAN_QC{
     lanes2 = fastqs_data.map{row -> tuple(row.cellid, row.fastq2)}.groupTuple(by: 0)
 
     fastqs = lanes.join(flowcells).join(lanes1).join(lanes2).map{
-        row -> tuple(
+        row ->
+            def total_fastq_size = row[3].collect { file(it).size() }.sum() + row[4].collect { file(it).size() }.sum()
+            tuple(
             row[0], row[1], row[2], row[3], row[4],
+            total_fastq_size,
                        primary_reference, primary_reference_version, primary_reference_name,
                        primary_reference+'.fai', primary_reference+'.amb', primary_reference+'.ann',
                        primary_reference+'.bwt', primary_reference+'.pac', primary_reference+'.sa',
