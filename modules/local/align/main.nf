@@ -1,6 +1,6 @@
 process ALIGN {
     time '24h'
-    cpus { total_fastq_size >= 1.5.GB ? 12 : 1 }
+    cpus { total_fastq_size >= 1.0.GB ? 12 : 1 }
     memory '12 GB'
     label 'process_high'
 
