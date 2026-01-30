@@ -1,6 +1,17 @@
 process ALIGN {
     time '24h'
-    cpus 1
+    cpus { 
+      def size1 = fastqs1 instanceof Collection ? fastqs1.sum{ it.size() } : fastqs1.size()
+      def size2 = fastqs2 instanceof Collection ? fastqs2.sum{ it.size() } : fastqs2.size()
+      def total = size1 + size2
+      
+      switch (total) {
+        case { it < 500.MB } :   return 1   // small
+        case { it < 1.GB } :     return 4   // medium
+        case { it >= 1.GB } :    return 12  // large
+        default:                 return 1   // Fallback for unexpected cases
+      }
+    }
     memory '12 GB'
     label 'process_high'
 
