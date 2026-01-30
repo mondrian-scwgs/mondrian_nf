@@ -6,10 +6,10 @@ process ALIGN {
       def total = size1 + size2
       
       def base_cpus = switch (total) {
-        case { it < 500.MB } :   return 1   // small
-        case { it < 1.GB } :     return 4   // medium
-        case { it >= 1.GB } :    return 12  // large
-        default:                 return 1   // Fallback for unexpected cases
+        case { it < 500.MB } : 1   // small
+        case { it < 1.GB } :   4   // medium
+        case { it >= 1.GB } :  12  // large
+        default:               1   // Fallback for unexpected cases
       }
       check_max( base_cpus * task.attempt, 'cpus' )
     }
