@@ -11,7 +11,7 @@ process ALIGN {
 
       base_cpus * task.attempt
     }
-    memory '12 GB'
+    memory { 12.GB * task.attempt }
     label 'process_high'
 
   input:
