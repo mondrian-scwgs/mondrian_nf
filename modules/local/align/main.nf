@@ -7,8 +7,9 @@ process ALIGN {
       
       def base_cpus = total < 500.MB ? 1 :  // small
               total < 1.GB   ? 4 :          // medium
-              12                            // large (≥1 GB) / default fallback
-      check_max( base_cpus * task.attempt, 'cpus' )
+              12                            // large (≥1 GB)
+
+      base_cpus * task.attempt
     }
     memory '12 GB'
     label 'process_high'
