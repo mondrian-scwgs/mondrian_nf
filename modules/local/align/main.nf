@@ -5,12 +5,9 @@ process ALIGN {
       def size2 = fastqs2 instanceof Collection ? fastqs2.sum{ it.size() } : fastqs2.size()
       def total = size1 + size2
       
-      def base_cpus = switch (total) {
-        case { it < 500.MB } : 1   // small
-        case { it < 1.GB } :   4   // medium
-        case { it >= 1.GB } :  12  // large
-        default:               1   // Fallback for unexpected cases
-      }
+      def base_cpus = total < 500.MB ? 1 :  // small
+              total < 1.GB   ? 4 :          // medium
+              12                            // large (≥1 GB) / default fallback
       check_max( base_cpus * task.attempt, 'cpus' )
     }
     memory '12 GB'
