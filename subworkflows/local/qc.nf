@@ -36,6 +36,7 @@ workflow MONDRIAN_QC{
         repeats_satellite_regions
         chromosomes
         sample_id
+        run_tss_enrichment
 
     main:
 
@@ -60,7 +61,8 @@ workflow MONDRIAN_QC{
                        secondary_reference_2, secondary_reference_2_version, secondary_reference_2_name,
                        secondary_reference_2+'.fai', secondary_reference_2+'.amb', secondary_reference_2+'.ann',
                        secondary_reference_2+'.bwt', secondary_reference_2+'.pac', secondary_reference_2+'.sa',
-                       metadata_yaml
+                       metadata_yaml,
+                       run_tss_enrichment
         )
     }
 

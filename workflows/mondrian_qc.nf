@@ -39,6 +39,7 @@ chromosomes = params.chromosomes
 fastqs = file(params.fastqs)
 metadata = file(params.metadata)
 sample_id = params.sample_id
+run_tss_enrichment = params.run_tss_enrichment != null ? params.run_tss_enrichment : true
 
 
 
@@ -86,7 +87,8 @@ workflow MONDRIAN_QC_PIPELINE{
         quality_classifier_training_data,
         repeats_satellite_regions,
         chromosomes,
-        sample_id
+        sample_id,
+        run_tss_enrichment
     )
 
 }

@@ -16,7 +16,8 @@ process ALIGN {
       path(secondary_reference_2), val(secondary_reference_2_version), val(secondary_reference_2_name),
       path(secondary_reference_2_fai), path(secondary_reference_2_amb),path(secondary_reference_2_ann),
       path(secondary_reference_2_bwt),path(secondary_reference_2_pac),path(secondary_reference_2_sa),
-      path(metadata)
+      path(metadata),
+      val(run_tss_enrichment)
     )
   output:
     tuple(
@@ -38,6 +39,7 @@ process ALIGN {
     } else {
         supplementary_2 = ''
     }
+    def tss_flag = run_tss_enrichment ? '--run_tss_enrichment' : '--no_tss_enrichment'
     """
 
         fastqs_cmd=`python -c 'x=["${lanes}","${flowcells}","${fastqs1}","${fastqs2}"];x=[v.split() for v in x];x=[",".join(v) for v in zip(*x)];x=" --fastq_pairs ".join(x);print(x)'`
@@ -59,7 +61,8 @@ process ALIGN {
         --metrics_output metrics.csv.gz \
         --metrics_gc_output ${cell_id}_gc_metrics.csv.gz \
         --tar_output ${cell_id}.tar.gz \
-        --num_threads ${task.cpus}
+        --num_threads ${task.cpus} \
+        ${tss_flag}
 
         rm -rf tempdir
     """
