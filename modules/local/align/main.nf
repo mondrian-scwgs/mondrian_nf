@@ -11,7 +11,17 @@ process ALIGN {
 
       base_cpus * task.attempt
     }
-    memory { 12.GB * task.attempt }
+    memory {
+      def size1 = fastqs1 instanceof Collection ? fastqs1.sum{ it.size() } : fastqs1.size()
+      def size2 = fastqs2 instanceof Collection ? fastqs2.sum{ it.size() } : fastqs2.size()
+      def total = size1 + size2
+
+      def base_mem = total < 500.MB ? 12.GB :  // small
+                     total < 1.GB   ? 24.GB :  // medium
+                     48.GB                     // large (≥1 GB)
+
+      base_mem * task.attempt
+    }
     label 'process_high'
 
   input:
