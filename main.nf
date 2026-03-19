@@ -22,6 +22,8 @@ if (params.mode == "qc") {
     include { MONDRIAN_VARIANT_PIPELINE } from './workflows/mondrian_variant'
 } else if (params.mode == "contamination") {
     include { MONDRIAN_CONTAMINATION_PIPELINE } from './workflows/mondrian_contamination'
+} else if (params.mode == "bulk_alignment") {
+    include { MONDRIAN_BULK_ALIGNMENT_PIPELINE } from './workflows/mondrian_bulk_alignment'
 }
 
 
@@ -52,6 +54,9 @@ workflow MONDRIAN {
     }
     else if(params.mode == "contamination") {
         MONDRIAN_CONTAMINATION_PIPELINE ()
+    }
+    else if(params.mode == "bulk_alignment") {
+        MONDRIAN_BULK_ALIGNMENT_PIPELINE ()
     }
 }
 
