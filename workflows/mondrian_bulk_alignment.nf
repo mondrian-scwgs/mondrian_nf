@@ -11,13 +11,11 @@ def assert_required_param(param_name){
 }
 
 assert_required_param('primary_reference')
-assert_required_param('primary_reference_version')
 assert_required_param('primary_reference_name')
 assert_required_param('fastqs')
 assert_required_param('sample_id')
 
 primary_reference = file(params.primary_reference)
-primary_reference_version = params.primary_reference_version
 primary_reference_name = params.primary_reference_name
 fastqs = file(params.fastqs)
 sample_id = params.sample_id
@@ -55,7 +53,6 @@ workflow MONDRIAN_BULK_ALIGNMENT_PIPELINE {
         fastqs_ch,
         fastqs,                      // Pass samplesheet path for RG header generation
         primary_reference,
-        primary_reference_version,
         primary_reference_name,
         sample_id
     )

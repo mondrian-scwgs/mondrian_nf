@@ -17,7 +17,6 @@ workflow BULK_ALIGNMENT {
         fastqs_ch                    // Channel of [cell_id, readgroup_id, fastq1, fastq2]
         samplesheet                  // Path to extended samplesheet CSV
         primary_reference
-        primary_reference_version
         primary_reference_name
         sample_id
 
