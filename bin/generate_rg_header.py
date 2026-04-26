@@ -14,23 +14,20 @@ def generate_rg_header(samplesheet_path, output_path):
     """
     Generate @RG header lines from samplesheet.
 
-    Each unique combination of (sample_id, library_id, flowcell_id, lane_id)
-    gets one @RG line.
+    Each unique read group ID gets one @RG line.
     """
-    rg_lines = set()
+    rg_lines = dict()
 
     with open(samplesheet_path, 'r') as f:
         reader = csv.DictReader(f)
         for row in reader:
-            # Extract required fields
+            # Extract fields
+            rg_id = row['readgroup_id']
             sample_id = row['sample_id']
             library_id = row['library_id']
             flowcell_id = row['flowcellid']
             lane_id = row['laneid']
             sequencing_centre = row.get('sequencing_centre', 'UNKNOWN')
-
-            # Generate read group ID (must match what's added to reads)
-            rg_id = f"{sample_id}_{library_id}_{flowcell_id}_{lane_id}"
 
             # Generate @RG line
             # Format: @RG\tID:id\tSM:sample\tLB:library\tPU:platform_unit\tPL:platform\tCN:centre
@@ -43,15 +40,19 @@ def generate_rg_header(samplesheet_path, output_path):
                 f"PL:ILLUMINA\t"
                 f"CN:{sequencing_centre}"
             )
-            rg_lines.add(rg_line)
+
+            if rg_id in rg_lines:
+                assert rg_lines[rg_id] == rg_line, f"Conflicting @RG lines for ID {rg_id}"
+
+            rg_lines[rg_id] = rg_line
 
     # Write output
     with open(output_path, 'w') as f:
-        for line in sorted(rg_lines):
+        for rg_id, line in sorted(rg_lines.items()):
             f.write(line + '\n')
 
     print(f"Generated {len(rg_lines)} @RG header line(s)")
-    for line in sorted(rg_lines):
+    for rg_id, line in sorted(rg_lines.items()):
         print(f"  {line}")
 
 

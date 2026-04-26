@@ -6,11 +6,7 @@ process BWA_MEM_BULK {
     tuple val(sample_id), path(trimmed_r1), path(trimmed_r2)
     path(reference)
     path(reference_fai)
-    path(reference_amb)
-    path(reference_ann)
-    path(reference_bwt)
-    path(reference_pac)
-    path(reference_sa)
+    path(bwa_indices)
     path(rg_header)
 
     output:

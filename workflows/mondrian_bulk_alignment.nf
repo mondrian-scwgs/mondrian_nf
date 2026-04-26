@@ -38,17 +38,14 @@ include { BULK_ALIGNMENT } from '../subworkflows/local/bulk_alignment'
 
 workflow MONDRIAN_BULK_ALIGNMENT_PIPELINE {
 
-    // Parse extended samplesheet CSV to create channel with all metadata
-    // Columns: cellid,laneid,flowcellid,sample_id,library_id,sequencing_centre,...,fastq1,fastq2
+    // Parse extended samplesheet CSV to create channel with metadata
+    // Columns: cellid,laneid,flowcellid,sample_id,library_id,readgroup_id,sequencing_centre,...,fastq1,fastq2
     fastqs_ch = Channel
         .fromPath(fastqs)
         .splitCsv(header:true, sep:',')
         .map { row -> tuple(
             row.cellid,
-            row.laneid,
-            row.flowcellid,
-            row.sample_id,
-            row.library_id,
+            row.readgroup_id,
             file(row.fastq1),
             file(row.fastq2)
         )}
