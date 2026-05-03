@@ -1,9 +1,9 @@
 process FASTQSCREEN {
-    tag "${sample_id}"
+    tag "${sample_id}_chunk${chunk_id}"
     container 'josousa/fastq_screen:0.15.3'
 
     input:
-    tuple val(sample_id), path(fastq_r1), path(fastq_r2)
+    tuple val(sample_id), val(chunk_id), path(fastq_r1), path(fastq_r2)
     path reference_fasta
     path bwa_indices
     val reference_name
@@ -12,7 +12,7 @@ process FASTQSCREEN {
     val supplementary_ref_names
 
     output:
-    tuple val(sample_id), path("${fastq_r1.simpleName}.tagged.fixed.fastq.gz"), path("${fastq_r2.simpleName}.tagged.fixed.fastq.gz"), emit: tagged_fastqs
+    tuple val(sample_id), val(chunk_id), path("${fastq_r1.simpleName}.tagged.fixed.fastq.gz"), path("${fastq_r2.simpleName}.tagged.fixed.fastq.gz"), emit: tagged_fastqs
     path "fastq_screen.conf", emit: config
 
     script:
