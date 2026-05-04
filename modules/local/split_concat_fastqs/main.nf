@@ -18,12 +18,14 @@ process SPLIT_CONCAT_FASTQS {
         | split -d --suffix-length=4 -l ${lines} \\
             --additional-suffix=.fastq \\
             --filter='gzip -1 > \$FILE.gz' \\
-            - '${sample_id}_R1_chunk'
+            - '${sample_id}_R1_chunk' &
 
     zcat \$(printf '%s\\n' ${tagged_r2_files} | sort) \\
         | split -d --suffix-length=4 -l ${lines} \\
             --additional-suffix=.fastq \\
             --filter='gzip -1 > \$FILE.gz' \\
-            - '${sample_id}_R2_chunk'
+            - '${sample_id}_R2_chunk' &
+
+    wait
     """
 }
