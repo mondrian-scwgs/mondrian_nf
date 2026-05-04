@@ -18,6 +18,19 @@ def open_fastq(filepath, mode='rt'):
     return open(filepath, mode)
 
 
+def _illumina_comment_to_sam_tags(comment):
+    """
+    Convert an Illumina CASAVA comment (e.g. '1:N:0:CGCGCAAC+GTACTTCC') to
+    a SAM-compatible BC:Z: tag string, or return '' if not in that format.
+    The raw Illumina comment is not a valid SAM tag and will cause samtools
+    to reject the record when BWA copies it via -C.
+    """
+    parts = comment.strip().split(':')
+    if len(parts) == 4 and parts[3] and parts[3] != '0':
+        return f"BC:Z:{parts[3]}"
+    return ""
+
+
 def add_tags_to_fastq(input_fastq, output_fastq, cell_id, rg_id=None):
     """
     Add CB:Z:<cell_id> and RG:Z:<rg_id> tags to each read in the FASTQ file.
@@ -44,7 +57,10 @@ def add_tags_to_fastq(input_fastq, output_fastq, cell_id, rg_id=None):
                     parts = line.split(' ', 1)
                     header = parts[0]
                     existing_comment = parts[1]
-                    new_line = f"{header}\t{tags}\t{existing_comment}\n"
+                    bc_tag = _illumina_comment_to_sam_tags(existing_comment)
+                    if bc_tag:
+                        tags += f"\t{bc_tag}"
+                    new_line = f"{header}\t{tags}\n"
                 else:
                     new_line = f"{line}\t{tags}\n"
                 outfile.write(new_line)
