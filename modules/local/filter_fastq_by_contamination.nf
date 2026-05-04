@@ -1,6 +1,6 @@
 process FILTER_FASTQ_BY_CONTAMINATION {
     tag "${sample_id}_chunk${chunk_id}"
-    container 'python:3.10'
+    container 'quay.io/biocontainers/python:3.10'
 
     input:
     tuple val(sample_id), val(chunk_id), path(tagged_fastq_r1), path(tagged_fastq_r2), path(contamination_metrics)

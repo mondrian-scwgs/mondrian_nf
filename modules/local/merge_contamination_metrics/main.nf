@@ -1,6 +1,6 @@
 process MERGE_CONTAMINATION_METRICS {
     tag "$sample_id"
-    container 'python:3.10'
+    container 'quay.io/biocontainers/python:3.10'
 
     input:
     tuple val(sample_id), path(metrics_csvs)

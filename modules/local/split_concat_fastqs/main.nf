@@ -1,6 +1,5 @@
 process SPLIT_CONCAT_FASTQS {
     tag "$sample_id"
-    container 'python:3.10'
     label 'process_medium'
 
     input:
@@ -13,11 +12,18 @@ process SPLIT_CONCAT_FASTQS {
     tuple val(sample_id), path("${sample_id}_R1_chunk*.fastq.gz"), path("${sample_id}_R2_chunk*.fastq.gz"), emit: chunks
 
     script:
+    def lines = reads_per_chunk * 4
     """
-    split_fastq_pairs.py \\
-        --r1 ${tagged_r1_files} \\
-        --r2 ${tagged_r2_files} \\
-        --sample-id ${sample_id} \\
-        --reads-per-chunk ${reads_per_chunk}
+    zcat \$(printf '%s\\n' ${tagged_r1_files} | sort) \\
+        | split -d --suffix-length=4 -l ${lines} \\
+            --additional-suffix=.fastq \\
+            --filter='gzip -1 > \$FILE.gz' \\
+            - '${sample_id}_R1_chunk'
+
+    zcat \$(printf '%s\\n' ${tagged_r2_files} | sort) \\
+        | split -d --suffix-length=4 -l ${lines} \\
+            --additional-suffix=.fastq \\
+            --filter='gzip -1 > \$FILE.gz' \\
+            - '${sample_id}_R2_chunk'
     """
 }
