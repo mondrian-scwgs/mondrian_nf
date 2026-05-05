@@ -105,21 +105,30 @@ def main():
             print(f'Warning: Read without CB tag', file=sys.stderr)
             continue
         
-        cell_stats[cb_tag]['total_reads'] += 2  # Count both pairs
         genomes_seen.update(flags_r1.keys())
         genomes_seen.update(flags_r2.keys())
         
-        # Count hits per genome (checking if R1 or R2 maps, or both)
-        for genome in set(list(flags_r1.keys()) + list(flags_r2.keys())):
-            hit_r1 = flags_r1.get(genome, 0)
-            hit_r2 = flags_r2.get(genome, 0)
-            
-            # If either R1 or R2 maps, count it as a hit
-            if hit_r1 or hit_r2:
-                cell_stats[cb_tag]['genomes'][genome] += 1
-                # If BOTH R1 and R2 map, it's a multihit
-                if hit_r1 and hit_r2:
-                    cell_stats[cb_tag]['multihit'][genome] += 1
+        # Count each read end independently (matches original fastqscreen.py)
+        # total_reads counts individual read ends (2 per pair)
+        cell_stats[cb_tag]['total_reads'] += 2
+        
+        # R1 hits
+        hit_orgs_r1 = [g for g, flag in flags_r1.items() if flag > 0]
+        for genome in hit_orgs_r1:
+            cell_stats[cb_tag]['genomes'][genome] += 1
+        # multihit = read maps to multiple genomes simultaneously
+        if len(hit_orgs_r1) > 1:
+            for genome in hit_orgs_r1:
+                cell_stats[cb_tag]['multihit'][genome] += 1
+        
+        # R2 hits
+        hit_orgs_r2 = [g for g, flag in flags_r2.items() if flag > 0]
+        for genome in hit_orgs_r2:
+            cell_stats[cb_tag]['genomes'][genome] += 1
+        # multihit = read maps to multiple genomes simultaneously
+        if len(hit_orgs_r2) > 1:
+            for genome in hit_orgs_r2:
+                cell_stats[cb_tag]['multihit'][genome] += 1
     
     # Determine contamination status per cell
     genomes_list = sorted(genomes_seen)
