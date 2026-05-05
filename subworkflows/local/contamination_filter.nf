@@ -34,8 +34,7 @@ workflow CONTAMINATION_FILTER {
     // FASTQSCREEN.out.tagged_fastqs: tuple(sample_id, chunk_id, tagged_r1, tagged_r2)
     EXTRACT_CONTAMINATION_METRICS(
         FASTQSCREEN.out.tagged_fastqs,
-        reference_name,
-        contamination_threshold
+        reference_name
     )
 
     // Step 3: Collect all chunk metrics per sample and merge into a single CSV

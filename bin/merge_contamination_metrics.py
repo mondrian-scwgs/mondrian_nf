@@ -36,8 +36,11 @@ def merge_metrics(input_files, reference_genome, threshold, output_file):
     if fieldnames is None:
         raise ValueError('No input data found in provided metrics files')
 
+    # Add is_contaminated to output fieldnames
+    out_fieldnames = [fieldnames[0]] + ['is_contaminated'] + fieldnames[1:]
+
     with open(output_file, 'w', newline='') as out_fh:
-        writer = csv.DictWriter(out_fh, fieldnames=fieldnames)
+        writer = csv.DictWriter(out_fh, fieldnames=out_fieldnames)
         writer.writeheader()
         for cell_id in sorted(cell_data.keys()):
             row = dict(cell_data[cell_id])
@@ -47,8 +50,13 @@ def merge_metrics(input_files, reference_genome, threshold, output_file):
             if total > 0:
                 for col in fieldnames:
                     if col.endswith('_hits') and not col.startswith('reference'):
+                        # Subtract multihit (reads mapping to multiple genomes)
+                        # to get exclusive hits, matching original mondrian logic
+                        multihit_col = col.replace('_hits', '_multihit')
                         hits = row.get(col, 0)
-                        if (hits / total) > threshold:
+                        multihit = row.get(multihit_col, 0)
+                        exclusive_hits = hits - multihit
+                        if (exclusive_hits / total) > threshold:
                             is_contaminated = True
                             break
             row['is_contaminated'] = is_contaminated

@@ -79,16 +79,15 @@ def read_fastq_pairs(r1_file, r2_file):
 
 
 def main():
-    if len(sys.argv) != 6:
-        print("Usage: extract_contamination.py <r1_fastq> <r2_fastq> <reference_genome> <threshold> <output_csv>", 
+    if len(sys.argv) != 5:
+        print("Usage: extract_contamination.py <r1_fastq> <r2_fastq> <reference_genome> <output_csv>", 
               file=sys.stderr)
         sys.exit(1)
     
     r1_file = sys.argv[1]
     r2_file = sys.argv[2]
     reference = sys.argv[3]
-    threshold = float(sys.argv[4])
-    output_file = sys.argv[5] if len(sys.argv) > 5 else 'contamination_metrics.csv'
+    output_file = sys.argv[4]
     
     # Accumulate per-cell statistics
     cell_stats = defaultdict(lambda: {
@@ -136,7 +135,7 @@ def main():
     with open(output_file, 'w', newline='') as outf:
         writer = csv.DictWriter(
             outf,
-            fieldnames=['cell_id', 'is_contaminated', 'total_reads', 'reference_hits', 'reference_multihit'] + 
+            fieldnames=['cell_id', 'total_reads', 'reference_hits', 'reference_multihit'] + 
                        [f'{g}_hits' for g in genomes_list if g != reference] +
                        [f'{g}_multihit' for g in genomes_list if g != reference]
         )
@@ -148,24 +147,8 @@ def main():
             ref_hits = stats['genomes'].get(reference, 0)
             ref_multihit = stats['multihit'].get(reference, 0)
             
-            # Contaminated if any non-reference genome exceeds threshold
-            # Subtract multihit (reads mapping to multiple genomes) to get
-            # exclusive hits, matching the original mondrian logic:
-            #   (fastqscreen_{org} - fastqscreen_{org}_multihit) / total_reads
-            is_contaminated = False
-            for genome in genomes_list:
-                if genome == reference:
-                    continue
-                hits = stats['genomes'].get(genome, 0)
-                multihit = stats['multihit'].get(genome, 0)
-                exclusive_hits = hits - multihit
-                if total > 0 and (exclusive_hits / total) > threshold:
-                    is_contaminated = True
-                    break
-            
             row = {
                 'cell_id': cell_id,
-                'is_contaminated': str(is_contaminated),
                 'total_reads': total,
                 'reference_hits': ref_hits,
                 'reference_multihit': ref_multihit
@@ -180,11 +163,6 @@ def main():
             writer.writerow(row)
     
     print(f'Processed {len(cell_stats)} cells', file=sys.stderr)
-    contaminated = sum(1 for s in cell_stats.values() if s['genomes'] and max(
-        ((s['genomes'].get(g, 0) - s['multihit'].get(g, 0)) / s['total_reads'] if s['total_reads'] > 0 else 0)
-        for g in genomes_list if g != reference
-    ) > threshold)
-    print(f'Contaminated: {contaminated}', file=sys.stderr)
 
 
 if __name__ == '__main__':
