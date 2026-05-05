@@ -149,12 +149,17 @@ def main():
             ref_multihit = stats['multihit'].get(reference, 0)
             
             # Contaminated if any non-reference genome exceeds threshold
+            # Subtract multihit (reads mapping to multiple genomes) to get
+            # exclusive hits, matching the original mondrian logic:
+            #   (fastqscreen_{org} - fastqscreen_{org}_multihit) / total_reads
             is_contaminated = False
             for genome in genomes_list:
                 if genome == reference:
                     continue
                 hits = stats['genomes'].get(genome, 0)
-                if total > 0 and (hits / total) > threshold:
+                multihit = stats['multihit'].get(genome, 0)
+                exclusive_hits = hits - multihit
+                if total > 0 and (exclusive_hits / total) > threshold:
                     is_contaminated = True
                     break
             
@@ -176,7 +181,7 @@ def main():
     
     print(f'Processed {len(cell_stats)} cells', file=sys.stderr)
     contaminated = sum(1 for s in cell_stats.values() if s['genomes'] and max(
-        (s['genomes'].get(g, 0) / s['total_reads'] if s['total_reads'] > 0 else 0)
+        ((s['genomes'].get(g, 0) - s['multihit'].get(g, 0)) / s['total_reads'] if s['total_reads'] > 0 else 0)
         for g in genomes_list if g != reference
     ) > threshold)
     print(f'Contaminated: {contaminated}', file=sys.stderr)
