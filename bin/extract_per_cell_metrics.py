@@ -8,8 +8,7 @@ distributions, and basic coverage statistics.
 """
 
 import csv
-import statistics
-from collections import defaultdict
+from collections import Counter, defaultdict
 
 import pysam
 import click
@@ -30,8 +29,8 @@ def create_empty_metrics():
         'secondary_alignments': 0,
         'supplementary_alignments': 0,
         'primary_alignments': 0,
-        'insert_sizes': [],
-        'mapping_qualities': [],
+        'insert_sizes': Counter(),
+        'mapping_qualities': Counter(),
     }
 
 
@@ -71,7 +70,7 @@ def extract_per_cell_metrics(bamfile):
                 m['unmapped_reads'] += 1
             else:
                 m['mapped_reads'] += 1
-                m['mapping_qualities'].append(read.mapping_quality)
+                m['mapping_qualities'][read.mapping_quality] += 1
 
             if read.is_duplicate:
                 m['duplicate_reads'] += 1
@@ -82,7 +81,7 @@ def extract_per_cell_metrics(bamfile):
             if read.is_proper_pair:
                 m['properly_paired_reads'] += 1
                 if read.template_length > 0 and not read.is_duplicate:
-                    m['insert_sizes'].append(abs(read.template_length))
+                    m['insert_sizes'][abs(read.template_length)] += 1
 
             if read.is_read1:
                 m['read1_count'] += 1
@@ -102,6 +101,37 @@ def extract_per_cell_metrics(bamfile):
     return metrics
 
 
+def _stats_from_counter(counter):
+    """Compute mean, median, and stdev from a Counter of values."""
+    n = sum(counter.values())
+    if n == 0:
+        return 0, 0, 0
+
+    # mean
+    total_sum = sum(val * count for val, count in counter.items())
+    mean = total_sum / n
+
+    # median
+    mid = (n - 1) / 2
+    cumulative = 0
+    median = 0
+    sorted_keys = sorted(counter)
+    for val in sorted_keys:
+        cumulative += counter[val]
+        if cumulative > mid:
+            median = val
+            break
+
+    # stdev
+    if n > 1:
+        variance = sum(count * (val - mean) ** 2 for val, count in counter.items()) / (n - 1)
+        std = variance ** 0.5
+    else:
+        std = 0
+
+    return mean, median, std
+
+
 def compute_summary_stats(metrics):
     """Convert raw metrics to summary statistics."""
     summary = {}
@@ -109,22 +139,8 @@ def compute_summary_stats(metrics):
     for cell_id, m in metrics.items():
         total = m['total_reads']
 
-        if m['insert_sizes']:
-            median_insert = statistics.median(m['insert_sizes'])
-            mean_insert = statistics.mean(m['insert_sizes'])
-            if len(m['insert_sizes']) > 1:
-                std_insert = statistics.stdev(m['insert_sizes'])
-            else:
-                std_insert = 0
-        else:
-            median_insert = 0
-            mean_insert = 0
-            std_insert = 0
-
-        if m['mapping_qualities']:
-            mean_mapq = statistics.mean(m['mapping_qualities'])
-        else:
-            mean_mapq = 0
+        mean_insert, median_insert, std_insert = _stats_from_counter(m['insert_sizes'])
+        mean_mapq, _, _ = _stats_from_counter(m['mapping_qualities'])
 
         percent_mapped = (m['mapped_reads'] / total * 100) if total > 0 else 0
         percent_duplicates = (m['duplicate_reads'] / total * 100) if total > 0 else 0
@@ -205,7 +221,7 @@ def main(bam, output, insert_size_histograms):
     if insert_size_histograms:
         import json
 
-        histograms = {cell_id: m["insert_sizes"] for cell_id, m in metrics.items()}
+        histograms = {cell_id: dict(m["insert_sizes"]) for cell_id, m in metrics.items()}
         with open(insert_size_histograms, "w") as f:
             json.dump(histograms, f)
         click.echo(f"Wrote insert size histograms to: {insert_size_histograms}")
