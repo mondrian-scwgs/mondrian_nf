@@ -13,6 +13,7 @@ from collections import defaultdict
 
 import pysam
 import click
+from tqdm import tqdm
 
 
 def create_empty_metrics():
@@ -43,8 +44,20 @@ def extract_per_cell_metrics(bamfile):
     metrics = defaultdict(create_empty_metrics)
     reads_without_cb = 0
 
+    # Get total read count from index if available
+    total_reads = None
+    try:
+        idx_stats = pysam.idxstats(bamfile)
+        total_reads = sum(
+            int(line.split('\t')[2]) + int(line.split('\t')[3])
+            for line in idx_stats.strip().split('\n')
+            if line
+        )
+    except Exception:
+        pass
+
     with pysam.AlignmentFile(bamfile, 'rb') as bam:
-        for read in bam.fetch(until_eof=True):
+        for read in tqdm(bam.fetch(until_eof=True), total=total_reads, desc="Processing reads", unit=" reads"):
             if not read.has_tag('CB'):
                 reads_without_cb += 1
                 continue
