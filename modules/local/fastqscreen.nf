@@ -1,6 +1,6 @@
 process FASTQSCREEN {
     tag "${sample_id}_chunk${chunk_id}"
-    container 'josousa/fastq_screen:0.15.3'
+    container 'quay.io/andrew_mcpherson/fastq_screen:0.15.3'
 
     input:
     tuple val(sample_id), val(chunk_id), path(fastq_r1), path(fastq_r2)
