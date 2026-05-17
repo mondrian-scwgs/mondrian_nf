@@ -24,6 +24,10 @@ if (params.mode == "qc") {
     include { MONDRIAN_CONTAMINATION_PIPELINE } from './workflows/mondrian_contamination'
 } else if (params.mode == "bulk_alignment") {
     include { MONDRIAN_BULK_ALIGNMENT_PIPELINE } from './workflows/mondrian_bulk_alignment'
+} else if (params.mode == "hmmcopy") {
+    include { MONDRIAN_HMMCOPY_PIPELINE } from './workflows/mondrian_hmmcopy'
+} else {
+    error "Invalid mode specified: ${params.mode}. Valid options are: qc, inferhaps, counthaps, snv_genotyping, normalizer, breakpoint, destruct, variant, contamination, bulk_alignment, hmmcopy."
 }
 
 
@@ -57,6 +61,9 @@ workflow MONDRIAN {
     }
     else if(params.mode == "bulk_alignment") {
         MONDRIAN_BULK_ALIGNMENT_PIPELINE ()
+    }
+    else if(params.mode == "hmmcopy") {
+        MONDRIAN_HMMCOPY_PIPELINE ()
     }
 }
 
