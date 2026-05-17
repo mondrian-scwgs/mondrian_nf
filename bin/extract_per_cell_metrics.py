@@ -7,12 +7,53 @@ per-cell metrics equivalent to flagstat, duplicate counts, insert size
 distributions, and basic coverage statistics.
 """
 
-import csv
 from collections import Counter, defaultdict
 
+import pandas as pd
 import pysam
 import click
 from tqdm import tqdm
+import csverve
+
+
+DTYPES = {
+    'cell_id': 'category',
+    'sample_id': 'category',
+    'library_id': 'category',
+    'condition': 'str',
+    'is_control': 'bool',
+    'pick_met': 'str',
+    'sample_type': 'str',
+    'row': 'int',
+    'column': 'int',
+    'total_reads': 'int',
+    'total_mapped_reads': 'int',
+    'paired_mapped_reads': 'int',
+    'unpaired_mapped_reads': 'int',
+    'unmapped_reads': 'int',
+    'total_duplicate_reads': 'int',
+    'paired_duplicate_reads': 'int',
+    'unpaired_duplicate_reads': 'int',
+    'percent_duplicate_reads': 'float',
+    'total_properly_paired': 'int',
+    'coverage_depth': 'float',
+    'coverage_breadth': 'float',
+    'median_insert_size': 'float',
+    'mean_insert_size': 'float',
+    'standard_deviation_insert_size': 'float',
+}
+
+SAMPLESHEET_EXCLUDE_COLS = {'readgroup_id', 'flowcellid', 'laneid', 'sequencing_centre', 'fastq1', 'fastq2'}
+
+
+def load_samplesheet_metadata(samplesheet_path):
+    """Load samplesheet and return per-cell metadata (one row per cell_id)."""
+    ss = pd.read_csv(samplesheet_path)
+    ss = ss.drop(columns=[c for c in SAMPLESHEET_EXCLUDE_COLS if c in ss.columns])
+    ss = ss.rename(columns={'cellid': 'cell_id'})
+    ss = ss.drop_duplicates(subset=['cell_id'])
+    assert not ss['cell_id'].duplicated().any(), "Duplicate cell_id found in samplesheet after dropping duplicates"
+    return ss
 
 
 def create_empty_metrics():
@@ -20,13 +61,19 @@ def create_empty_metrics():
     return {
         'total_reads': 0,
         'mapped_reads': 0,
+        'paired_mapped_reads': 0,
+        'unpaired_mapped_reads': 0,
         'unmapped_reads': 0,
         'duplicate_reads': 0,
+        'paired_duplicate_reads': 0,
+        'unpaired_duplicate_reads': 0,
         'paired_reads': 0,
         'properly_paired_reads': 0,
         'secondary_alignments': 0,
         'supplementary_alignments': 0,
         'primary_alignments': 0,
+        'aligned_bases': 0,
+        'covered_bases': 0,
         'insert_sizes': Counter(),
         'mapping_qualities': Counter(),
     }
@@ -54,6 +101,13 @@ def extract_per_cell_metrics(bamfile):
         pass
 
     with pysam.AlignmentFile(bamfile, 'rb') as bam:
+        # Compute genome size from @SQ header lines for coverage_depth
+        genome_size = sum(sq['LN'] for sq in bam.header.get('SQ', []))
+
+        # Track active coverage intervals per cell for coverage_breadth
+        # Since BAM is coordinate-sorted, we only need one interval per cell
+        active_intervals = {}  # cell_id -> (chrom, start, end)
+
         for read in tqdm(bam.fetch(until_eof=True), total=total_reads, desc="Processing reads", unit=" reads"):
             if not read.has_tag('CB'):
                 reads_without_cb += 1
@@ -69,9 +123,37 @@ def extract_per_cell_metrics(bamfile):
             else:
                 m['mapped_reads'] += 1
                 m['mapping_qualities'][read.mapping_quality] += 1
+                if read.is_paired:
+                    m['paired_mapped_reads'] += 1
+                else:
+                    m['unpaired_mapped_reads'] += 1
+                # Accumulate aligned bases for coverage_depth (primary, non-dup only)
+                if not read.is_secondary and not read.is_supplementary and not read.is_duplicate:
+                    m['aligned_bases'] += read.query_alignment_length
+
+                    # Track coverage_breadth intervals (primary, non-dup only)
+                    ref_start = read.reference_start
+                    ref_end = read.reference_end
+                    chrom = read.reference_name
+
+                    if cell_id in active_intervals:
+                        prev_chrom, prev_start, prev_end = active_intervals[cell_id]
+                        if chrom == prev_chrom and ref_start <= prev_end:
+                            # Overlaps or extends current interval
+                            active_intervals[cell_id] = (chrom, prev_start, max(prev_end, ref_end))
+                        else:
+                            # Flush previous interval
+                            m['covered_bases'] += prev_end - prev_start
+                            active_intervals[cell_id] = (chrom, ref_start, ref_end)
+                    else:
+                        active_intervals[cell_id] = (chrom, ref_start, ref_end)
 
             if read.is_duplicate:
                 m['duplicate_reads'] += 1
+                if read.is_paired:
+                    m['paired_duplicate_reads'] += 1
+                else:
+                    m['unpaired_duplicate_reads'] += 1
 
             if read.is_paired:
                 m['paired_reads'] += 1
@@ -91,7 +173,11 @@ def extract_per_cell_metrics(bamfile):
     if reads_without_cb > 0:
         print(f"Warning: {reads_without_cb} reads had no CB tag and were skipped")
 
-    return metrics
+    # Flush remaining active intervals for coverage_breadth
+    for cell_id, (chrom, start, end) in active_intervals.items():
+        metrics[cell_id]['covered_bases'] += end - start
+
+    return metrics, genome_size
 
 
 def _stats_from_counter(counter):
@@ -125,56 +211,40 @@ def _stats_from_counter(counter):
     return mean, median, std
 
 
-def compute_summary_stats(metrics):
-    """Convert raw metrics to summary statistics."""
-    summary = {}
+def compute_summary_dataframe(metrics, genome_size):
+    """Convert raw metrics to a summary DataFrame."""
+    rows = []
 
-    for cell_id, m in metrics.items():
+    for cell_id in sorted(metrics.keys()):
+        m = metrics[cell_id]
         total = m['total_reads']
 
         mean_insert, median_insert, std_insert = _stats_from_counter(m['insert_sizes'])
-        mean_mapq, _, _ = _stats_from_counter(m['mapping_qualities'])
 
-        percent_mapped = (m['mapped_reads'] / total * 100) if total > 0 else 0
         percent_duplicates = (m['duplicate_reads'] / total * 100) if total > 0 else 0
-        percent_properly_paired = (m['properly_paired_reads'] / m['paired_reads'] * 100) if m['paired_reads'] > 0 else 0
+        coverage_depth = (m['aligned_bases'] / genome_size) if genome_size > 0 else 0
+        coverage_breadth = (m['covered_bases'] / genome_size) if genome_size > 0 else 0
 
-        summary[cell_id] = {
+        rows.append({
             'cell_id': cell_id,
             'total_reads': total,
             'total_mapped_reads': m['mapped_reads'],
+            'paired_mapped_reads': m['paired_mapped_reads'],
+            'unpaired_mapped_reads': m['unpaired_mapped_reads'],
             'unmapped_reads': m['unmapped_reads'],
             'total_duplicate_reads': m['duplicate_reads'],
-            'percent_mapped': round(percent_mapped, 2),
-            'percent_duplicate_reads': round(percent_duplicates, 2),
-            'paired_reads': m['paired_reads'],
+            'paired_duplicate_reads': m['paired_duplicate_reads'],
+            'unpaired_duplicate_reads': m['unpaired_duplicate_reads'],
+            'percent_duplicate_reads': percent_duplicates,
             'total_properly_paired': m['properly_paired_reads'],
-            'percent_properly_paired': round(percent_properly_paired, 2),
-            'primary_alignments': m['primary_alignments'],
-            'secondary_alignments': m['secondary_alignments'],
-            'supplementary_alignments': m['supplementary_alignments'],
-            'median_insert_size': round(median_insert, 1),
-            'mean_insert_size': round(mean_insert, 1),
-            'standard_deviation_insert_size': round(std_insert, 1),
-            'mean_mapping_quality': round(mean_mapq, 1),
-        }
+            'coverage_depth': coverage_depth,
+            'coverage_breadth': coverage_breadth,
+            'median_insert_size': median_insert,
+            'mean_insert_size': mean_insert,
+            'standard_deviation_insert_size': std_insert,
+        })
 
-    return summary
-
-
-def write_metrics_csv(summary, output_file):
-    """Write summary metrics to a CSV file."""
-    if not summary:
-        print("No cells found with CB tags!")
-        return
-
-    fieldnames = list(next(iter(summary.values())).keys())
-
-    with open(output_file, 'w', newline='') as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
-        writer.writeheader()
-        for cell_id in sorted(summary.keys()):
-            writer.writerow(summary[cell_id])
+    return pd.DataFrame(rows)
 
 
 @click.command(context_settings={"show_default": True})
@@ -191,23 +261,34 @@ def write_metrics_csv(summary, output_file):
     help="Output CSV file for metrics",
 )
 @click.option(
+    "--samplesheet",
+    required=True,
+    type=click.Path(exists=True, dir_okay=False),
+    help="Extended samplesheet CSV with per-cell metadata",
+)
+@click.option(
     "--insert_size_histograms",
     required=False,
     type=click.Path(dir_okay=False, writable=True),
     help="Optional: output file for insert size histograms (JSON)",
 )
-def main(bam, output, insert_size_histograms):
+def main(bam, output, samplesheet, insert_size_histograms):
     """CLI entry point implemented with Click."""
     click.echo(f"Reading BAM: {bam}")
-    metrics = extract_per_cell_metrics(bam)
+    metrics, genome_size = extract_per_cell_metrics(bam)
 
     click.echo(f"Found {len(metrics)} cells with CB tags")
+    click.echo(f"Genome size from header: {genome_size:,} bp")
 
     click.echo("Computing summary statistics...")
-    summary = compute_summary_stats(metrics)
+    df = compute_summary_dataframe(metrics, genome_size)
+
+    click.echo(f"Merging samplesheet metadata from: {samplesheet}")
+    ss_metadata = load_samplesheet_metadata(samplesheet)
+    df = df.merge(ss_metadata, on='cell_id', how='left')
 
     click.echo(f"Writing metrics to: {output}")
-    write_metrics_csv(summary, output)
+    csverve.write_dataframe_to_csv_and_yaml(df, output, DTYPES)
 
     if insert_size_histograms:
         import json
@@ -219,9 +300,10 @@ def main(bam, output, insert_size_histograms):
 
     click.echo("Done.")
 
-    for cell_id in sorted(summary.keys())[:5]:
+    for cell_id in sorted(list(metrics.keys()))[:5]:
         click.echo(f"\n  {cell_id}:")
-        for k, v in summary[cell_id].items():
+        row = df[df['cell_id'] == cell_id].iloc[0]
+        for k, v in row.items():
             if k != "cell_id":
                 click.echo(f"    {k}: {v}")
 
