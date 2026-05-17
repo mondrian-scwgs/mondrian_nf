@@ -18,8 +18,13 @@ process SAMTOOLS_MERGE_CHUNKS {
         samtools merge \\
             -@ ${task.cpus} \\
             -f \\
-            ${sample_id}_merged.bam \\
+            -c -p \\
+            ${sample_id}_merged_tmp.bam \\
             ${bam_chunks}
+
+        samtools view -H ${sample_id}_merged_tmp.bam | awk '!seen[\$0]++' > deduped_header.sam
+        samtools reheader deduped_header.sam ${sample_id}_merged_tmp.bam > ${sample_id}_merged.bam
+        rm ${sample_id}_merged_tmp.bam deduped_header.sam
     fi
     """
 }
