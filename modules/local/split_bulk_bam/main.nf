@@ -32,7 +32,8 @@ process SPLIT_BULK_BAM {
             tmp_bam="tmpdir/\${barcode}.bam"
 
             if [[ ! -e "\$tmp_bam" ]]; then
-                samtools view -Hb ${bamfile} > \${tmp_bam}
+                echo "Warning: BAM file for barcode \$barcode not found. Skipping." >&2
+                continue
             fi
 
             { samtools view -H "\$tmp_bam" | grep -v "^@CO"; printf "@CO\t%s\n" "\${barcode_line}"; } > "tmpdir/\${barcode}.header.sam"
