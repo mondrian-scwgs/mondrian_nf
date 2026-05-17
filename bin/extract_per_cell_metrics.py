@@ -24,8 +24,6 @@ def create_empty_metrics():
         'duplicate_reads': 0,
         'paired_reads': 0,
         'properly_paired_reads': 0,
-        'read1_count': 0,
-        'read2_count': 0,
         'secondary_alignments': 0,
         'supplementary_alignments': 0,
         'primary_alignments': 0,
@@ -82,11 +80,6 @@ def extract_per_cell_metrics(bamfile):
                 m['properly_paired_reads'] += 1
                 if read.template_length > 0 and not read.is_duplicate:
                     m['insert_sizes'][abs(read.template_length)] += 1
-
-            if read.is_read1:
-                m['read1_count'] += 1
-            elif read.is_read2:
-                m['read2_count'] += 1
 
             if read.is_secondary:
                 m['secondary_alignments'] += 1
@@ -149,22 +142,20 @@ def compute_summary_stats(metrics):
         summary[cell_id] = {
             'cell_id': cell_id,
             'total_reads': total,
-            'mapped_reads': m['mapped_reads'],
+            'total_mapped_reads': m['mapped_reads'],
             'unmapped_reads': m['unmapped_reads'],
-            'duplicate_reads': m['duplicate_reads'],
+            'total_duplicate_reads': m['duplicate_reads'],
             'percent_mapped': round(percent_mapped, 2),
-            'percent_duplicates': round(percent_duplicates, 2),
+            'percent_duplicate_reads': round(percent_duplicates, 2),
             'paired_reads': m['paired_reads'],
-            'properly_paired_reads': m['properly_paired_reads'],
+            'total_properly_paired': m['properly_paired_reads'],
             'percent_properly_paired': round(percent_properly_paired, 2),
-            'read1_count': m['read1_count'],
-            'read2_count': m['read2_count'],
             'primary_alignments': m['primary_alignments'],
             'secondary_alignments': m['secondary_alignments'],
             'supplementary_alignments': m['supplementary_alignments'],
             'median_insert_size': round(median_insert, 1),
             'mean_insert_size': round(mean_insert, 1),
-            'std_insert_size': round(std_insert, 1),
+            'standard_deviation_insert_size': round(std_insert, 1),
             'mean_mapping_quality': round(mean_mapq, 1),
         }
 
