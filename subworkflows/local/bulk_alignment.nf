@@ -103,7 +103,7 @@ workflow BULK_ALIGNMENT {
         SAMTOOLS_MARKDUP_BARCODE(SAMTOOLS_MERGE_CHUNKS.out)
 
         // Step 8: Extract per-cell metrics from the merged BAM
-        EXTRACT_PER_CELL_METRICS(SAMTOOLS_MARKDUP_BARCODE.out.bam)
+        EXTRACT_PER_CELL_METRICS(SAMTOOLS_MARKDUP_BARCODE.out.bam, samplesheet)
 
     emit:
         bam = SAMTOOLS_MARKDUP_BARCODE.out.bam
