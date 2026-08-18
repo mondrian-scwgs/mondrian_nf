@@ -1,6 +1,6 @@
 process SPLITBAM_TASK {
     time '48h'
-    cpus 1
+    cpus { num_threads as int }
     memory '12 GB'
     label 'process_high'
 
