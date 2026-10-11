@@ -11,9 +11,8 @@ process FILTERMUTECT {
     path(unfiltered_vcf)
     path(unfiltered_vcf_tbi)
     path(mutect_stats)
-    val(has_contamination_data)
-    path(contamination_table, stageAs: "?/table/*")
-    path(maf_segments, stageAs: "?/segments/*")
+    path(contamination_table)
+    path(maf_segments)
     path(artifact_priors_tar_gz)
     val(filename)
   output:
@@ -21,10 +20,9 @@ process FILTERMUTECT {
     path("${filename}.vcf.gz.tbi"), emit: tbi
     path("${filename}.stats"), emit: stats
   script:
-    def contamination_table_arg = has_contamination_data ? "--contamination-table "+contamination_table : ""
-    def maf_segments_arg = has_contamination_data ? "--tumor-segmentation "+maf_segments : ""
+    def contamination_table_arg = contamination_table ? "--contamination-table "+contamination_table : ""
+    def maf_segments_arg = maf_segments ? "--tumor-segmentation "+maf_segments : ""
     """
-        echo ${has_contamination_data}
         set -e
         gatk FilterMutectCalls -V ${unfiltered_vcf} \
             -R ${reference} \

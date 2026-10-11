@@ -25,6 +25,8 @@ process MUTECT {
     path("${filename}.stats"), emit: stats
     path("raw_data/*_f1r2.tar.gz"), emit: f1r2
   script:
+    def panel_of_normals_arg = panel_of_normals ? "-pon "+panel_of_normals : ""
+    def gnomad_arg = gnomad ? "--germline-resource "+gnomad : ""
     """
         set -e
 
@@ -37,8 +39,8 @@ process MUTECT {
             gatk --java-options "-Xmx4G" Mutect2 \
             -I ${normal_bam} -normal `cat normal_name.txt` \
             -I ${tumor_bam}  -tumor `cat tumor_name.txt` \
-            -pon ${panel_of_normals} \
-            --germline-resource  ${gnomad} \
+            ${panel_of_normals_arg} \
+            ${gnomad_arg} \
             --f1r2-tar-gz raw_data/${interval}_f1r2.tar.gz \
             -R ${reference} -O raw_data/${interval}.vcf  --intervals ${interval}
             mv raw_data/${interval}.vcf merged.vcf
@@ -53,8 +55,8 @@ process MUTECT {
                     echo "gatk --java-options \\"-Xmx4G\\" Mutect2 \
                     -I ${normal_bam} -normal `cat normal_name.txt` \
                     -I ${tumor_bam}  -tumor `cat tumor_name.txt` \
-                    -pon  ${panel_of_normals} \
-                    --germline-resource  ${gnomad} \
+                    ${panel_of_normals_arg} \
+                    ${gnomad_arg} \
                     --f1r2-tar-gz raw_data/\${sub_interval}_f1r2.tar.gz \
                     -R ${reference} -O raw_data/\${sub_interval}.vcf.gz  --intervals \${sub_interval} ">> commands.txt
                     merge_vcf_inputs="\${merge_vcf_inputs} --inputs raw_data/\${sub_interval}.vcf.gz"

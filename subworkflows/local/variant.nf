@@ -110,18 +110,16 @@ workflow MONDRIAN_VARIANT {
             contamination = CALCULATECONTAMINATION(tumor_merged_pileups.tsv, normal_merged_pileups.tsv)
             contamination_table = contamination.table
             contamination_segments = contamination.segments
-            has_contamination_data = true
         } else {
-            contamination_table = file("$baseDir/assets/dummy_file.txt")
-            contamination_segments = file("$baseDir/assets/dummy_file.txt")
-            has_contamination_data = false
+            contamination_table = []
+            contamination_segments = []
         }
 
 
         mutect = MUTECT(
             normal_variant_bam.bam, normal_variant_bam.bai, tumor_variant_bam.bam, tumor_variant_bam.bai,
-            reference, reference+'.fai', reference_dict, panel_of_normals, panel_of_normals+'.tbi',
-            gnomad, gnomad+'.tbi', allregions.flatten(), numcores, sample_id+'_mutect'
+            reference, reference+'.fai', reference_dict, panel_of_normals[0], panel_of_normals[1],
+            gnomad[0], gnomad[1], allregions.flatten(), numcores, sample_id+'_mutect'
         )
 
         orientation_model = READORIENTATIONMODEL(mutect.f1r2.collect())
@@ -130,7 +128,7 @@ workflow MONDRIAN_VARIANT {
 
         filter_mutect = FILTERMUTECT(
             reference, reference+'.fai', reference_dict, merge_vcfs.vcf, merge_vcfs.tbi,
-            merge_stats.stats, has_contamination_data, contamination_table, contamination_segments, orientation_model.artifact_priors,
+            merge_stats.stats, contamination_table, contamination_segments, orientation_model.artifact_priors,
             sample_id+'_filter_mutect'
         )
 
