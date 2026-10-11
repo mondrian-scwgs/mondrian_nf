@@ -24,6 +24,16 @@ mode: 'variant'
 output_dir: "results"
 ```
 
+The following resources are optional and can be left out of the params file, for example when running on a
+species that has no equivalent (see [mouse](../reference/mouse.md)):
+
+| param | used for | when omitted |
+|---|---|---|
+| `panel_of_normals` | mutect `-pon` | mutect runs without a panel of normals |
+| `gnomad` | mutect `--germline-resource` | mutect runs without a germline resource |
+| `variants_for_contamination` | pileups and contamination estimate for mutect filtering | contamination is not estimated |
+| `realignment_index_bundle` | mutect alignment artifact filter | the alignment artifact filter is skipped |
+
 
 # Outputs:
 

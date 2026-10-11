@@ -15,8 +15,6 @@ assert_required_param('tumor')
 assert_required_param('chromosomes')
 assert_required_param('reference')
 assert_required_param('reference_dict')
-assert_required_param('panel_of_normals')
-assert_required_param('gnomad')
 assert_required_param('vep_ref')
 assert_required_param('vep_fasta_suffix')
 assert_required_param('ncbi_build')
@@ -31,8 +29,6 @@ tumor = params.tumor
 chromosomes = params.chromosomes
 reference = params.reference
 reference_dict = params.reference_dict
-panel_of_normals = params.panel_of_normals
-gnomad = params.gnomad
 vep_ref = params.vep_ref
 vep_fasta_suffix = params.vep_fasta_suffix
 ncbi_build = params.ncbi_build
@@ -41,19 +37,31 @@ species = params.species
 sample_id = params.sample_id
 numcores = params.numcores
 
-maxcoverage = params.maxcoverage ? maxcoverage : 10000
+maxcoverage = params.maxcoverage ? params.maxcoverage : 10000
 
+
+if(params.panel_of_normals){
+    panel_of_normals = tuple(file(params.panel_of_normals), file(params.panel_of_normals + '.tbi'))
+} else {
+    panel_of_normals = tuple([], [])
+}
+
+if(params.gnomad){
+    gnomad = tuple(file(params.gnomad), file(params.gnomad + '.tbi'))
+} else {
+    gnomad = tuple([], [])
+}
 
 if(params.variants_for_contamination){
     variants_for_contamination = tuple(true, file(params.variants_for_contamination))
 } else {
-    variants_for_contamination = tuple(false, file("$baseDir/docs/assets/dummy_file.txt"))
+    variants_for_contamination = tuple(false, [])
 }
 
 if(params.realignment_index_bundle){
     realignment_index_bundle = tuple(true, file(params.realignment_index_bundle))
 } else {
-    realignment_index_bundle = tuple(false, file("$baseDir/docs/assets/dummy_file.txt"))
+    realignment_index_bundle = tuple(false, [])
 }
 
 

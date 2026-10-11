@@ -11,6 +11,7 @@
 
 - [Reference](reference/README.md)
   - [GRCh38](reference/GRCh38.md)
+  - [Mouse](reference/mouse.md)
 
 - [Analyses](analyses/README.md)
   - [QC](analyses/qc.md)
