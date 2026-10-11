@@ -23,6 +23,21 @@ assert_required_param('species')
 assert_required_param('sample_id')
 assert_required_param('numcores')
 
+if(params.species == 'homo_sapiens'){
+    if(!params.panel_of_normals){
+        exit 1, "panel_of_normals not specified. Please provide --panel_of_normals <value> when species is homo_sapiens!"
+    }
+    if(!params.gnomad){
+        exit 1, "gnomad not specified. Please provide --gnomad <value> when species is homo_sapiens!"
+    }
+    if(!params.variants_for_contamination){
+        log.warn "variants_for_contamination not specified, contamination will not be estimated"
+    }
+    if(!params.realignment_index_bundle){
+        log.warn "realignment_index_bundle not specified, alignment artifact filter will be skipped"
+    }
+}
+
 
 normal = params.normal
 tumor = params.tumor

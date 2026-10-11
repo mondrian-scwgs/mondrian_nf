@@ -35,7 +35,8 @@ output_dir: "results"
 ```
 
 The following resources are optional and can be left out of the params file, for example when running on a
-species that has no equivalent (see [mouse](../reference/mouse.md)):
+species that has no equivalent (see [mouse](../reference/mouse.md)). When `species` is `homo_sapiens`,
+`panel_of_normals` and `gnomad` are required:
 
 | param | used for | when omitted |
 |---|---|---|
